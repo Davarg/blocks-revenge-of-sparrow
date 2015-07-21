@@ -1,0 +1,270 @@
+#include "GameField.h"
+#include "MessagesQueue.h"
+
+Block ***_arrayBlocks = nullptr;
+int HEIGHT = 0;
+int WIDHT = 0;
+
+GameField::~GameField() {
+	if (_arrayBlocks) {
+		for (int i = 0; i < HEIGHT; i++) {
+			for (int k = 0; k < WIDHT; k++) {
+				if (_arrayBlocks[i][k])
+					CC_SAFE_RELEASE_NULL(_arrayBlocks[i][k]);
+			}
+		}
+		CC_SAFE_DELETE_ARRAY(_arrayBlocks);
+	}
+}
+
+void GameField::init(const int height, const int width) {
+	if (!_arrayBlocks) {
+		_arrayBlocks = new Block**[height];
+		for (int i = 0; i < height; i++)
+			_arrayBlocks[i] = new Block*[width];
+
+		for (int i = 0; i < height; i++)
+			for (int k = 0; k < width; k++)
+				_arrayBlocks[i][k] = nullptr;
+
+		HEIGHT = height;
+		WIDHT = width;
+
+		MessagesQueue::addListener(MessagesQueue::MessageType::UPDATE_GAME_FIELD, &GameField::updateGameField);
+	}
+}
+
+void GameField::updateGameField(void* args) {
+	GameField::checkField();
+}
+
+void GameField::setBlock(Block* block) {
+	if (!_arrayBlocks) {
+		cocos2d::log("GameField must be init first!");
+		throw;
+	}
+
+	const int x1 = block->getPosOnField().x;
+	const int y1 = block->getPosOnField().y;
+
+	const int x2 = block->getAttachedBlock()->getPosOnField().x;
+	const int y2 = block->getAttachedBlock()->getPosOnField().y;
+
+	_arrayBlocks[y1][x1] = block;
+	_arrayBlocks[y2][x2] = block->getAttachedBlock();
+}
+
+void GameField::setBlock(int y, int x, Block* block){
+	if (!_arrayBlocks) {
+		cocos2d::log("GameField must be init first!");
+		throw;
+	}
+
+	_arrayBlocks[y][x] = block;
+}
+
+Block* GameField::getBlock(int y, int x) {
+	if (!_arrayBlocks) {
+		cocos2d::log("GameField must be init first!");
+		throw;
+	}
+
+	if (y < HEIGHT && x < WIDHT)
+		return _arrayBlocks[y][x];
+	else
+		return nullptr;
+}
+
+Block* GameField::getBlock(Vec2 pos) {
+	if (!_arrayBlocks) {
+		cocos2d::log("GameField must be init first!");
+		throw;
+	}
+
+	if (pos.y < HEIGHT && pos.x < WIDHT) {
+		const int x = pos.x;
+		const int y = pos.y;
+		return _arrayBlocks[y][x];
+	}
+	else
+		return nullptr;
+}
+
+b2Vec2 GameField::getSize() {
+	b2Vec2 size; 
+	size.x = WIDHT;
+	size.y = HEIGHT;
+
+	return size;
+}
+
+void GameField::checkField() {
+	Color3B currentColor = Color3B::WHITE;
+	int counterLeftRight = 0;
+	int counterTopDown = 0;
+	int bottom = 0;
+	int right = 0;
+	int left = 0;
+	int top = 0;
+	
+	std::vector<int> vectorLeftRight;
+	std::vector<int> vectorUpDown;
+
+	GameField::recountGameField();
+
+	for (int i = 0; i < HEIGHT; i++) {
+		if (left != right && counterLeftRight >= 3) {
+			vectorLeftRight.push_back(left);
+			vectorLeftRight.push_back(right);
+			vectorLeftRight.push_back(i - 1);
+		}
+		
+		currentColor = Color3B::WHITE;
+		counterLeftRight = 0;
+		left = 0;
+		right = 0;
+
+		for (int k = 0; k < WIDHT; k++) {
+			if (_arrayBlocks[i][k]) {
+				if (currentColor != _arrayBlocks[i][k]->getColor() && counterLeftRight < 3) {
+					currentColor = _arrayBlocks[i][k]->getColor();
+					counterLeftRight = 1;
+					left = k;
+					right = k;
+				}
+				else if (currentColor != _arrayBlocks[i][k]->getColor() && counterLeftRight >= 3) {
+					vectorLeftRight.push_back(left);
+					vectorLeftRight.push_back(right);
+					vectorLeftRight.push_back(i);
+
+					currentColor = _arrayBlocks[i][k]->getColor();
+					counterLeftRight = 1;
+					left = k;
+					right = k;
+				}
+				else {
+					counterLeftRight++;
+					right = k;
+				}
+			}
+			else {
+				currentColor = Color3B::WHITE;
+				if (left != right && counterLeftRight >= 3) {
+					vectorLeftRight.push_back(left);
+					vectorLeftRight.push_back(right);
+					vectorLeftRight.push_back(i);
+
+					currentColor = Color3B::WHITE;
+					counterLeftRight = 0;
+					left = 0;
+					right = 0;
+				}
+			}
+		}
+	}
+
+	currentColor = Color3B::WHITE;
+	for (int i = 0; i < WIDHT; i++) {
+		if (top != bottom && counterTopDown >= 3) {
+			vectorUpDown.push_back(bottom);
+			vectorUpDown.push_back(top);
+			vectorUpDown.push_back(i - 1);
+		}
+
+		currentColor = Color3B::WHITE;
+		counterTopDown = 0;
+		top = 0;
+		bottom = 0;
+
+		for (int k = 0; k < HEIGHT; k++) {
+			if (_arrayBlocks[k][i]) {
+				if (currentColor != _arrayBlocks[k][i]->getColor() && counterTopDown < 3) {
+					currentColor = _arrayBlocks[k][i]->getColor();
+					counterTopDown = 1;
+					top = k;
+					bottom = k;
+				}
+				else if (currentColor != _arrayBlocks[k][i]->getColor() && counterTopDown >= 3) {
+					vectorUpDown.push_back(bottom);
+					vectorUpDown.push_back(top);
+					vectorUpDown.push_back(i);
+
+					currentColor = _arrayBlocks[k][i]->getColor();
+					counterTopDown = 1;
+					top = k;
+					bottom = k;
+				}
+				else {
+					counterTopDown++;
+					top = k;
+				}
+			}
+			else {
+				currentColor = Color3B::WHITE;
+				if (top != bottom && counterTopDown >= 3) {
+					vectorUpDown.push_back(bottom);
+					vectorUpDown.push_back(top);
+					vectorUpDown.push_back(i);
+
+					currentColor = Color3B::WHITE;
+					counterTopDown = 0;
+					top = 0;
+					bottom = 0;
+				}
+			}
+		}
+	}
+	
+	if (!vectorLeftRight.size() % 3 == 0) {
+		for (std::vector<int>::iterator it = vectorLeftRight.begin(); it != vectorLeftRight.end(); ++it) {
+			int l = *it;
+			++it;
+			int r = *it;
+			++it;
+			const int row = *it;
+
+			for (; l <= r; l++) {
+				if (_arrayBlocks[row][l]) {
+					_arrayBlocks[row][l]->destroy();
+					CC_SAFE_RELEASE(_arrayBlocks[row][l]);
+					_arrayBlocks[row][l] = nullptr;
+				}
+			}
+		}
+	}
+
+	if (!vectorUpDown.size() % 3 == 0) {
+		for (std::vector<int>::iterator it = vectorUpDown.begin(); it != vectorUpDown.end(); ++it) {
+			int b = *it;
+			++it;
+			int t = *it;
+			++it;
+			const int collumn = *it;
+
+			for (; b <= t; b++) {
+				if (_arrayBlocks[b][collumn]) {
+					_arrayBlocks[b][collumn]->destroy();
+					CC_SAFE_RELEASE(_arrayBlocks[b][collumn]);
+					_arrayBlocks[b][collumn] = nullptr;
+				}
+			}
+		}
+	}
+}
+
+void GameField::recountGameField() {
+	for (int i = 0; i < HEIGHT; i++) {
+		for (int k = 0; k < WIDHT; k++) {
+			if (_arrayBlocks[i][k]) {
+				const int y1 = _arrayBlocks[i][k]->getPosOnField().y;
+				const int x1 = _arrayBlocks[i][k]->getPosOnField().x;
+
+				if (x1 != k || y1 != i) {
+					auto block1 = _arrayBlocks[i][k];
+					_arrayBlocks[i][k] = nullptr;
+					_arrayBlocks[y1][x1] = block1;
+				}
+			}
+		}
+	}
+}

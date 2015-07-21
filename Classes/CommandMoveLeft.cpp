@@ -1,0 +1,79 @@
+#include "CommandMoveLeft.h"
+#include "Constants.h"
+
+bool CommandMoveLeft::init() {
+	this->_isExecute = false;
+	this->_isRedo = false;
+	this->_isUndo = false;
+
+	return true;
+}
+
+void CommandMoveLeft::update(float dt) {
+	b2Vec2 oldVelocity = _block->getBody()->GetLinearVelocity();
+
+	if (!_isUndo && !_isRedo) {
+		if (_positionOld.x - _block->getBody()->GetPosition().x >=
+			(_block->getSprite()->getContentSize().width - JOINT_BLOCK_DIST) / SCALE_RATIO) {
+			_block->getBody()->SetLinearVelocity((b2Vec2(0, oldVelocity.y)));
+			_block->getAttachedBody()->SetLinearVelocity((b2Vec2(0, oldVelocity.y)));
+			Director::getInstance()->getScheduler()->unscheduleUpdate(this);
+			_isExecute = false;
+		}
+	}
+	else if (_isUndo){
+		if (_block->getBody()->GetPosition().x >= _positionOld.x) {
+			_isUndo = false;
+			Director::getInstance()->getScheduler()->unscheduleUpdate(this);
+			_block->getBody()->SetLinearVelocity((b2Vec2(0, oldVelocity.y)));
+			_block->getAttachedBody()->SetLinearVelocity((b2Vec2(0, oldVelocity.y)));
+			_isExecute = false;
+		}
+	} 
+	else if (_isRedo) {
+		if (_block->getBody()->GetPosition().x <= _positionNew.x) {
+			_isRedo = false;
+			Director::getInstance()->getScheduler()->unscheduleUpdate(this);
+			_block->getBody()->SetLinearVelocity((b2Vec2(0, oldVelocity.y)));
+			_block->getAttachedBody()->SetLinearVelocity((b2Vec2(0, oldVelocity.y)));
+			_isExecute = false;
+		}
+	}
+}
+
+void CommandMoveLeft::execute(Block *block) {
+	int nWidth = block->getSprite()->getContentSize().width;
+	b2Vec2 oldVelocity = block->getBody()->GetLinearVelocity();
+	_block = block;
+	_positionOld = _block->getBody()->GetPosition();
+	_positionNew = { _block->getBody()->GetPosition().x - _block->getSprite()->getContentSize().width / SCALE_RATIO
+		, _block->getBody()->GetPosition().y };
+	_isUndo = false;
+	_isRedo = false;
+	_isExecute = true;
+
+	block->getBody()->SetLinearVelocity(b2Vec2((-nWidth / MOVETIME) / SCALE_RATIO, oldVelocity.y));
+	block->getAttachedBody()->SetLinearVelocity(b2Vec2((-nWidth / MOVETIME) / SCALE_RATIO, oldVelocity.y));
+}
+
+void CommandMoveLeft::undo() {
+	int nWidth = _block->getSprite()->getContentSize().width;
+	b2Vec2 oldVelocity = _block->getBody()->GetLinearVelocity();
+
+	_isUndo = true;
+	_isRedo = false;
+
+	_block->getBody()->SetLinearVelocity(b2Vec2((nWidth / MOVETIME) / SCALE_RATIO, oldVelocity.y));
+	_block->getAttachedBody()->SetLinearVelocity(b2Vec2((nWidth / MOVETIME) / SCALE_RATIO, oldVelocity.y));
+}
+
+void CommandMoveLeft::redo() {
+	int nWidth = _block->getSprite()->getContentSize().width;
+	b2Vec2 oldVelocity = _block->getBody()->GetLinearVelocity();
+
+	_isUndo = false;
+	_isRedo = true;
+
+	_block->getBody()->SetLinearVelocity(b2Vec2((-nWidth / MOVETIME) / SCALE_RATIO, oldVelocity.y));
+	_block->getAttachedBody()->SetLinearVelocity(b2Vec2((-nWidth / MOVETIME) / SCALE_RATIO, oldVelocity.y));
+}
