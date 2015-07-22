@@ -1,4 +1,4 @@
-# What's Blocks: Revenge of Sparrow
+# What's _Blocks: Revenge of Sparrow_
 Blocks: Revenge of Sparrow. Logical game about greed, villain and Hero, who threw the gauntlet in the beak of evil sparrow.
 
 #### Game Mechanic
