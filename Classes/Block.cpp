@@ -46,21 +46,21 @@ Block* Block::generateBlock() {
 
 	switch (COLOR1) {
 	case 0:
-		blockSprite = Sprite::create("block_green.png");
+		blockSprite = Sprite::create("../Resources/block_green.png");
 		blockSprite->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
 
 		block = Block::createBlock(blockSprite, 100, Color3B::GREEN);
 		break;
 
 	case 1:
-		blockSprite = Sprite::create("block_red.png");
+		blockSprite = Sprite::create("../Resources/block_red.png");
 		blockSprite->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
 
 		block = Block::createBlock(blockSprite, 100, Color3B::RED);
 		break;
 
 	case 2:
-		blockSprite = Sprite::create("block_yellow.png");
+		blockSprite = Sprite::create("../Resources/block_yellow.png");
 		blockSprite->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
 
 		block = Block::createBlock(blockSprite, 100, Color3B::YELLOW);
@@ -69,21 +69,21 @@ Block* Block::generateBlock() {
 
 	switch (COLOR2) {
 	case 0:
-		blockSprite2 = Sprite::create("block_green.png");
+		blockSprite2 = Sprite::create("../Resources/block_green.png");
 		blockSprite2->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
 
 		block->setJointWith(Block::createBlock(blockSprite2, 100, Color3B::GREEN, true));
 		break;
 
 	case 1:
-		blockSprite2 = Sprite::create("block_red.png");
+		blockSprite2 = Sprite::create("../Resources/block_red.png");
 		blockSprite2->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
 
 		block->setJointWith(Block::createBlock(blockSprite2, 100, Color3B::RED, true));
 		break;
 
 	case 2:
-		blockSprite2 = Sprite::create("block_yellow.png");
+		blockSprite2 = Sprite::create("../Resources/block_yellow.png");
 		blockSprite2->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
 
 		block->setJointWith(Block::createBlock(blockSprite2, 100, Color3B::YELLOW, true));

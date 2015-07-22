@@ -57,7 +57,7 @@ bool MainGameScene::init() {
 	_currentBlock = nullptr;
 
 	auto size = Director::getInstance()->getVisibleSize();
-	_spriteGlass = Sprite::create("glass.png");
+	_spriteGlass = Sprite::create("../Resources/glass.png");
 
 	_spriteGlass->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
 	_spriteGlass->setPosition(Vec2(5, 3));
