@@ -13,6 +13,7 @@
 #include "BlockContactListener.h"
 #include "GameField.h"
 #include "MessagesQueue.h"
+#include "SimpleUI.h"
 
 USING_NS_CC;
 
@@ -20,18 +21,16 @@ class MainGameScene : public Layer {
 private:
 	int _glassWidt;
 	int _glassHeight;
-	b2Body *_bodyGlass;
+	SimpleUI *simpleUI;
 	Command *_moveLeft;
 	Command *_moveDown;
 	Command *_moveRight;
-	Sprite *_spriteGlass;
 	Block *_currentBlock;
 	Command *_moveClockwise;
 	Command *_moveCounterClockwise;
 	BlockContactListener blockContactListener;
 	
 	void initArrayOfBlocks();
-	void createGlass();
 	
 public: 
 	~MainGameScene();

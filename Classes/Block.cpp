@@ -3,6 +3,16 @@
 #include "Constants.h"
 #include <math.h>
 
+void Block::destroy() {
+	_sprite->removeFromParentAndCleanup(true);
+	auto world = _body->GetWorld();
+	/*b2Joint *joint = _body->GetJointList()->joint;
+
+	if (joint != nullptr)
+	world->DestroyJoint(joint);*/
+	world->DestroyBody(_body);
+}
+
 bool Block::init(Sprite* _sprite) {
 	try {
 		b2BodyDef bodyDef;
@@ -131,12 +141,12 @@ void Block::setJointWith(Block *block) {
 }
 
 void Block::setSize(Size _size) {
-	this->_size = _size;
+	_size = _size;
 }
 
 void Block::setPositionInPxl(Vec2 pos) {
-	this->_sprite->setPosition(pos);
-	this->_body->SetTransform(b2Vec2(pos.x / SCALE_RATIO, pos.y / SCALE_RATIO), 0);
+	_sprite->setPosition(pos);
+	_body->SetTransform(b2Vec2(pos.x / SCALE_RATIO, pos.y / SCALE_RATIO), 0);
 }
 
 Size Block::getSize() {
@@ -182,14 +192,4 @@ void Block::createJointListener(void* args) {
 	MainGameScene::getWorld()->CreateJoint(&jointDef);
 
 	CC_SAFE_DELETE(args);
-}
-
-void Block::destroy() {
-	_sprite->removeFromParentAndCleanup(true);
-	auto world = _body->GetWorld();
-	/*b2Joint *joint = _body->GetJointList()->joint;
-	
-	if (joint != nullptr)
-		world->DestroyJoint(joint);*/
-	world->DestroyBody(_body);
 }

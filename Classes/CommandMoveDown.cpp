@@ -2,9 +2,9 @@
 #include "Constants.h"
 
 bool CommandMoveDown::init() {
-	this->_isExecute = false;
-	this->_isRedo = false;
-	this->_isUndo = false;
+	_isExecute = false;
+	_isRedo = false;
+	_isUndo = false;
 
 	return true;
 }
