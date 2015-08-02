@@ -1,5 +1,6 @@
 #include "SimpleUI.h"
 #include "BackgroundElementUI.h"
+#include "TopPanel.h"
 
 SimpleUI::~SimpleUI() {
 	for (auto iterator : _childrens) {
@@ -11,10 +12,14 @@ SimpleUI::~SimpleUI() {
 }
 
 SimpleUI::SimpleUI(Layer* layer) {
+	const Size winSize = Director::sharedDirector()->getVisibleSize();
 	_layer = layer;
-	Vec2 backPos = { 5, 3 };
-	BackgroundElementUI *beui = new BackgroundElementUI(layer, backPos);
+	
+	BackgroundElementUI *beui = new BackgroundElementUI(layer, winSize);
 	_childrens.push_back(beui);
+
+	TopPanel *tp = new TopPanel(layer, winSize);
+	_childrens.push_back(tp);
 }
 
 void SimpleUI::show(){

@@ -24,27 +24,24 @@ void AppDelegate::initGLContextAttrs()
 }
 
 bool AppDelegate::applicationDidFinishLaunching() {
-    // initialize director
-    auto director = Director::getInstance();
+	//auto size = new Size(720, 1280);
+	auto sizeFrame = new Size(480, 800);
+    
+	auto director = Director::getInstance();
     auto glview = director->getOpenGLView();
     if(!glview) {
         glview = GLViewImpl::create("Blocks:Revenge of Sparrow");
+		glview->setFrameSize(sizeFrame->width, sizeFrame->height);
         director->setOpenGLView(glview);
     }
 
-    // turn on display FPS
-    //director->setDisplayStats(true);
+	glview->setDesignResolutionSize(sizeFrame->width, sizeFrame->height, ResolutionPolicy::NO_BORDER);
 
-    // set FPS. the default value is 1.0/60 if you don't call this
     director->setAnimationInterval(1.0 / 60);
-
-    // create a scene. it's an autorelease object
     auto scene = MainGameScene::createScene();
-
-    // run
     director->runWithScene(scene);
 
-    return true;
+	return true;
 }
 
 // This function will be called when the app is inactive. When comes a phone call,it's be invoked too

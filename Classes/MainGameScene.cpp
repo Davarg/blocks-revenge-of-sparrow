@@ -51,14 +51,14 @@ bool MainGameScene::init() {
 	auto size = Director::getInstance()->getVisibleSize();
 	
 	auto listenerKey = EventListenerKeyboard::create();
-	listenerKey->onKeyPressed = CC_CALLBACK_2(MainGameScene::onKeyPressed, this);
-	_eventDispatcher->addEventListenerWithSceneGraphPriority(listenerKey, this);
+	//listenerKey->onKeyPressed = CC_CALLBACK_2(MainGameScene::onKeyPressed, this);
+	//_eventDispatcher->addEventListenerWithSceneGraphPriority(listenerKey, this);
 
 	_currentBlock = Block::generateBlock();
 	auto element = simpleUI->getChildrenByName(BackgroundElementUI::name());
-	auto spriteBack = ((BackgroundElementUI*)element)->getSprite();
+	//auto spriteBack = ((BackgroundElementUI*)element)->getSprite();
 
-	if (_currentBlock) {
+	/*if (_currentBlock) {
 		Vec2 pos = { spriteBack->getPositionX() + 4, spriteBack->getContentSize().height - 2 };
 		_currentBlock->setPositionInPxl(pos);
 		addChild(_currentBlock->getSprite());
@@ -67,7 +67,7 @@ bool MainGameScene::init() {
 			+ _currentBlock->getSprite()->getPositionX()
 			, _currentBlock->getSprite()->getPositionY()));
 		addChild(_currentBlock->getAttachedBlock()->getSprite());
-	}
+	}*/
 
 	_moveLeft = CommandMoveLeft::create();
 	_moveRight = CommandMoveRight::create();
@@ -81,10 +81,10 @@ bool MainGameScene::init() {
 	_moveClockwise = nullptr;//new CommandMoveClockwise(); //Memory Leak
 	_moveDown = nullptr;//CommandMoveDown::create();
 
-	initArrayOfBlocks();
+	//initArrayOfBlocks();
 
-	_glassHeight = spriteBack->getContentSize().height / _currentBlock->getSprite()->getContentSize().height;
-	_glassWidt = spriteBack->getContentSize().width / _currentBlock->getSprite()->getContentSize().width;
+	//_glassHeight = spriteBack->getContentSize().height / _currentBlock->getSprite()->getContentSize().height;
+	//_glassWidt = spriteBack->getContentSize().width / _currentBlock->getSprite()->getContentSize().width;
 
 	MainGameScene::getWorld()->SetContactListener(&blockContactListener);
 	MessagesQueue::addListener(MessagesQueue::MessageType::ADD_BLOCK_ON_SCENE, static_cast<void*>(this)
@@ -99,7 +99,7 @@ bool MainGameScene::init() {
 void MainGameScene::update(float dt) {
 	int velocityIterations = 10;
 	int positionIterations = 10;	MainGameScene::getWorld()->Step(dt, velocityIterations, positionIterations);
-	for (b2Body *body = MainGameScene::getWorld()->GetBodyList(); body != NULL; body = body->GetNext()) {
+	/*for (b2Body *body = MainGameScene::getWorld()->GetBodyList(); body != NULL; body = body->GetNext()) {
 		if (body->GetUserData()) {
 			Sprite *spr = static_cast<Sprite*>(body->GetUserData());
 			if (spr != nullptr) {
@@ -110,7 +110,7 @@ void MainGameScene::update(float dt) {
 	}
 
 	MainGameScene::getWorld()->ClearForces();
-	MessagesQueue::update(dt);
+	MessagesQueue::update(dt);*/
 }
 
 void MainGameScene::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {
@@ -166,9 +166,9 @@ void MainGameScene::addBlockListener(void* args) {
 
 	_currentBlock = Block::generateBlock();
 	auto element = simpleUI->getChildrenByName(BackgroundElementUI::name());
-	auto spriteBack = ((BackgroundElementUI*)element)->getSprite();
+	//auto spriteBack = ((BackgroundElementUI*)element)->getSprite();
 
-	if (_currentBlock) {
+	/*if (_currentBlock) {
 		Vec2 pos = { spriteBack->getPositionX() + 4, spriteBack->getContentSize().height - 2 };
 		_currentBlock->setPositionInPxl(pos);
 		addChild(_currentBlock->getSprite());
@@ -177,7 +177,7 @@ void MainGameScene::addBlockListener(void* args) {
 			+ _currentBlock->getSprite()->getPositionX()
 			, _currentBlock->getSprite()->getPositionY()));
 		addChild(_currentBlock->getAttachedBlock()->getSprite());
-	}
+	}*/
 
 	resumeSchedulerAndActions();
 }
@@ -185,12 +185,12 @@ void MainGameScene::addBlockListener(void* args) {
 void MainGameScene::initArrayOfBlocks() {
 	if (_currentBlock != nullptr) {
 		auto element = simpleUI->getChildrenByName(BackgroundElementUI::name());
-		auto spriteBack = ((BackgroundElementUI*)element)->getSprite();
+		//auto spriteBack = ((BackgroundElementUI*)element)->getSprite();
 
-		const int HEIGHT = spriteBack->getContentSize().height / _currentBlock->getSprite()->getContentSize().height;
+		/*const int HEIGHT = spriteBack->getContentSize().height / _currentBlock->getSprite()->getContentSize().height;
 		const int WIDTH = spriteBack->getContentSize().width / _currentBlock->getSprite()->getContentSize().width;
 
-		GameField::init(HEIGHT, WIDTH);
+		GameField::init(HEIGHT, WIDTH);*/
 	}
 	else {
 		cocos2d::log("Block doesn't have size");

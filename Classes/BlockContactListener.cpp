@@ -5,7 +5,7 @@
 #include "MessagesQueue.h"
 
 void BlockContactListener::BeginContact(b2Contact* contact) {
-	const int MOD = 4;
+	/*const int MOD = 4;
 	void* bodyUserDataA = contact->GetFixtureA()->GetBody()->GetUserData();
 	void* bodyUserDataB = contact->GetFixtureB()->GetBody()->GetUserData();
 	const uint16 categoryA = contact->GetFixtureA()->GetFilterData().categoryBits;
@@ -101,5 +101,5 @@ void BlockContactListener::BeginContact(b2Contact* contact) {
 		void* ptr = nullptr;
 		MessagesQueue::addMessageToQueue(
 			MessagesQueue::Message{ MessagesQueue::MessageType::UPDATE_GAME_FIELD, ptr});
-	}
+	}*/
 }

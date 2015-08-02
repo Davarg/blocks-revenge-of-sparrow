@@ -2,33 +2,77 @@
 #include "MainGameScene.h"
 #include "Constants.h"
 
-const char* BackgroundElementUI::_name = "BACKGROUND_UGLY";
+const char* BackgroundElementUI::_name = "BACKGROUND_HANDMADE";
 
 BackgroundElementUI::~BackgroundElementUI() {
 	if (_bodyGlass)
 		MainGameScene::getWorld()->DestroyBody(_bodyGlass);
 	if (!_bodyGlass && _spriteGlass)
 		CC_SAFE_RELEASE_NULL(_spriteGlass);
+	CC_SAFE_RELEASE_NULL(_layerBack);
 }
 
-BackgroundElementUI::BackgroundElementUI(Layer *layer, Vec2 pos) {
+BackgroundElementUI::BackgroundElementUI(Layer *layer, Size winSize) {
+	auto path = new std::string(_backAnimFolderPath);
+	auto vec = new std::vector<std::string>();
+	vec->push_back(*path);
+
+	FileUtils::getInstance()->setSearchPaths(*vec);
+	const float scaleX = winSize.width / _realSize.width;
+	const float scaleY = (winSize.height - 55) / _realSize.height;
+	Vector<SpriteFrame*> animFrames(numAnimFiles);
+	char str[10] = { 0 };
+	auto animatedSprite = Sprite::create();
+
+	for (int i = 1; i <= animFrames.capacity(); i++) {
+		sprintf(str, "%d.png", i);
+		auto frame = SpriteFrame::create(str, Rect(0, 0, 502, 712));
+		animFrames.pushBack(frame);
+	}
+
+	_layerBack = Layer::create();
+	_layerParent = layer;
+	_layerBack->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
+	_layerBack->setPosition(0, (_realBottomMargin * scaleY) + (_realSize.height * scaleY));
+	_layerBack->setContentSize(_realSize);
+	_layerBack->setScaleX(scaleX);
+	_layerBack->setScaleY(scaleY);
+
 	_spriteGlass = Sprite::create(_glassPath);
 	_spriteGlass->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
-	_spriteGlass->setPosition(pos); //_spriteGlass->setPosition(Vec2(5, 3));
-	_layer = layer;
-	createGlass();
+	_spriteGlass->setPosition(0, 0);
+	_spriteGlass->setScaleX(_layerBack->getContentSize().width / _spriteGlass->getContentSize().width);
+	_spriteGlass->setScaleY(_layerBack->getContentSize().height / _spriteGlass->getContentSize().height);
+
+	animatedSprite->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+	animatedSprite->setScaleX(0.0275f);
+	animatedSprite->setScaleY(0.0267f);
+	animatedSprite->setPosition(1.1f, 0.51f);
+
+	auto animation = Animation::createWithSpriteFrames(animFrames, 0.2f);
+	animation->setLoops(-1);
+	auto animate = Animate::create(animation);
+	animatedSprite->runAction(animate);
+
+	_layerBack->addChild(_spriteGlass);
+	_layerBack->addChild(animatedSprite);
+	//createGlass();
 }
 
 void BackgroundElementUI::show() {
-	_layer->addChild(_spriteGlass);
+	_layerParent->addChild(_layerBack);
 }
 
 void BackgroundElementUI::disable(bool flag) {
 	_disable = flag;
 	if (!flag)
-		_layer->removeChild(_spriteGlass);
+		_layerParent->removeChild(_layerBack);
 	else
-		_layer->addChild(_spriteGlass);
+		_layerParent->addChild(_layerBack);
+}
+
+Size BackgroundElementUI::getUserSize() const {
+	return { 0, 0 };
 }
 
 void BackgroundElementUI::createGlass() {
