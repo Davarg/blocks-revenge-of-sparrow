@@ -10,6 +10,15 @@
     <Filter Include="src">
       <UniqueIdentifier>{bb6c862e-70e9-49d9-81b7-3829a6f50471}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\ui">
+      <UniqueIdentifier>{e48537f5-52ca-4678-9f37-d9a415c6778f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\commands">
+      <UniqueIdentifier>{45a4e24d-f784-4f8e-b6d7-b1ed386bf902}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\utils">
+      <UniqueIdentifier>{65d84de3-b714-46c7-8678-0ed2d855e8c0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -21,47 +30,47 @@
     <ClCompile Include="..\Classes\Block.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\BlockContactListener.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\CommandMoveClockwise.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\CommandMoveCounterClockwise.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\CommandMoveDown.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\CommandMoveLeft.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\CommandMoveRight.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\Classes\GameField.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\MainGameScene.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\MessagesQueue.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\SimpleUI.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\Classes\BackgroundElementUI.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\TopPanel.cpp">
-      <Filter>src</Filter>
+      <Filter>src\ui</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\BottomPanel.cpp">
-      <Filter>src</Filter>
+      <Filter>src\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\SimpleUI.cpp">
+      <Filter>src\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\TopPanel.cpp">
+      <Filter>src\ui</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\UserInput.cpp">
-      <Filter>src</Filter>
+      <Filter>src\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\CommandMoveClockwise.cpp">
+      <Filter>src\commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\CommandMoveCounterClockwise.cpp">
+      <Filter>src\commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\CommandMoveDown.cpp">
+      <Filter>src\commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\CommandMoveLeft.cpp">
+      <Filter>src\commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\CommandMoveRight.cpp">
+      <Filter>src\commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\BlockContactListener.cpp">
+      <Filter>src\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\MessagesQueue.cpp">
+      <Filter>src\utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -74,59 +83,59 @@
     <ClInclude Include="..\Classes\Block.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\BlockContactListener.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Command.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\CommandMoveClockwise.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\CommandMoveCounterClockwise.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\CommandMoveDown.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\CommandMoveLeft.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\CommandMoveRight.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Constants.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\GameField.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\MainGameScene.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\MessagesQueue.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\AbstractUI.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\SimpleUI.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\AbstractElementUI.h">
       <Filter>resource</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\BackgroundElementUI.h">
-      <Filter>src</Filter>
+    <ClInclude Include="..\Classes\AbstractUI.h">
+      <Filter>src\ui</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\TopPanel.h">
-      <Filter>src</Filter>
+    <ClInclude Include="..\Classes\BackgroundElementUI.h">
+      <Filter>src\ui</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\BottomPanel.h">
-      <Filter>src</Filter>
+      <Filter>src\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\SimpleUI.h">
+      <Filter>src\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\TopPanel.h">
+      <Filter>src\ui</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\UserInput.h">
-      <Filter>src</Filter>
+      <Filter>src\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Command.h">
+      <Filter>src\commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\CommandMoveClockwise.h">
+      <Filter>src\commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\CommandMoveCounterClockwise.h">
+      <Filter>src\commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\CommandMoveDown.h">
+      <Filter>src\commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\CommandMoveLeft.h">
+      <Filter>src\commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\CommandMoveRight.h">
+      <Filter>src\commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\BlockContactListener.h">
+      <Filter>src\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Constants.h">
+      <Filter>src\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\MessagesQueue.h">
+      <Filter>src\utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
