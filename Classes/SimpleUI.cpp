@@ -1,6 +1,8 @@
 #include "SimpleUI.h"
 #include "BackgroundElementUI.h"
 #include "TopPanel.h"
+#include "BottomPanel.h"
+#include "UserInput.h"
 
 SimpleUI::~SimpleUI() {
 	for (auto iterator : _childrens) {
@@ -20,6 +22,12 @@ SimpleUI::SimpleUI(Layer* layer) {
 
 	TopPanel *tp = new TopPanel(layer, winSize);
 	_childrens.push_back(tp);
+
+	BottomPanel *bp = new BottomPanel(layer, winSize);
+	_childrens.push_back(bp);
+
+	UserInput *ui = new UserInput(bp->getLayer(), bp->getLayer()->getContentSize());
+	_childrens.push_back(ui);
 }
 
 void SimpleUI::show(){

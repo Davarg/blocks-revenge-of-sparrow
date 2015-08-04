@@ -30,6 +30,7 @@ public:
 
 	virtual const char* getName() const override { return _name; }
 	virtual bool isDisable() const override { return _disable; }
+	Layer* getLayer() { return _layerBack; }
 	virtual void disable(bool flag) override;
 	virtual void show() override;
 	Size getUserSize() const;

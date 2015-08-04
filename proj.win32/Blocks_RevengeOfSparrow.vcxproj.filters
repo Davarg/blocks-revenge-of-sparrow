@@ -57,6 +57,12 @@
     <ClCompile Include="..\Classes\TopPanel.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\BottomPanel.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\UserInput.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -114,6 +120,12 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\TopPanel.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\BottomPanel.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\UserInput.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

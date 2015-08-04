@@ -141,6 +141,7 @@ xcopy /Y /Q "$(EngineRoot)external\websockets\prebuilt\win32\*.*" "$(OutDir)"</C
     <ClCompile Include="..\Classes\BackgroundElementUI.cpp" />
     <ClCompile Include="..\Classes\Block.cpp" />
     <ClCompile Include="..\Classes\BlockContactListener.cpp" />
+    <ClCompile Include="..\Classes\BottomPanel.cpp" />
     <ClCompile Include="..\Classes\CommandMoveClockwise.cpp" />
     <ClCompile Include="..\Classes\CommandMoveCounterClockwise.cpp" />
     <ClCompile Include="..\Classes\CommandMoveDown.cpp" />
@@ -151,6 +152,7 @@ xcopy /Y /Q "$(EngineRoot)external\websockets\prebuilt\win32\*.*" "$(OutDir)"</C
     <ClCompile Include="..\Classes\MessagesQueue.cpp" />
     <ClCompile Include="..\Classes\SimpleUI.cpp" />
     <ClCompile Include="..\Classes\TopPanel.cpp" />
+    <ClCompile Include="..\Classes\UserInput.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -160,6 +162,7 @@ xcopy /Y /Q "$(EngineRoot)external\websockets\prebuilt\win32\*.*" "$(OutDir)"</C
     <ClInclude Include="..\Classes\BackgroundElementUI.h" />
     <ClInclude Include="..\Classes\Block.h" />
     <ClInclude Include="..\Classes\BlockContactListener.h" />
+    <ClInclude Include="..\Classes\BottomPanel.h" />
     <ClInclude Include="..\Classes\Command.h" />
     <ClInclude Include="..\Classes\CommandMoveClockwise.h" />
     <ClInclude Include="..\Classes\CommandMoveCounterClockwise.h" />
@@ -172,6 +175,7 @@ xcopy /Y /Q "$(EngineRoot)external\websockets\prebuilt\win32\*.*" "$(OutDir)"</C
     <ClInclude Include="..\Classes\MessagesQueue.h" />
     <ClInclude Include="..\Classes\SimpleUI.h" />
     <ClInclude Include="..\Classes\TopPanel.h" />
+    <ClInclude Include="..\Classes\UserInput.h" />
     <ClInclude Include="main.h" />
   </ItemGroup>
   <ItemGroup>
