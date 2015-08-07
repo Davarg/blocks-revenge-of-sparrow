@@ -2,9 +2,11 @@
 #include "Constants.h"
 #include "BackgroundElementUI.h"
 #include <math.h>
+#include "GLES-Render.h"
 
 static b2World *world = nullptr;
 static MainGameScene *gameScene = nullptr;
+static GLESDebugDraw *debugDraw = nullptr;
 
 MainGameScene::~MainGameScene() {
 	/*if (_spriteGlass)
@@ -23,9 +25,24 @@ b2World* MainGameScene::getWorld() {
 	if (!world) {
 		b2Vec2 gravityVec{ 0, -1.8f };
 		world = new b2World(gravityVec);
+
+		debugDraw = new GLESDebugDraw(SCALE_RATIO);
+		uint32  flags = 0;
+		flags += b2Draw::e_shapeBit;
+		flags += b2Draw::e_jointBit;
+		// flags + = b2Draw :: e_aabbBit;
+		// flags + = b2Draw :: e_pairBit;
+		flags += b2Draw::e_centerOfMassBit;
+		debugDraw->SetFlags(flags);
+		world->SetDebugDraw(debugDraw);
 	}
 
 	return world;
+}
+
+void MainGameScene::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags) {
+	glEnableVertexAttribArray(0);
+	world->DrawDebugData();
 }
 
 Scene* MainGameScene::createScene() {

@@ -56,7 +56,7 @@ BackgroundElementUI::BackgroundElementUI(Layer *layer, Size winSize) {
 
 	_layerBack->addChild(_spriteGlass);
 	_layerBack->addChild(animatedSprite);
-	//createGlass();
+	createGlass();
 }
 
 void BackgroundElementUI::show() {
