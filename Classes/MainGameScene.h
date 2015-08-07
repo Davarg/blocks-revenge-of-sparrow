@@ -31,7 +31,9 @@ private:
 	BlockContactListener blockContactListener;
 	
 	void initArrayOfBlocks();
+#ifdef _DEBUG
 	virtual void draw(Renderer *renderer, const Mat4 &transform, uint32_t flags) override;
+#endif
 	
 public: 
 	~MainGameScene();
