@@ -56,7 +56,7 @@ BackgroundElementUI::BackgroundElementUI(Layer *layer, Size winSize) {
 	auto animate = Animate::create(animation);
 	_animatedSprite->runAction(animate);
 
-	_layerBack->addChild(_spriteGlass);
+	_layerBack->addChild(_spriteGlass);   
 	_layerBack->addChild(_animatedSprite);
 	createGlass();
 }

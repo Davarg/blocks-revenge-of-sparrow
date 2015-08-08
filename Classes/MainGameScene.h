@@ -27,6 +27,9 @@ private:
 	Command *_moveClockwise;
 	Command *_moveCounterClockwise;
 	BlockContactListener _blockContactListener;
+#ifdef _DEBUG
+	virtual void draw(Renderer *renderer, const Mat4 &transform, uint32_t flags) override;
+#endif
 	
 public: 
 	~MainGameScene();
