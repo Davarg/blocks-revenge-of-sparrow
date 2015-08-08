@@ -16,7 +16,7 @@ MainGameScene::~MainGameScene() {
 	CC_SAFE_RELEASE_NULL(_moveDown);
 	CC_SAFE_RELEASE_NULL(_currentBlock);
 	CC_SAFE_DELETE(world);
-	CC_SAFE_DELETE(simpleUI);
+	CC_SAFE_DELETE(_simpleUI);
 }
 
 b2World* MainGameScene::getWorld() {
@@ -47,28 +47,22 @@ bool MainGameScene::init() {
 	_moveRight = nullptr;
 	_currentBlock = nullptr;
 
-	simpleUI = new SimpleUI(this);
-	auto size = Director::getInstance()->getVisibleSize();
-	
-	auto listenerKey = EventListenerKeyboard::create();
-	//listenerKey->onKeyPressed = CC_CALLBACK_2(MainGameScene::onKeyPressed, this);
-	//_eventDispatcher->addEventListenerWithSceneGraphPriority(listenerKey, this);
-
+	_simpleUI = new SimpleUI(this);
 	_currentBlock = Block::generateBlock();
-	auto element = simpleUI->getChildrenByName(BackgroundElementUI::name());
-	//auto spriteBack = ((BackgroundElementUI*)element)->getSprite();
 
+	BackgroundElementUI *beui = (BackgroundElementUI*)_simpleUI->getChildrenByName(BackgroundElementUI::name());
+	
 	/*if (_currentBlock) {
-		Vec2 pos = { spriteBack->getPositionX() + 4, spriteBack->getContentSize().height - 2 };
+		Vec2 pos = { 0, 0 };
 		_currentBlock->setPositionInPxl(pos);
-		addChild(_currentBlock->getSprite());
+		beui->getLayer()->addChild(_currentBlock->getSprite());
 
 		_currentBlock->getAttachedBlock()->setPositionInPxl(Vec2(_currentBlock->getSprite()->getContentSize().width
 			+ _currentBlock->getSprite()->getPositionX()
 			, _currentBlock->getSprite()->getPositionY()));
-		addChild(_currentBlock->getAttachedBlock()->getSprite());
+		beui->getLayer()->addChild(_currentBlock->getAttachedBlock()->getSprite());
 	}*/
-
+	
 	_moveLeft = CommandMoveLeft::create();
 	_moveRight = CommandMoveRight::create();
 	_moveCounterClockwise = CommandMoveCounterClockwise::create();
@@ -81,17 +75,17 @@ bool MainGameScene::init() {
 	_moveClockwise = nullptr;//new CommandMoveClockwise(); //Memory Leak
 	_moveDown = nullptr;//CommandMoveDown::create();
 
-	//initArrayOfBlocks();
+	/*const Size gameFieldSizePxl = beui->getUserSize();
+	const Size sizeBlock = _currentBlock->getSprite()->getContentSize();
+	GameField::init(gameFieldSizePxl.width / sizeBlock.width, gameFieldSizePxl.height / sizeBlock.height);*/
+	GameField::init();
 
-	//_glassHeight = spriteBack->getContentSize().height / _currentBlock->getSprite()->getContentSize().height;
-	//_glassWidt = spriteBack->getContentSize().width / _currentBlock->getSprite()->getContentSize().width;
-
-	MainGameScene::getWorld()->SetContactListener(&blockContactListener);
+	MainGameScene::getWorld()->SetContactListener(&_blockContactListener);
 	MessagesQueue::addListener(MessagesQueue::MessageType::ADD_BLOCK_ON_SCENE, static_cast<void*>(this)
 				, &MainGameScene::wrapperToAddBlockListener);
 	MessagesQueue::addListener(MessagesQueue::MessageType::CREATE_JOINT, &Block::createJointListener);
 
-	simpleUI->show();
+	_simpleUI->show();
 
 	return true;
 }
@@ -165,35 +159,20 @@ void MainGameScene::addBlockListener(void* args) {
 	GameField::checkField();
 
 	_currentBlock = Block::generateBlock();
-	auto element = simpleUI->getChildrenByName(BackgroundElementUI::name());
-	//auto spriteBack = ((BackgroundElementUI*)element)->getSprite();
+	BackgroundElementUI *beui = (BackgroundElementUI*)_simpleUI->getChildrenByName(BackgroundElementUI::name());
+	const Size gameFieldSizePxl = beui->getUserSize();
+	auto spriteBack = beui->getLayer()->getChildByTag(0);
 
-	/*if (_currentBlock) {
-		Vec2 pos = { spriteBack->getPositionX() + 4, spriteBack->getContentSize().height - 2 };
+	if (_currentBlock) {
+		Vec2 pos = { spriteBack->getPositionX() + 1, spriteBack->getContentSize().height - 2 };
 		_currentBlock->setPositionInPxl(pos);
-		addChild(_currentBlock->getSprite());
+		beui->getLayer()->addChild(_currentBlock->getSprite());
 
 		_currentBlock->getAttachedBlock()->setPositionInPxl(Vec2(_currentBlock->getSprite()->getContentSize().width
 			+ _currentBlock->getSprite()->getPositionX()
 			, _currentBlock->getSprite()->getPositionY()));
-		addChild(_currentBlock->getAttachedBlock()->getSprite());
-	}*/
+		beui->getLayer()->addChild(_currentBlock->getAttachedBlock()->getSprite());
+	}
 
 	resumeSchedulerAndActions();
-}
-
-void MainGameScene::initArrayOfBlocks() {
-	if (_currentBlock != nullptr) {
-		auto element = simpleUI->getChildrenByName(BackgroundElementUI::name());
-		//auto spriteBack = ((BackgroundElementUI*)element)->getSprite();
-
-		/*const int HEIGHT = spriteBack->getContentSize().height / _currentBlock->getSprite()->getContentSize().height;
-		const int WIDTH = spriteBack->getContentSize().width / _currentBlock->getSprite()->getContentSize().width;
-
-		GameField::init(HEIGHT, WIDTH);*/
-	}
-	else {
-		cocos2d::log("Block doesn't have size");
-		throw;
-	}
 }

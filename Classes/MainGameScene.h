@@ -19,18 +19,14 @@ USING_NS_CC;
 
 class MainGameScene : public Layer {
 private:
-	int _glassWidt;
-	int _glassHeight;
-	SimpleUI *simpleUI;
 	Command *_moveLeft;
 	Command *_moveDown;
+	SimpleUI *_simpleUI;
 	Command *_moveRight;
 	Block *_currentBlock;
 	Command *_moveClockwise;
 	Command *_moveCounterClockwise;
-	BlockContactListener blockContactListener;
-	
-	void initArrayOfBlocks();
+	BlockContactListener _blockContactListener;
 	
 public: 
 	~MainGameScene();

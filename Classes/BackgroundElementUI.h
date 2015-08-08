@@ -10,7 +10,8 @@ USING_NS_CC;
 class BackgroundElementUI : public AbstractElementUI {
 private:
 	static const char* _name;
-	const int numAnimFiles = 18;
+	const int _numAnimFiles = 18;
+	const int _tagBackground = 0;
 	const float _realBottomMargin = 1;
 	const Size _realSize = { 16, 21 };
 	const char* _glassPath = "../Resources/ui/back.png";
@@ -21,6 +22,7 @@ private:
 	b2Body *_bodyGlass;
 	Layer *_layerParent;
 	Sprite *_spriteGlass;
+	Sprite *_animatedSprite;
 
 	void createGlass();
 

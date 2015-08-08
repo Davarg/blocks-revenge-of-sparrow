@@ -20,9 +20,9 @@ BackgroundElementUI::BackgroundElementUI(Layer *layer, Size winSize) {
 	FileUtils::getInstance()->setSearchPaths(*vec);
 	const float scaleX = winSize.width / _realSize.width;
 	const float scaleY = (winSize.height - 55) / _realSize.height;
-	Vector<SpriteFrame*> animFrames(numAnimFiles);
+	Vector<SpriteFrame*> animFrames(_numAnimFiles);
 	char str[10] = { 0 };
-	auto animatedSprite = Sprite::create();
+	_animatedSprite = Sprite::create();
 
 	for (int i = 1; i <= animFrames.capacity(); i++) {
 		sprintf(str, "%d.png", i);
@@ -43,20 +43,22 @@ BackgroundElementUI::BackgroundElementUI(Layer *layer, Size winSize) {
 	_spriteGlass->setPosition(0, 0);
 	_spriteGlass->setScaleX(_layerBack->getContentSize().width / _spriteGlass->getContentSize().width);
 	_spriteGlass->setScaleY(_layerBack->getContentSize().height / _spriteGlass->getContentSize().height);
+	_spriteGlass->setTag(_tagBackground);
 
-	animatedSprite->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
-	animatedSprite->setScaleX(0.0275f);
-	animatedSprite->setScaleY(0.0267f);
-	animatedSprite->setPosition(1.1f, 0.51f);
+	_animatedSprite->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+	_animatedSprite->setScaleX(0.0275f);
+	_animatedSprite->setScaleY(0.0267f);
+	_animatedSprite->setPosition(1.1f, 0.51f);
+	_animatedSprite->setContentSize(animFrames.at(0)->getOriginalSizeInPixels());
 
 	auto animation = Animation::createWithSpriteFrames(animFrames, 0.2f);
 	animation->setLoops(-1);
 	auto animate = Animate::create(animation);
-	animatedSprite->runAction(animate);
+	_animatedSprite->runAction(animate);
 
 	_layerBack->addChild(_spriteGlass);
-	_layerBack->addChild(animatedSprite);
-	//createGlass();
+	_layerBack->addChild(_animatedSprite);
+	createGlass();
 }
 
 void BackgroundElementUI::show() {
@@ -72,7 +74,7 @@ void BackgroundElementUI::disable(bool flag) {
 }
 
 Size BackgroundElementUI::getUserSize() const {
-	return { 0, 0 };
+	return _animatedSprite->getContentSize();
 }
 
 void BackgroundElementUI::createGlass() {

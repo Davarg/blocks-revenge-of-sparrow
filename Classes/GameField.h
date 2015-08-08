@@ -9,6 +9,8 @@ USING_NS_CC;
 
 class GameField {
 private:
+	static int _fieldWidth;
+	static int _fieldHeight;
 	CC_DISALLOW_IMPLICIT_CONSTRUCTORS(GameField);
 
 public:
@@ -22,7 +24,7 @@ public:
 	static Block* getBlock(int y, int x);
 	static void updateGameField(void* args);
 	static void setBlock(int y, int x, Block* block);
-	static void init(const int height, const int width);
+	static void init(const int width = 0, const int height = 0);
 };
 
 #endif

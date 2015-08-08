@@ -1,14 +1,14 @@
 #include "GameField.h"
 #include "MessagesQueue.h"
 
+int GameField::_fieldWidth = 8;
+int GameField::_fieldHeight = 13;
 Block ***_arrayBlocks = nullptr;
-int HEIGHT = 0;
-int WIDHT = 0;
 
 GameField::~GameField() {
 	if (_arrayBlocks) {
-		for (int i = 0; i < HEIGHT; i++) {
-			for (int k = 0; k < WIDHT; k++) {
+		for (int i = 0; i < _fieldHeight; i++) {
+			for (int k = 0; k < _fieldWidth; k++) {
 				if (_arrayBlocks[i][k])
 					CC_SAFE_RELEASE_NULL(_arrayBlocks[i][k]);
 			}
@@ -17,18 +17,22 @@ GameField::~GameField() {
 	}
 }
 
-void GameField::init(const int height, const int width) {
+void GameField::init(const int width, const int height) {
 	if (!_arrayBlocks) {
-		_arrayBlocks = new Block**[height];
-		for (int i = 0; i < height; i++)
-			_arrayBlocks[i] = new Block*[width];
+		if (height && width) {
+			_fieldHeight = height;
+			_fieldWidth = width;
+		}
 
-		for (int i = 0; i < height; i++)
-			for (int k = 0; k < width; k++)
+		_arrayBlocks = new Block**[_fieldHeight];
+		for (int i = 0; i < _fieldHeight; i++)
+			_arrayBlocks[i] = new Block*[_fieldWidth];
+
+		for (int i = 0; i < _fieldHeight; i++)
+			for (int k = 0; k < _fieldWidth; k++)
 				_arrayBlocks[i][k] = nullptr;
 
-		HEIGHT = height;
-		WIDHT = width;
+		
 
 		MessagesQueue::addListener(MessagesQueue::MessageType::UPDATE_GAME_FIELD, &GameField::updateGameField);
 	}
@@ -69,7 +73,7 @@ Block* GameField::getBlock(int y, int x) {
 		throw;
 	}
 
-	if (y < HEIGHT && x < WIDHT)
+	if (y < _fieldHeight && x < _fieldWidth)
 		return _arrayBlocks[y][x];
 	else
 		return nullptr;
@@ -81,7 +85,7 @@ Block* GameField::getBlock(Vec2 pos) {
 		throw;
 	}
 
-	if (pos.y < HEIGHT && pos.x < WIDHT) {
+	if (pos.y < _fieldHeight && pos.x < _fieldWidth) {
 		const int x = pos.x;
 		const int y = pos.y;
 		return _arrayBlocks[y][x];
@@ -92,8 +96,8 @@ Block* GameField::getBlock(Vec2 pos) {
 
 b2Vec2 GameField::getSize() {
 	b2Vec2 size; 
-	size.x = WIDHT;
-	size.y = HEIGHT;
+	size.x = _fieldWidth;
+	size.y = _fieldHeight;
 
 	return size;
 }
@@ -112,7 +116,7 @@ void GameField::checkField() {
 
 	GameField::recountGameField();
 
-	for (int i = 0; i < HEIGHT; i++) {
+	for (int i = 0; i < _fieldHeight; i++) {
 		if (left != right && counterLeftRight >= 3) {
 			vectorLeftRight.push_back(left);
 			vectorLeftRight.push_back(right);
@@ -124,7 +128,7 @@ void GameField::checkField() {
 		left = 0;
 		right = 0;
 
-		for (int k = 0; k < WIDHT; k++) {
+		for (int k = 0; k < _fieldWidth; k++) {
 			if (_arrayBlocks[i][k]) {
 				if (currentColor != _arrayBlocks[i][k]->getColor() && counterLeftRight < 3) {
 					currentColor = _arrayBlocks[i][k]->getColor();
@@ -164,7 +168,7 @@ void GameField::checkField() {
 	}
 
 	currentColor = Color3B::WHITE;
-	for (int i = 0; i < WIDHT; i++) {
+	for (int i = 0; i < _fieldWidth; i++) {
 		if (top != bottom && counterTopDown >= 3) {
 			vectorUpDown.push_back(bottom);
 			vectorUpDown.push_back(top);
@@ -176,7 +180,7 @@ void GameField::checkField() {
 		top = 0;
 		bottom = 0;
 
-		for (int k = 0; k < HEIGHT; k++) {
+		for (int k = 0; k < _fieldHeight; k++) {
 			if (_arrayBlocks[k][i]) {
 				if (currentColor != _arrayBlocks[k][i]->getColor() && counterTopDown < 3) {
 					currentColor = _arrayBlocks[k][i]->getColor();
@@ -253,8 +257,8 @@ void GameField::checkField() {
 }
 
 void GameField::recountGameField() {
-	for (int i = 0; i < HEIGHT; i++) {
-		for (int k = 0; k < WIDHT; k++) {
+	for (int i = 0; i < _fieldHeight; i++) {
+		for (int k = 0; k < _fieldWidth; k++) {
 			if (_arrayBlocks[i][k]) {
 				const int y1 = _arrayBlocks[i][k]->getPosOnField().y;
 				const int x1 = _arrayBlocks[i][k]->getPosOnField().x;
