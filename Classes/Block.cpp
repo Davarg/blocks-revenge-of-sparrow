@@ -18,6 +18,9 @@ bool Block::init(Sprite* _sprite) {
 	try {
 		_sprite->setScaleX(0.037f);
 		_sprite->setScaleY(0.035f);
+#ifdef _DEBUG
+		_sprite->setOpacity(60);
+#endif
 
 		b2BodyDef bodyDef;
 		bodyDef.position = b2Vec2(_sprite->getPositionX() / SCALE_RATIO, _sprite->getPositionY() / SCALE_RATIO);

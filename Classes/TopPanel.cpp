@@ -47,6 +47,12 @@ TopPanel::TopPanel(Layer *layer, Size winSize) {
 	_fieldScore->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
 	_fieldScore->setPosition(1.6f, 0.1f);
 
+#ifdef _DEBUG
+	_spritePanel->setOpacity(60);
+	_labelNext->setOpacity(60);
+	_labelScore->setOpacity(60);
+	_fieldScore->setOpacity(60);
+#endif
 	_layerBack->addChild(_spritePanel);
 	_layerBack->addChild(_labelNext);
 	_layerBack->addChild(_labelScore);

@@ -26,6 +26,9 @@ BottomPanel::BottomPanel(Layer *layer, Size winSize) {
 	_spritePanel->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
 	_spritePanel->setPosition(0, 0);
 
+#ifdef _DEBUG
+	_spritePanel->setOpacity(60);
+#endif 
 	_layerBack->addChild(_spritePanel);
 }
 
