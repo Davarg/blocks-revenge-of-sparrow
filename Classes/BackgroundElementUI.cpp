@@ -19,7 +19,9 @@ BackgroundElementUI::BackgroundElementUI(Layer *layer, Size winSize) {
 
 	for (int i = 1; i <= animFrames.capacity(); i++) {
 		sprintf(str, "%d.png", i);
-		auto frame = SpriteFrame::create(str, Rect(0, 0, 416, 608));
+#ifdef _DEBUG
+		auto frame = SpriteFrame::create(str, Rect(0, 0, 416, 680));
+#endif
 		animFrames.pushBack(frame);
 	}
 
@@ -34,7 +36,9 @@ BackgroundElementUI::BackgroundElementUI(Layer *layer, Size winSize) {
 	_spriteGlass->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
 	_spriteGlass->setPosition(Vec2::ZERO);
 
+#ifdef _DEBUG
 	_animatedSprite->setPosition(32, 65);
+#endif
 	_animatedSprite->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
 
 	auto animation = Animation::createWithSpriteFrames(animFrames, 0.2f);

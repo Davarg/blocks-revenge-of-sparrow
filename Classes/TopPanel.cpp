@@ -14,29 +14,37 @@ TopPanel::TopPanel(Layer *layer, Size winSize) {
 	_layerParent = layer;
 	_layerBack = Layer::create();
 	_layerBack->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
-	_layerBack->setPosition(0, 750);
+#ifdef _DEBUG //Need to properly calculate position on screen size, avoid absolute position
+	_layerBack->setPosition(0, 745);
+#endif
 
 	_spritePanel = Sprite::create(_panelPath);
 	_spritePanel->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
 	_spritePanel->setPosition(Vec2::ZERO);
 
 	_labelNext = Sprite::create(_labelNextPath);
-	_labelNext->setScaleX(0.02f);
-	_labelNext->setScaleY(0.01f);
+#ifdef _DEBUG
+	_labelNext->setScaleX(0.6f);
+	_labelNext->setScaleY(0.4f);
+	_labelNext->setPosition(335, 27);
+#endif
 	_labelNext->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
-	_labelNext->setPosition(12.2f, 0.7f);
-
+	
 	_labelScore = Sprite::create(_labelScorePath);
-	_labelScore->setScaleX(0.02f);
-	_labelScore->setScaleY(0.01f);
+#ifdef _DEBUG 
+	_labelScore->setScaleX(0.6f);
+	_labelScore->setScaleY(0.4f);
+	_labelScore->setPosition(90, 27);
+#endif
 	_labelScore->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
-	_labelScore->setPosition(1.6f, 0.7f);
-
+	
 	_fieldScore = Sprite::create(_fieldScorePath);
-	_fieldScore->setScaleX(0.02f);
-	_fieldScore->setScaleY(0.01f);
+#ifdef _DEBUG 
+	_fieldScore->setScaleX(0.6f);
+	_fieldScore->setScaleY(0.4f);
+	_fieldScore->setPosition(90, 3);
+#endif
 	_fieldScore->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
-	_fieldScore->setPosition(1.6f, 0.1f);
 
 #ifdef _DEBUG
 	_spritePanel->setOpacity(60);

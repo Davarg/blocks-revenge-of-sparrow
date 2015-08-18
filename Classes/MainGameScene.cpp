@@ -113,7 +113,7 @@ bool MainGameScene::init() {
 
 void MainGameScene::update(float dt) {
 	int velocityIterations = 10;
-	int positionIterations = 10;	MainGameScene::getWorld()->Step(dt, velocityIterations, positionIterations);
+	int positionIterations = 10;	//MainGameScene::getWorld()->Step(dt, velocityIterations, positionIterations);
 	/*for (b2Body *body = MainGameScene::getWorld()->GetBodyList(); body != NULL; body = body->GetNext()) {
 		if (body->GetUserData()) {
 			Sprite *spr = static_cast<Sprite*>(body->GetUserData());

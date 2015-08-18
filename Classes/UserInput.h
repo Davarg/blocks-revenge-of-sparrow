@@ -11,15 +11,15 @@ using namespace ui;
 class UserInput : public AbstractElementUI {
 private:
 	static const char* _name;
-	const char* _leftNormalPath = "../Resources/btns/left_up.png";
-	const char* _downNormalPath = "../Resources/btns/down_up.png";
-	const char* _rightNormalPath = "../Resources/btns/right_up.png";
-	const char* _rotateNormalPath = "../Resources/btns/rotate_up.png";
+	const char* _leftNormalPath = "btns/left_up.png";
+	const char* _downNormalPath = "btns/down_up.png";
+	const char* _rightNormalPath = "btns/right_up.png";
+	const char* _rotateNormalPath = "btns/rotate_up.png";
 
-	const char* _leftPressedPath = "../Resources/btns/left_down.png";
-	const char* _downPressedPath = "../Resources/btns/down_down.png";
-	const char* _rightPressedPath = "../Resources/btns/right_down.png";
-	const char* _rotatePressedPath = "../Resources/btns/rotate_down.png";
+	const char* _leftPressedPath = "btns/left_down.png";
+	const char* _downPressedPath = "btns/down_down.png";
+	const char* _rightPressedPath = "btns/right_down.png";
+	const char* _rotatePressedPath = "btns/rotate_down.png";
 
 	bool _disable;
 	Button *_btnLeft;

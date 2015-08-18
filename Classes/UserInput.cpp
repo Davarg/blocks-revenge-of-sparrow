@@ -23,22 +23,35 @@ UserInput::UserInput(Layer* layer, Size winSize) {
 	_btnRight->addClickEventListener(CC_CALLBACK_1(UserInput::buttonClick, this));
 	_btnRotate->addClickEventListener(CC_CALLBACK_1(UserInput::buttonClick, this));
 
-	_btnDown->setScaleX(0.0281f);
-	_btnDown->setScaleY(0.021f);
-	_btnDown->setPosition({ 6, 1.05f });
+	_btnDown->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+	_btnLeft->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+	_btnRight->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+	_btnRotate->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
 
-	_btnLeft->setScaleX(0.0281f);
-	_btnLeft->setScaleY(0.021f);
-	_btnLeft->setPosition({ 2.6f, 1.05f });
+#ifdef _DEBUG
+	_btnDown->setScaleX(0.7f);
+	_btnDown->setScaleY(0.6f);
+	_btnDown->setPosition({ 390, 5 });
 
-	_btnRight->setScaleX(0.0281f);
-	_btnRight->setScaleY(0.021f);
-	_btnRight->setPosition({ 13.6f, 1.05f });
+	_btnLeft->setScaleX(0.7f);
+	_btnLeft->setScaleY(0.6f);
+	_btnLeft->setPosition({ 280, 5 });
 
-	_btnRotate->setScaleX(0.027f);
-	_btnRotate->setScaleY(0.02f);
-	_btnRotate->setPosition({ 10, 1.05f });
+	_btnRight->setScaleX(0.7f);
+	_btnRight->setScaleY(0.6f);
+	_btnRight->setPosition({ 180, 5 });
 
+	_btnRotate->setScaleX(0.7f);
+	_btnRotate->setScaleY(0.6f);
+	_btnRotate->setPosition({ 48, 5 });
+#endif
+
+#ifdef _DEBUG
+	_btnDown->setOpacity(80);
+	_btnLeft->setOpacity(80);
+	_btnRight->setOpacity(80);
+	_btnRotate->setOpacity(80);
+#endif
 	_layerBack->addChild(_btnDown);
 	_layerBack->addChild(_btnLeft);
 	_layerBack->addChild(_btnRight);
