@@ -8,23 +8,15 @@ BottomPanel::~BottomPanel() {
 }
 
 BottomPanel::BottomPanel(Layer *layer, Size winSize) {
-	const float scaleX = winSize.width / _realSize.width;
-	const float scaleY = 55 / _realSize.height;
-
 	_layerParent = layer;
 	_layerBack = Layer::create();
 	_spritePanel = Sprite::create(_panelPath);
 
 	_layerBack->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
-	_layerBack->setScaleX(scaleX);
-	_layerBack->setScaleY(scaleY);
-	_layerBack->setContentSize(_realSize);
-	_layerBack->setPosition(0, 0);
+	_layerBack->setPosition(Vec2::ZERO);
 
-	_spritePanel->setScaleX(0.0281f);
-	_spritePanel->setScaleY(0.036f);
 	_spritePanel->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
-	_spritePanel->setPosition(0, 0);
+	_spritePanel->setPosition(Vec2::ZERO);
 
 #ifdef _DEBUG
 	_spritePanel->setOpacity(60);

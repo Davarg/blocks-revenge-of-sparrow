@@ -12,10 +12,7 @@ private:
 	static const char* _name;
 	const int _numAnimFiles = 18;
 	const int _tagBackground = 0;
-	const float _realBottomMargin = 1;
-	const Size _realSize = { 16, 21 };
-	const char* _glassPath = "../Resources/ui/back.png";
-	const char* _backAnimFolderPath = "../Resources/ui/back_anim";
+	const char* _glassPath = "ui/back.png";
 
 	bool _disable;
 	Layer *_layerBack;
@@ -32,8 +29,8 @@ public:
 
 	virtual const char* getName() const override { return _name; }
 	virtual bool isDisable() const override { return _disable; }
-	Layer* getLayer() { return _layerBack; }
 	virtual void disable(bool flag) override;
+	Layer* getLayer() { return _layerBack; }
 	virtual void show() override;
 	Size getUserSize() const;
 

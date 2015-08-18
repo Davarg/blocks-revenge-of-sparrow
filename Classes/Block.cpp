@@ -23,13 +23,13 @@ bool Block::init(Sprite* _sprite) {
 #endif
 
 		b2BodyDef bodyDef;
-		bodyDef.position = b2Vec2(_sprite->getPositionX() / SCALE_RATIO, _sprite->getPositionY() / SCALE_RATIO);
+		bodyDef.position = b2Vec2(_sprite->getPositionX() / SCALE_RATIO_BOX2D, _sprite->getPositionY() / SCALE_RATIO_BOX2D);
 		bodyDef.userData = _sprite;
 		bodyDef.type = b2_dynamicBody;
 
 		b2PolygonShape shape;
-		shape.SetAsBox((_sprite->getContentSize().width / SCALE_RATIO) / 2.2f
-			, (_sprite->getContentSize().height / SCALE_RATIO) / 2.2f);
+		shape.SetAsBox((_sprite->getContentSize().width / SCALE_RATIO_BOX2D) / 2.2f
+			, (_sprite->getContentSize().height / SCALE_RATIO_BOX2D) / 2.2f);
 
 		b2FixtureDef fixtureDef;
 		fixtureDef.density = 1;
@@ -63,21 +63,21 @@ Block* Block::generateBlock() {
 
 	switch (COLOR1) {
 	case 0:
-		blockSprite = Sprite::create("../Resources/block_green.png");
+		blockSprite = Sprite::create("block_green.png");
 		blockSprite->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
 
 		block = Block::createBlock(blockSprite, 100, Color3B::GREEN);
 		break;
 
 	case 1:
-		blockSprite = Sprite::create("../Resources/block_red.png");
+		blockSprite = Sprite::create("block_red.png");
 		blockSprite->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
 
 		block = Block::createBlock(blockSprite, 100, Color3B::RED);
 		break;
 
 	case 2:
-		blockSprite = Sprite::create("../Resources/block_yellow.png");
+		blockSprite = Sprite::create("block_yellow.png");
 		blockSprite->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
 
 		block = Block::createBlock(blockSprite, 100, Color3B::YELLOW);
@@ -86,21 +86,21 @@ Block* Block::generateBlock() {
 
 	switch (COLOR2) {
 	case 0:
-		blockSprite2 = Sprite::create("../Resources/block_green.png");
+		blockSprite2 = Sprite::create("block_green.png");
 		blockSprite2->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
 
 		block->setJointWith(Block::createBlock(blockSprite2, 100, Color3B::GREEN, true));
 		break;
 
 	case 1:
-		blockSprite2 = Sprite::create("../Resources/block_red.png");
+		blockSprite2 = Sprite::create("block_red.png");
 		blockSprite2->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
 
 		block->setJointWith(Block::createBlock(blockSprite2, 100, Color3B::RED, true));
 		break;
 
 	case 2:
-		blockSprite2 = Sprite::create("../Resources/block_yellow.png");
+		blockSprite2 = Sprite::create("block_yellow.png");
 		blockSprite2->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
 
 		block->setJointWith(Block::createBlock(blockSprite2, 100, Color3B::YELLOW, true));
@@ -153,7 +153,7 @@ void Block::setSize(Size _size) {
 
 void Block::setPositionInPxl(Vec2 pos) {
 	_sprite->setPosition(pos);
-	_body->SetTransform(b2Vec2(pos.x / SCALE_RATIO, pos.y / SCALE_RATIO), 0);
+	_body->SetTransform(b2Vec2(pos.x / SCALE_RATIO_BOX2D, pos.y / SCALE_RATIO_BOX2D), 0);
 }
 
 Size Block::getSize() {
@@ -191,8 +191,8 @@ void Block::createJointListener(void* args) {
 	auto bodies = static_cast<bodiesStructArgs*>(args);
 	b2WeldJointDef jointDef;
 	jointDef.collideConnected = false;
-	jointDef.localAnchorA = b2Vec2(bodies->b1->GetLocalPoint(b2Vec2(bodies->pos.x / SCALE_RATIO, 0)).x
-									, bodies->b1->GetLocalPoint(b2Vec2(0, bodies->pos.y / SCALE_RATIO)).y + 0.1f);
+	jointDef.localAnchorA = b2Vec2(bodies->b1->GetLocalPoint(b2Vec2(bodies->pos.x / SCALE_RATIO_BOX2D, 0)).x
+									, bodies->b1->GetLocalPoint(b2Vec2(0, bodies->pos.y / SCALE_RATIO_BOX2D)).y + 0.1f);
 	jointDef.localAnchorB = b2Vec2(0, 0);
 	jointDef.bodyA = bodies->b1;
 	jointDef.bodyB = bodies->b2;

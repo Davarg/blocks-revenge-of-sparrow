@@ -27,7 +27,7 @@ b2World* MainGameScene::getWorld() {
 		world = new b2World(gravityVec);
 
 #ifdef _DEBUG
-		debugDraw = new GLESDebugDraw(SCALE_RATIO);
+		debugDraw = new GLESDebugDraw(SCALE_RATIO_BOX2D);
 		uint32  flags = 0;
 		flags += b2Draw::e_shapeBit;
 		flags += b2Draw::e_jointBit;
@@ -118,7 +118,7 @@ void MainGameScene::update(float dt) {
 		if (body->GetUserData()) {
 			Sprite *spr = static_cast<Sprite*>(body->GetUserData());
 			if (spr != nullptr) {
-				spr->setPosition(Vec2(body->GetPosition().x * SCALE_RATIO, body->GetPosition().y * SCALE_RATIO));
+				spr->setPosition(Vec2(body->GetPosition().x * SCALE_RATIO_BOX2D, body->GetPosition().y * SCALE_RATIO_BOX2D));
 				spr->setRotation(-1 * CC_RADIANS_TO_DEGREES(body->GetAngle()));
 			}
 		}

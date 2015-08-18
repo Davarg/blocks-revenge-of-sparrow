@@ -9,8 +9,7 @@ USING_NS_CC;
 class BottomPanel : public AbstractElementUI {
 private:
 	static const char* _name;
-	const Size _realSize = { 16, 1.5f };
-	const char* _panelPath = "../Resources/ui/bottom.png";
+	const char* _panelPath = "ui/bottom.png";
 
 	bool _disable;
 	Layer *_layerBack;

@@ -26,6 +26,11 @@ void AppDelegate::initGLContextAttrs()
 bool AppDelegate::applicationDidFinishLaunching() {
 	//auto size = new Size(720, 1280);
 	auto sizeFrame = new Size(480, 800);
+	
+	auto vecSearchPaths = FileUtils::getInstance()->getSearchPaths();
+	vecSearchPaths.push_back("../Resources/wvga");
+	vecSearchPaths.push_back("../Resources/wvga/ui/back_anim");
+	FileUtils::getInstance()->setSearchPaths(vecSearchPaths);
     
 	auto director = Director::getInstance();
     auto glview = director->getOpenGLView();
@@ -35,7 +40,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
         director->setOpenGLView(glview);
     }
 
-	glview->setDesignResolutionSize(sizeFrame->width, sizeFrame->height, ResolutionPolicy::NO_BORDER);
+	glview->setDesignResolutionSize(sizeFrame->width, sizeFrame->height, ResolutionPolicy::EXACT_FIT);
 
     director->setAnimationInterval(1.0 / 60);
     auto scene = MainGameScene::createScene();

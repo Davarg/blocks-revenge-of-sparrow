@@ -11,23 +11,14 @@ TopPanel::~TopPanel() {
 }
 
 TopPanel::TopPanel(Layer *layer, Size winSize) {
-	const float scaleX = winSize.width / _realSize.width;
-	const float scaleY = 55 / _realSize.height;
-
 	_layerParent = layer;
 	_layerBack = Layer::create();
-
 	_layerBack->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
-	_layerBack->setScaleX(scaleX);
-	_layerBack->setScaleY(scaleY);
-	_layerBack->setContentSize(_realSize);
-	_layerBack->setPosition(0, (_realBottomMargin * scaleY) + (_realSize.height * scaleY));
+	_layerBack->setPosition(0, 750);
 
 	_spritePanel = Sprite::create(_panelPath);
-	_spritePanel->setScaleX(_layerBack->getContentSize().width / _spritePanel->getContentSize().width);
-	_spritePanel->setScaleY(_layerBack->getContentSize().height / _spritePanel->getContentSize().height);
 	_spritePanel->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
-	_spritePanel->setPosition(0, 0);
+	_spritePanel->setPosition(Vec2::ZERO);
 
 	_labelNext = Sprite::create(_labelNextPath);
 	_labelNext->setScaleX(0.02f);

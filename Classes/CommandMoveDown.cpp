@@ -14,7 +14,7 @@ void CommandMoveDown::update(float dt) {
 
 	if (!_isUndo && !_isRedo) {
 		if (_positionOld.y - _block->getBody()->GetPosition().y >=
-			_block->getSprite()->getContentSize().height / SCALE_RATIO) {
+			_block->getSprite()->getContentSize().height / SCALE_RATIO_BOX2D) {
 			_block->getBody()->SetLinearVelocity((b2Vec2(oldVelocity.x, 0)));
 			_block->getAttachedBody()->SetLinearVelocity((b2Vec2(oldVelocity.x, 0)));
 			Director::getInstance()->getScheduler()->unscheduleUpdate(this);
@@ -47,13 +47,13 @@ void CommandMoveDown::execute(Block *block) {
 	_block = block;
 	_positionOld = _block->getBody()->GetPosition();
 	_positionNew = { _block->getBody()->GetPosition().x
-		, _block->getBody()->GetPosition().y - _block->getSprite()->getContentSize().height / SCALE_RATIO };
+		, _block->getBody()->GetPosition().y - _block->getSprite()->getContentSize().height / SCALE_RATIO_BOX2D };
 	_isUndo = false;
 	_isRedo = false;
 	_isExecute = true;
 
-	block->getBody()->SetLinearVelocity(b2Vec2(oldVelocity.x, (-nHeight / MOVETIME) / SCALE_RATIO));
-	block->getAttachedBody()->SetLinearVelocity(b2Vec2(oldVelocity.x, (-nHeight / MOVETIME) / SCALE_RATIO));
+	block->getBody()->SetLinearVelocity(b2Vec2(oldVelocity.x, (-nHeight / MOVETIME) / SCALE_RATIO_BOX2D));
+	block->getAttachedBody()->SetLinearVelocity(b2Vec2(oldVelocity.x, (-nHeight / MOVETIME) / SCALE_RATIO_BOX2D));
 }
 
 void CommandMoveDown::undo() {
@@ -63,8 +63,8 @@ void CommandMoveDown::undo() {
 	_isUndo = true;
 	_isRedo = false;
 
-	_block->getBody()->SetLinearVelocity(b2Vec2(oldVelocity.x, (nHeight / MOVETIME) / SCALE_RATIO));
-	_block->getAttachedBody()->SetLinearVelocity(b2Vec2(oldVelocity.x, (nHeight / MOVETIME) / SCALE_RATIO));
+	_block->getBody()->SetLinearVelocity(b2Vec2(oldVelocity.x, (nHeight / MOVETIME) / SCALE_RATIO_BOX2D));
+	_block->getAttachedBody()->SetLinearVelocity(b2Vec2(oldVelocity.x, (nHeight / MOVETIME) / SCALE_RATIO_BOX2D));
 }
 
 void CommandMoveDown::redo() {
@@ -74,6 +74,6 @@ void CommandMoveDown::redo() {
 	_isUndo = false;
 	_isRedo = true;
 
-	_block->getBody()->SetLinearVelocity(b2Vec2(oldVelocity.x, (-nHeight / MOVETIME) / SCALE_RATIO));
-	_block->getAttachedBody()->SetLinearVelocity(b2Vec2(oldVelocity.x, (-nHeight / MOVETIME) / SCALE_RATIO));
+	_block->getBody()->SetLinearVelocity(b2Vec2(oldVelocity.x, (-nHeight / MOVETIME) / SCALE_RATIO_BOX2D));
+	_block->getAttachedBody()->SetLinearVelocity(b2Vec2(oldVelocity.x, (-nHeight / MOVETIME) / SCALE_RATIO_BOX2D));
 }

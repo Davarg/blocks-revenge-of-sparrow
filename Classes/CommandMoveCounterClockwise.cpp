@@ -31,8 +31,8 @@ void moveBlock(int mainBlockY, int mainBlockX, int attachedBlockY, int attachedB
 				- block->getSprite()->getPositionX();
 			b2Vec2 position;
 
-			position.x = block->getSprite()->getPositionX() / SCALE_RATIO;
-			position.y = (block->getSprite()->getPositionY() + distance) / SCALE_RATIO;
+			position.x = block->getSprite()->getPositionX() / SCALE_RATIO_BOX2D;
+			position.y = (block->getSprite()->getPositionY() + distance) / SCALE_RATIO_BOX2D;
 
 			block->getAttachedBody()->SetTransform(position, 0);
 		}
@@ -51,8 +51,8 @@ void moveBlock(int mainBlockY, int mainBlockX, int attachedBlockY, int attachedB
 				- ((Sprite*)block->getAttachedBody()->GetUserData())->getPositionX();
 			b2Vec2 position;
 
-			position.x = block->getSprite()->getPositionX() / SCALE_RATIO;
-			position.y = (block->getSprite()->getPositionY() - distance) / SCALE_RATIO;
+			position.x = block->getSprite()->getPositionX() / SCALE_RATIO_BOX2D;
+			position.y = (block->getSprite()->getPositionY() - distance) / SCALE_RATIO_BOX2D;
 
 			block->getAttachedBody()->SetTransform(position, 0);
 		}
@@ -71,8 +71,8 @@ void moveBlock(int mainBlockY, int mainBlockX, int attachedBlockY, int attachedB
 				- block->getSprite()->getPositionY();
 			b2Vec2 position;
 
-			position.x = (block->getSprite()->getPositionX() - distance) / SCALE_RATIO;
-			position.y = block->getSprite()->getPositionY() / SCALE_RATIO;
+			position.x = (block->getSprite()->getPositionX() - distance) / SCALE_RATIO_BOX2D;
+			position.y = block->getSprite()->getPositionY() / SCALE_RATIO_BOX2D;
 
 			block->getAttachedBody()->SetTransform(position, 0);
 		}
@@ -91,8 +91,8 @@ void moveBlock(int mainBlockY, int mainBlockX, int attachedBlockY, int attachedB
 				- ((Sprite*)block->getAttachedBody()->GetUserData())->getPositionY();
 			b2Vec2 position;
 
-			position.x = (block->getSprite()->getPositionX() + distance) / SCALE_RATIO;
-			position.y = block->getSprite()->getPositionY() / SCALE_RATIO;
+			position.x = (block->getSprite()->getPositionX() + distance) / SCALE_RATIO_BOX2D;
+			position.y = block->getSprite()->getPositionY() / SCALE_RATIO_BOX2D;
 
 			block->getAttachedBody()->SetTransform(position, 0);
 		}

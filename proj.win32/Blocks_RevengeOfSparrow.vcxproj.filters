@@ -92,9 +92,6 @@
     <ClInclude Include="..\Classes\MainGameScene.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\AbstractElementUI.h">
-      <Filter>resource</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\AbstractUI.h">
       <Filter>src\ui</Filter>
     </ClInclude>
@@ -142,6 +139,9 @@
     </ClInclude>
     <ClInclude Include="..\Classes\GLES-Render.h">
       <Filter>src\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\AbstractElementUI.h">
+      <Filter>src\ui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

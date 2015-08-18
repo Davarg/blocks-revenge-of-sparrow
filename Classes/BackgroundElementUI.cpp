@@ -13,43 +13,29 @@ BackgroundElementUI::~BackgroundElementUI() {
 }
 
 BackgroundElementUI::BackgroundElementUI(Layer *layer, Size winSize) {
-	auto path = new std::string(_backAnimFolderPath);
-	auto vec = new std::vector<std::string>();
-	vec->push_back(*path);
-
-	FileUtils::getInstance()->setSearchPaths(*vec);
-	const float scaleX = winSize.width / _realSize.width;
-	const float scaleY = (winSize.height - 55) / _realSize.height;
 	Vector<SpriteFrame*> animFrames(_numAnimFiles);
 	char str[10] = { 0 };
 	_animatedSprite = Sprite::create();
 
 	for (int i = 1; i <= animFrames.capacity(); i++) {
 		sprintf(str, "%d.png", i);
-		auto frame = SpriteFrame::create(str, Rect(0, 0, 502, 712));
+		auto frame = SpriteFrame::create(str, Rect(0, 0, 416, 608));
 		animFrames.pushBack(frame);
 	}
 
 	_layerBack = Layer::create();
 	_layerParent = layer;
-	_layerBack->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
-	_layerBack->setPosition(0, (_realBottomMargin * scaleY) + (_realSize.height * scaleY));
-	_layerBack->setContentSize(_realSize);
-	_layerBack->setScaleX(scaleX);
-	_layerBack->setScaleY(scaleY);
+	_layerBack->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+	_layerBack->setPosition(Vec2::ZERO);
 
 	_spriteGlass = Sprite::create(_glassPath);
-	_spriteGlass->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
-	_spriteGlass->setPosition(0, 0);
-	_spriteGlass->setScaleX(_layerBack->getContentSize().width / _spriteGlass->getContentSize().width);
-	_spriteGlass->setScaleY(_layerBack->getContentSize().height / _spriteGlass->getContentSize().height);
+	_spriteGlass->setPosition(Vec2::ZERO);
 	_spriteGlass->setTag(_tagBackground);
+	_spriteGlass->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+	_spriteGlass->setPosition(Vec2::ZERO);
 
+	_animatedSprite->setPosition(32, 65);
 	_animatedSprite->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
-	_animatedSprite->setScaleX(0.0275f);
-	_animatedSprite->setScaleY(0.0267f);
-	_animatedSprite->setPosition(1.1f, 0.51f);
-	_animatedSprite->setContentSize(animFrames.at(0)->getOriginalSizeInPixels());
 
 	auto animation = Animation::createWithSpriteFrames(animFrames, 0.2f);
 	animation->setLoops(-1);
@@ -87,12 +73,12 @@ void BackgroundElementUI::createGlass() {
 
 	b2BodyDef glassDef;
 	glassDef.type = b2_staticBody;
-	glassDef.position = b2Vec2(_spriteGlass->getPositionX() / SCALE_RATIO
-		, _spriteGlass->getPositionY() / SCALE_RATIO);
+	glassDef.position = b2Vec2(_spriteGlass->getPositionX() / SCALE_RATIO_BOX2D
+		, _spriteGlass->getPositionY() / SCALE_RATIO_BOX2D);
 	_bodyGlass = MainGameScene::getWorld()->CreateBody(&glassDef);
 
 	b2PolygonShape shapeBottom;
-	shapeBottom.SetAsBox(_spriteGlass->getContentSize().width / SCALE_RATIO, POS_Y);
+	shapeBottom.SetAsBox(_spriteGlass->getContentSize().width / SCALE_RATIO_BOX2D, POS_Y);
 	b2FixtureDef fixtureDefBottom;
 	fixtureDefBottom.density = 1;
 	fixtureDefBottom.friction = 1000;
@@ -102,8 +88,8 @@ void BackgroundElementUI::createGlass() {
 	_bodyGlass->CreateFixture(&fixtureDefBottom);
 
 	b2PolygonShape shapeLeft;
-	shapeLeft.SetAsBox(0.1, _spriteGlass->getContentSize().height / SCALE_RATIO
-		, b2Vec2(-0.7, _spriteGlass->getContentSize().height / SCALE_RATIO), 0);
+	shapeLeft.SetAsBox(0.1, _spriteGlass->getContentSize().height / SCALE_RATIO_BOX2D
+		, b2Vec2(-0.7, _spriteGlass->getContentSize().height / SCALE_RATIO_BOX2D), 0);
 	b2FixtureDef fixtureDefLeft;
 	fixtureDefLeft.density = 1;
 	fixtureDefLeft.friction = 0;
@@ -112,9 +98,9 @@ void BackgroundElementUI::createGlass() {
 	_bodyGlass->CreateFixture(&fixtureDefLeft);
 
 	b2PolygonShape shapeRight;
-	shapeRight.SetAsBox(0.1, _spriteGlass->getContentSize().height / SCALE_RATIO
-		, b2Vec2(_spriteGlass->getContentSize().width / SCALE_RATIO - 0.8
-		, _spriteGlass->getContentSize().height / SCALE_RATIO), 0);
+	shapeRight.SetAsBox(0.1, _spriteGlass->getContentSize().height / SCALE_RATIO_BOX2D
+		, b2Vec2(_spriteGlass->getContentSize().width / SCALE_RATIO_BOX2D - 0.8
+		, _spriteGlass->getContentSize().height / SCALE_RATIO_BOX2D), 0);
 	b2FixtureDef fixtureDefRight;
 	fixtureDefRight.density = 1;
 	fixtureDefRight.friction = 0;

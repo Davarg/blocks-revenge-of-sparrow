@@ -9,12 +9,10 @@ USING_NS_CC;
 class TopPanel : public AbstractElementUI {
 private:
 	static const char* _name;
-	const Size _realSize = { 16, 1.5f };
-	const float _realBottomMargin = 20.3f;
-	const char* _panelPath = "../Resources/ui/top.png";
-	const char* _labelNextPath = "../Resources/ui/label_next.png";
-	const char* _labelScorePath = "../Resources/ui/label_score.png";
-	const char* _fieldScorePath = "../Resources/ui/field_score.png";
+	const char* _panelPath = "ui/top.png";
+	const char* _labelNextPath = "ui/label_next.png";
+	const char* _labelScorePath = "ui/label_score.png";
+	const char* _fieldScorePath = "ui/field_score.png";
 
 	bool _disable;
 	Layer *_layerBack;
