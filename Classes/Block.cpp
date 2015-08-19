@@ -4,6 +4,10 @@
 #include "GameField.h"
 #include <math.h>
 
+const char* Block::_blockRedPath = "block_red.png";
+const char* Block::_blockGreenPath = "block_green.png";
+const char* Block::_blockYellowPath = "block_yellow.png";
+
 void Block::destroy() {
 	_sprite->removeFromParentAndCleanup(true);
 	auto world = _body->GetWorld();
@@ -16,9 +20,9 @@ void Block::destroy() {
 
 bool Block::init(Sprite* _sprite) {
 	try {
-		_sprite->setScaleX(0.037f);
-		_sprite->setScaleY(0.035f);
 #ifdef _DEBUG
+		//_sprite->setScaleX(0.037f);
+		//_sprite->setScaleY(0.035f);
 		_sprite->setOpacity(60);
 #endif
 
@@ -63,21 +67,21 @@ Block* Block::generateBlock() {
 
 	switch (COLOR1) {
 	case 0:
-		blockSprite = Sprite::create("block_green.png");
+		blockSprite = Sprite::create(_blockGreenPath);
 		blockSprite->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
 
 		block = Block::createBlock(blockSprite, 100, Color3B::GREEN);
 		break;
 
 	case 1:
-		blockSprite = Sprite::create("block_red.png");
+		blockSprite = Sprite::create(_blockRedPath);
 		blockSprite->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
 
 		block = Block::createBlock(blockSprite, 100, Color3B::RED);
 		break;
 
 	case 2:
-		blockSprite = Sprite::create("block_yellow.png");
+		blockSprite = Sprite::create(_blockYellowPath);
 		blockSprite->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
 
 		block = Block::createBlock(blockSprite, 100, Color3B::YELLOW);
@@ -86,21 +90,21 @@ Block* Block::generateBlock() {
 
 	switch (COLOR2) {
 	case 0:
-		blockSprite2 = Sprite::create("block_green.png");
+		blockSprite2 = Sprite::create(_blockGreenPath);
 		blockSprite2->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
 
 		block->setJointWith(Block::createBlock(blockSprite2, 100, Color3B::GREEN, true));
 		break;
 
 	case 1:
-		blockSprite2 = Sprite::create("block_red.png");
+		blockSprite2 = Sprite::create(_blockRedPath);
 		blockSprite2->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
 
 		block->setJointWith(Block::createBlock(blockSprite2, 100, Color3B::RED, true));
 		break;
 
 	case 2:
-		blockSprite2 = Sprite::create("block_yellow.png");
+		blockSprite2 = Sprite::create(_blockYellowPath);
 		blockSprite2->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
 
 		block->setJointWith(Block::createBlock(blockSprite2, 100, Color3B::YELLOW, true));

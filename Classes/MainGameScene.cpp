@@ -73,16 +73,16 @@ bool MainGameScene::init() {
 
 	BackgroundElementUI *beui = (BackgroundElementUI*)_simpleUI->getChildrenByName(BackgroundElementUI::name());
 	
-	/*if (_currentBlock) {
+	if (_currentBlock) {
 		Vec2 pos = { 0, 0 };
 		_currentBlock->setPositionInPxl(pos);
 		beui->getLayer()->addChild(_currentBlock->getSprite());
 
-		_currentBlock->getAttachedBlock()->setPositionInPxl(Vec2(_currentBlock->getSprite()->getContentSize().width
+		/*_currentBlock->getAttachedBlock()->setPositionInPxl(Vec2(_currentBlock->getSprite()->getContentSize().width
 			+ _currentBlock->getSprite()->getPositionX()
 			, _currentBlock->getSprite()->getPositionY()));
-		beui->getLayer()->addChild(_currentBlock->getAttachedBlock()->getSprite());
-	}*/
+		beui->getLayer()->addChild(_currentBlock->getAttachedBlock()->getSprite()); */
+	}
 	
 	_moveLeft = CommandMoveLeft::create();
 	_moveRight = CommandMoveRight::create();
