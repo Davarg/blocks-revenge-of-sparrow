@@ -72,9 +72,6 @@ Size BackgroundElementUI::getUserSize() const {
 }
 
 void BackgroundElementUI::createGlass() {
-	const int DENSITY = 10;
-	const float POS_Y = -0.6;
-
 	b2BodyDef glassDef;
 	glassDef.type = b2_staticBody;
 	glassDef.position = b2Vec2(_spriteGlass->getPositionX() / SCALE_RATIO_BOX2D
@@ -82,7 +79,9 @@ void BackgroundElementUI::createGlass() {
 	_bodyGlass = MainGameScene::getWorld()->CreateBody(&glassDef);
 
 	b2PolygonShape shapeBottom;
-	shapeBottom.SetAsBox(_spriteGlass->getContentSize().width / SCALE_RATIO_BOX2D, POS_Y);
+#ifdef _DEBUG
+	shapeBottom.SetAsBox(15, 1.5f);
+#endif
 	b2FixtureDef fixtureDefBottom;
 	fixtureDefBottom.density = 1;
 	fixtureDefBottom.friction = 1000;
@@ -92,8 +91,9 @@ void BackgroundElementUI::createGlass() {
 	_bodyGlass->CreateFixture(&fixtureDefBottom);
 
 	b2PolygonShape shapeLeft;
-	shapeLeft.SetAsBox(0.1, _spriteGlass->getContentSize().height / SCALE_RATIO_BOX2D
-		, b2Vec2(-0.7, _spriteGlass->getContentSize().height / SCALE_RATIO_BOX2D), 0);
+#ifdef _DEBUG
+	shapeLeft.SetAsBox(1.03f, 25, { 0, 0 }, 0);
+#endif
 	b2FixtureDef fixtureDefLeft;
 	fixtureDefLeft.density = 1;
 	fixtureDefLeft.friction = 0;
@@ -102,9 +102,9 @@ void BackgroundElementUI::createGlass() {
 	_bodyGlass->CreateFixture(&fixtureDefLeft);
 
 	b2PolygonShape shapeRight;
-	shapeRight.SetAsBox(0.1, _spriteGlass->getContentSize().height / SCALE_RATIO_BOX2D
-		, b2Vec2(_spriteGlass->getContentSize().width / SCALE_RATIO_BOX2D - 0.8
-		, _spriteGlass->getContentSize().height / SCALE_RATIO_BOX2D), 0);
+#ifdef _DEBUG
+	shapeRight.SetAsBox(0.5f, 25, { 14.5f, 0 }, 0);
+#endif
 	b2FixtureDef fixtureDefRight;
 	fixtureDefRight.density = 1;
 	fixtureDefRight.friction = 0;

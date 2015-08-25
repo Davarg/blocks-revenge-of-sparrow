@@ -21,8 +21,6 @@ void Block::destroy() {
 bool Block::init(Sprite* _sprite) {
 	try {
 #ifdef _DEBUG
-		//_sprite->setScaleX(0.037f);
-		//_sprite->setScaleY(0.035f);
 		_sprite->setOpacity(60);
 #endif
 
@@ -157,7 +155,10 @@ void Block::setSize(Size _size) {
 
 void Block::setPositionInPxl(Vec2 pos) {
 	_sprite->setPosition(pos);
-	_body->SetTransform(b2Vec2(pos.x / SCALE_RATIO_BOX2D, pos.y / SCALE_RATIO_BOX2D), 0);
+	Vec2 posSprite = _sprite->getPosition();
+	Size size = _sprite->getContentSize();
+	_body->SetTransform({ (posSprite.x / SCALE_RATIO_BOX2D) + ((size.width / 2) / SCALE_RATIO_BOX2D)
+		, (posSprite.y / SCALE_RATIO_BOX2D) + ((size.width / 2) / SCALE_RATIO_BOX2D) }, 0);
 }
 
 Size Block::getSize() {
