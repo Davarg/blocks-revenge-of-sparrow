@@ -29,12 +29,11 @@ public:
 
 	virtual const char* getName() const override { return _name; }
 	virtual bool isDisable() const override { return _disable; }
+	static const char* name() { return _name; }
 	virtual void disable(bool flag) override;
 	Layer* getLayer() { return _layerBack; }
 	virtual void show() override;
 	Size getUserSize() const;
-
-	static const char* name() { return _name; }
 };
 
 #endif

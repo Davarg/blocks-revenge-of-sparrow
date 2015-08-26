@@ -2,6 +2,7 @@
 #include "Constants.h"
 #include "BackgroundElementUI.h"
 #include <math.h>
+#include "UserInput.h"
 #include "GLES-Render.h"
 
 static b2World *world = nullptr;
@@ -11,11 +12,6 @@ static GLESDebugDraw *debugDraw = nullptr;
 MainGameScene::~MainGameScene() {
 	/*if (_spriteGlass)
 		CC_SAFE_RELEASE_NULL(_spriteGlass);*/ //Throw error somewhere in GL 
-	CC_SAFE_RELEASE_NULL(_moveLeft);
-	CC_SAFE_RELEASE_NULL(_moveRight);
-	CC_SAFE_RELEASE_NULL(_moveCounterClockwise);
-	CC_SAFE_RELEASE_NULL(_moveClockwise);
-	CC_SAFE_RELEASE_NULL(_moveDown);
 	CC_SAFE_RELEASE_NULL(_currentBlock);
 	CC_SAFE_DELETE(world);
 	CC_SAFE_DELETE(_simpleUI);
@@ -64,10 +60,6 @@ bool MainGameScene::init() {
 	if (!Layer::init())
 		return false;
 
-	_moveLeft = nullptr;
-	_moveRight = nullptr;
-	_currentBlock = nullptr;
-
 	_simpleUI = new SimpleUI(this);
 	_currentBlock = Block::generateBlock();
 
@@ -84,18 +76,6 @@ bool MainGameScene::init() {
 		beui->getLayer()->addChild(_currentBlock->getAttachedBlock()->getSprite());
 	}
 	
-	_moveLeft = CommandMoveLeft::create();
-	_moveRight = CommandMoveRight::create();
-	_moveCounterClockwise = CommandMoveCounterClockwise::create();
-
-	if (_moveLeft && _moveRight && _moveCounterClockwise) {
-		CC_SAFE_RETAIN(_moveLeft);
-		CC_SAFE_RETAIN(_moveRight);
-		CC_SAFE_RETAIN(_moveCounterClockwise);
-	}
-	_moveClockwise = nullptr;//new CommandMoveClockwise(); //Memory Leak
-	_moveDown = nullptr;//CommandMoveDown::create();
-
 	/*const Size gameFieldSizePxl = beui->getUserSize();
 	const Size sizeBlock = _currentBlock->getSprite()->getContentSize();
 	GameField::init(gameFieldSizePxl.width / sizeBlock.width, gameFieldSizePxl.height / sizeBlock.height);*/
@@ -108,8 +88,20 @@ bool MainGameScene::init() {
 
 	_simpleUI->show();
 
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+	auto listener = EventListenerKeyboard::create();
+	listener->onKeyPressed = CC_CALLBACK_2(MainGameScene::onKeyPressed, this);
+	Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this);
+#endif
+
 	return true;
 }
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+	void MainGameScene::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {
+		UserInput *ui = (UserInput*)_simpleUI->getChildrenByName(UserInput::name());
+		ui->onKeyPressed(keyCode, event, _currentBlock);
+	}
+#endif
 
 void MainGameScene::update(float dt) {
 	int velocityIterations = 10;
@@ -130,46 +122,6 @@ void MainGameScene::update(float dt) {
 
 	MainGameScene::getWorld()->ClearForces();
 	MessagesQueue::update(dt);
-}
-
-void MainGameScene::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {
-	switch (keyCode) {
-	case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
-		if (!_moveRight->isExecute()) {
-			if (!_moveLeft->isExecute()) {
-				_moveLeft->execute(_currentBlock);
-				Director::getInstance()->getScheduler()->scheduleUpdate(_moveLeft, 3, false);
-			}
-		}
-		else
-			_moveRight->undo();
-		break;
-
-	case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
-		if (!_moveLeft->isExecute()) {
-			if (!_moveRight->isExecute()) {
-				_moveRight->execute(_currentBlock);
-				Director::getInstance()->getScheduler()->scheduleUpdate(_moveRight, 3, false);
-			}
-		}
-		else
-			_moveLeft->undo();
-		break;
-
-	case EventKeyboard::KeyCode::KEY_UP_ARROW:
-		if (!_moveCounterClockwise->isExecute()) {
-			_moveCounterClockwise->execute(_currentBlock);
-			Director::getInstance()->getScheduler()->scheduleUpdate(_moveCounterClockwise, 3, false);
-		}
-		break;
-
-	case EventKeyboard::KeyCode::KEY_DOWN_ARROW:
-		/*if (!_moveDown->isExecute()) {
-			_moveDown->execute(_currentBlock);
-			Director::getInstance()->getScheduler()->scheduleUpdate(_moveDown, 3, false);
-		}*/
-		break;
-	}
 }
 
 void MainGameScene::wrapperToAddBlockListener(void* ptrObj, void* args) {

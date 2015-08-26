@@ -4,6 +4,12 @@
 #include <cocos2d.h>
 #include <ui\CocosGUI.h>
 #include "AbstractElementUI.h"
+#include "Command.h"
+#include "CommandMoveLeft.h"
+#include "CommandMoveRight.h"
+#include "CommandMoveCounterClockwise.h"
+#include "CommandMoveClockwise.h"
+#include "CommandMoveDown.h"
 
 USING_NS_CC;
 using namespace ui;
@@ -27,7 +33,12 @@ private:
 	Layer *_layerBack;
 	Button *_btnRight;
 	Button *_btnRotate;
+	Command *_moveLeft;
+	Command *_moveDown;
+	Command *_moveRight;
 	Layer *_layerParent;
+	Command *_moveClockwise;
+	Command *_moveCounterClockwise;
 
 public:
 	UserInput(Layer*, Size);
@@ -35,10 +46,14 @@ public:
 
 	virtual const char* getName() const override { return _name; }
 	virtual bool isDisable() const override { return _disable; }
+	static const char* name() { return _name; }
 	Layer* getLayer() { return _layerBack; }
 	virtual void disable(bool) override;
 	virtual void show() override;
-	void buttonClick(Ref*);
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+	void onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event, Block*); //Custom function
+#endif
 };
 
 #endif
