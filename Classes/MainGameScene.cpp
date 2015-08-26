@@ -113,19 +113,23 @@ bool MainGameScene::init() {
 
 void MainGameScene::update(float dt) {
 	int velocityIterations = 10;
-	int positionIterations = 10;	//MainGameScene::getWorld()->Step(dt, velocityIterations, positionIterations);
-	/*for (b2Body *body = MainGameScene::getWorld()->GetBodyList(); body != NULL; body = body->GetNext()) {
+	int positionIterations = 10;	MainGameScene::getWorld()->Step(dt, velocityIterations, positionIterations);
+	for (b2Body *body = MainGameScene::getWorld()->GetBodyList(); body != NULL; body = body->GetNext()) {
 		if (body->GetUserData()) {
 			Sprite *spr = static_cast<Sprite*>(body->GetUserData());
 			if (spr != nullptr) {
-				spr->setPosition(Vec2(body->GetPosition().x * SCALE_RATIO_BOX2D, body->GetPosition().y * SCALE_RATIO_BOX2D));
+				Size size = spr->getContentSize();
+				if (spr->getAnchorPoint() == Vec2::ANCHOR_BOTTOM_LEFT) {
+					spr->setPosition({ (body->GetPosition().x - size.width / 2) * SCALE_RATIO_BOX2D
+						, (body->GetPosition().y - size.height / 2) * SCALE_RATIO_BOX2D });
+				}
 				spr->setRotation(-1 * CC_RADIANS_TO_DEGREES(body->GetAngle()));
 			}
 		}
 	}
 
 	MainGameScene::getWorld()->ClearForces();
-	MessagesQueue::update(dt);*/
+	MessagesQueue::update(dt);
 }
 
 void MainGameScene::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {
