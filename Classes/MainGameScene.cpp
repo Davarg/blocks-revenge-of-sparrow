@@ -120,8 +120,8 @@ void MainGameScene::update(float dt) {
 			if (spr != nullptr) {
 				Size size = spr->getContentSize();
 				if (spr->getAnchorPoint() == Vec2::ANCHOR_BOTTOM_LEFT) {
-					spr->setPosition({ (body->GetPosition().x - size.width / 2) * SCALE_RATIO_BOX2D
-						, (body->GetPosition().y - size.height / 2) * SCALE_RATIO_BOX2D });
+					spr->setPosition({ (body->GetPosition().x * SCALE_RATIO_BOX2D) - size.width / 2
+						, (body->GetPosition().y * SCALE_RATIO_BOX2D) - size.height / 2 });
 				}
 				spr->setRotation(-1 * CC_RADIANS_TO_DEGREES(body->GetAngle()));
 			}
