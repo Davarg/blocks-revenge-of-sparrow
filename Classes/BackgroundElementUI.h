@@ -34,6 +34,7 @@ public:
 	Layer* getLayer() { return _layerBack; }
 	virtual void show() override;
 	Size getUserSize() const;
+	Vec2 getUserPosition() const;
 };
 
 #endif

@@ -66,7 +66,7 @@ bool MainGameScene::init() {
 	BackgroundElementUI *beui = (BackgroundElementUI*)_simpleUI->getChildrenByName(BackgroundElementUI::name());
 	
 	if (_currentBlock) {
-		Vec2 pos = { 160, 140 };
+		Vec2 pos = { beui->getUserPosition().x, 740 };
 		_currentBlock->setPositionInPxl(pos);
 		beui->getLayer()->addChild(_currentBlock->getSprite());
 

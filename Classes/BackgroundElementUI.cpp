@@ -71,6 +71,10 @@ Size BackgroundElementUI::getUserSize() const {
 	return _animatedSprite->getContentSize();
 }
 
+Vec2 BackgroundElementUI::getUserPosition() const {
+	return _animatedSprite->getPosition();
+}
+
 void BackgroundElementUI::createGlass() {
 	b2BodyDef glassDef;
 	glassDef.type = b2_staticBody;
@@ -92,7 +96,7 @@ void BackgroundElementUI::createGlass() {
 
 	b2PolygonShape shapeLeft;
 #ifdef _DEBUG
-	shapeLeft.SetAsBox(1.03f, 25, { 0, 0 }, 0);
+	shapeLeft.SetAsBox(1.18625f, 25, { 0, 0 }, 0);
 #endif
 	b2FixtureDef fixtureDefLeft;
 	fixtureDefLeft.density = 1;
@@ -103,7 +107,7 @@ void BackgroundElementUI::createGlass() {
 
 	b2PolygonShape shapeRight;
 #ifdef _DEBUG
-	shapeRight.SetAsBox(0.5f, 25, { 14.5f, 0 }, 0);
+	shapeRight.SetAsBox(0.74f, 25, { 14.5f, 0 }, 0);
 #endif
 	b2FixtureDef fixtureDefRight;
 	fixtureDefRight.density = 1;
