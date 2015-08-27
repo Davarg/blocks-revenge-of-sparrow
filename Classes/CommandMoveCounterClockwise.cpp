@@ -27,12 +27,12 @@ void moveBlock(int mainBlockY, int mainBlockX, int attachedBlockY, int attachedB
 			jointDef.localAnchorB = { 0.5, 0 };
 			MainGameScene::getWorld()->CreateJoint(&jointDef);
 
-			const int distance = ((Sprite*)block->getAttachedBody()->GetUserData())->getPositionX()
-				- block->getSprite()->getPositionX();
+			Size size = block->getSprite()->getContentSize();
 			b2Vec2 position;
 
-			position.x = block->getSprite()->getPositionX() / SCALE_RATIO_BOX2D;
-			position.y = (block->getSprite()->getPositionY() + distance) / SCALE_RATIO_BOX2D;
+			position.x = (block->getSprite()->getPositionX() / SCALE_RATIO_BOX2D) + (size.width / 2) / SCALE_RATIO_BOX2D;
+			position.y = ((block->getSprite()->getPositionY() + size.height) / SCALE_RATIO_BOX2D) 
+							+ (size.height / 2) / SCALE_RATIO_BOX2D;
 
 			block->getAttachedBody()->SetTransform(position, 0);
 		}
@@ -47,12 +47,12 @@ void moveBlock(int mainBlockY, int mainBlockX, int attachedBlockY, int attachedB
 			jointDef.localAnchorB = { 0.5, 1 };
 			MainGameScene::getWorld()->CreateJoint(&jointDef);
 
-			const int distance = block->getSprite()->getPositionX()
-				- ((Sprite*)block->getAttachedBody()->GetUserData())->getPositionX();
+			Size size = block->getSprite()->getContentSize();
 			b2Vec2 position;
 
-			position.x = block->getSprite()->getPositionX() / SCALE_RATIO_BOX2D;
-			position.y = (block->getSprite()->getPositionY() - distance) / SCALE_RATIO_BOX2D;
+			position.x = (block->getSprite()->getPositionX() / SCALE_RATIO_BOX2D) + (size.width / 2) / SCALE_RATIO_BOX2D;
+			position.y = ((block->getSprite()->getPositionY() - size.height) / SCALE_RATIO_BOX2D)
+							+ (size.height / 2) / SCALE_RATIO_BOX2D;
 
 			block->getAttachedBody()->SetTransform(position, 0);
 		}
@@ -67,12 +67,12 @@ void moveBlock(int mainBlockY, int mainBlockX, int attachedBlockY, int attachedB
 			jointDef.localAnchorB = { 1, 0 };
 			MainGameScene::getWorld()->CreateJoint(&jointDef);
 
-			const int distance = ((Sprite*)block->getAttachedBody()->GetUserData())->getPositionY()
-				- block->getSprite()->getPositionY();
+			Size size = block->getSprite()->getContentSize();
 			b2Vec2 position;
 
-			position.x = (block->getSprite()->getPositionX() - distance) / SCALE_RATIO_BOX2D;
-			position.y = block->getSprite()->getPositionY() / SCALE_RATIO_BOX2D;
+			position.x = ((block->getSprite()->getPositionX() - size.width) / SCALE_RATIO_BOX2D)
+							+ (size.width / 2) / SCALE_RATIO_BOX2D;
+			position.y = (block->getSprite()->getPositionY() / SCALE_RATIO_BOX2D) + (size.height / 2) / SCALE_RATIO_BOX2D;
 
 			block->getAttachedBody()->SetTransform(position, 0);
 		}
@@ -87,12 +87,12 @@ void moveBlock(int mainBlockY, int mainBlockX, int attachedBlockY, int attachedB
 			jointDef.localAnchorB = { 0, 0 };
 			MainGameScene::getWorld()->CreateJoint(&jointDef);
 
-			const int distance = block->getSprite()->getPositionY()
-				- ((Sprite*)block->getAttachedBody()->GetUserData())->getPositionY();
+			Size size = block->getSprite()->getContentSize();
 			b2Vec2 position;
 
-			position.x = (block->getSprite()->getPositionX() + distance) / SCALE_RATIO_BOX2D;
-			position.y = block->getSprite()->getPositionY() / SCALE_RATIO_BOX2D;
+			position.x = ((block->getSprite()->getPositionX() + size.width) / SCALE_RATIO_BOX2D)
+							+ (size.width / 2) / SCALE_RATIO_BOX2D;
+			position.y = (block->getSprite()->getPositionY() / SCALE_RATIO_BOX2D) + (size.height / 2) / SCALE_RATIO_BOX2D;
 
 			block->getAttachedBody()->SetTransform(position, 0);
 		}

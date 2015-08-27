@@ -158,7 +158,7 @@ void Block::setPositionInPxl(Vec2 pos) {
 	Vec2 posSprite = _sprite->getPosition();
 	Size size = _sprite->getContentSize();
 	_body->SetTransform({ (posSprite.x / SCALE_RATIO_BOX2D) + ((size.width / 2) / SCALE_RATIO_BOX2D)
-		, (posSprite.y / SCALE_RATIO_BOX2D) + ((size.width / 2) / SCALE_RATIO_BOX2D) }, 0);
+		, (posSprite.y / SCALE_RATIO_BOX2D) + ((size.height / 2) / SCALE_RATIO_BOX2D) }, 0);
 }
 
 Size Block::getSize() {
