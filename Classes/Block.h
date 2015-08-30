@@ -28,6 +28,7 @@ private:
 	static const char* _blockRedPath;
 	static const char* _blockGreenPath;
 	static const char* _blockYellowPath;
+	static Size _spriteSize;
 
 	void setSprite(Sprite* sprite) { _sprite = sprite; }
 	void setScores(int scores) { _scores = scores; }
@@ -44,8 +45,8 @@ public:
 	static uint16 getPassiveCategoryBits() { return 0x0999; }
 	static uint16 getActiveCategoryBits() { return 0x0666; }
 	static void createJointListener(void* args);
-	static b2WeldJointDef getJointDef();
 	static Vec2 getPosOnField(Sprite *spr);
+	static b2WeldJointDef getJointDef();
 	static Block* generateBlock();
 
 	CC_PROPERTY(Size, _size, Size);

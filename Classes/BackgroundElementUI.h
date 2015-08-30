@@ -29,12 +29,13 @@ public:
 
 	virtual const char* getName() const override { return _name; }
 	virtual bool isDisable() const override { return _disable; }
+	Sprite* getAnimatedSprite() { return _animatedSprite; }
 	static const char* name() { return _name; }
 	virtual void disable(bool flag) override;
 	Layer* getLayer() { return _layerBack; }
+	Vec2 getAnimatedPosition() const;
 	virtual void show() override;
 	Size getUserSize() const;
-	Vec2 getUserPosition() const;
 };
 
 #endif

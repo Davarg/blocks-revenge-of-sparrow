@@ -71,7 +71,7 @@ Size BackgroundElementUI::getUserSize() const {
 	return _animatedSprite->getContentSize();
 }
 
-Vec2 BackgroundElementUI::getUserPosition() const {
+Vec2 BackgroundElementUI::getAnimatedPosition() const {
 	return _animatedSprite->getPosition();
 }
 

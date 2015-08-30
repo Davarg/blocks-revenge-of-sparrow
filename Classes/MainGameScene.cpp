@@ -3,11 +3,10 @@
 #include "BackgroundElementUI.h"
 #include <math.h>
 #include "UserInput.h"
-#include "GLES-Render.h"
 
-static b2World *world = nullptr;
-static MainGameScene *gameScene = nullptr;
-static GLESDebugDraw *debugDraw = nullptr;
+b2World* MainGameScene::world = nullptr;
+MainGameScene* MainGameScene::gameScene = nullptr;
+GLESDebugDraw* MainGameScene::debugDraw = nullptr;
 
 MainGameScene::~MainGameScene() {
 	/*if (_spriteGlass)
@@ -66,7 +65,9 @@ bool MainGameScene::init() {
 	BackgroundElementUI *beui = (BackgroundElementUI*)_simpleUI->getChildrenByName(BackgroundElementUI::name());
 	
 	if (_currentBlock) {
-		Vec2 pos = { beui->getUserPosition().x, 740 };
+#ifdef _DEBUG
+		Vec2 pos = { beui->getAnimatedPosition().x + 52, 740 };
+#endif
 		_currentBlock->setPositionInPxl(pos);
 		beui->getLayer()->addChild(_currentBlock->getSprite());
 
@@ -141,13 +142,15 @@ void MainGameScene::addBlockListener(void* args) {
 	auto spriteBack = beui->getLayer()->getChildByTag(0);
 
 	if (_currentBlock) {
-		Vec2 pos = { spriteBack->getPositionX() + 1, spriteBack->getContentSize().height - 2 };
+#ifdef _DEBUG
+		Vec2 pos = { beui->getAnimatedPosition().x + 52, 740 };
+#endif
 		_currentBlock->setPositionInPxl(pos);
 		beui->getLayer()->addChild(_currentBlock->getSprite());
 
-		_currentBlock->getAttachedBlock()->setPositionInPxl(Vec2(_currentBlock->getSprite()->getContentSize().width
+		_currentBlock->getAttachedBlock()->setPositionInPxl({ _currentBlock->getSprite()->getContentSize().width
 			+ _currentBlock->getSprite()->getPositionX()
-			, _currentBlock->getSprite()->getPositionY()));
+			, _currentBlock->getSprite()->getPositionY() });
 		beui->getLayer()->addChild(_currentBlock->getAttachedBlock()->getSprite());
 	}
 

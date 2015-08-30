@@ -32,8 +32,6 @@ void GameField::init(const int width, const int height) {
 			for (int k = 0; k < _fieldWidth; k++)
 				_arrayBlocks[i][k] = nullptr;
 
-		
-
 		MessagesQueue::addListener(MessagesQueue::MessageType::UPDATE_GAME_FIELD, &GameField::updateGameField);
 	}
 }
@@ -219,7 +217,7 @@ void GameField::checkField() {
 		}
 	}
 	
-	if (!vectorLeftRight.size() % 3 == 0) {
+	if (!(vectorLeftRight.size() % 3 == 0)) {
 		for (std::vector<int>::iterator it = vectorLeftRight.begin(); it != vectorLeftRight.end(); ++it) {
 			int l = *it;
 			++it;
@@ -237,7 +235,7 @@ void GameField::checkField() {
 		}
 	}
 
-	if (!vectorUpDown.size() % 3 == 0) {
+	if (!(vectorUpDown.size() % 3 == 0)) {
 		for (std::vector<int>::iterator it = vectorUpDown.begin(); it != vectorUpDown.end(); ++it) {
 			int b = *it;
 			++it;

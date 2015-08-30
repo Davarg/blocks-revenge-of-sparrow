@@ -3,11 +3,12 @@
 #include <math.h>
 #include "Block.h"
 #include "MessagesQueue.h"
+#include "Constants.h"
 
 void BlockContactListener::BeginContact(b2Contact* contact) {
-	/*const int MOD = 4;
-	void* bodyUserDataA = contact->GetFixtureA()->GetBody()->GetUserData();
-	void* bodyUserDataB = contact->GetFixtureB()->GetBody()->GetUserData();
+	const int MOD = 4;
+	void* bodyUserDataA = contact->GetFixtureA()->GetBody()->GetUserData(); //Static body, in rare cases, it may be dynamic body
+	void* bodyUserDataB = contact->GetFixtureB()->GetBody()->GetUserData(); //Dynamic body, in rare cases, it may be static body
 	const uint16 categoryA = contact->GetFixtureA()->GetFilterData().categoryBits;
 	const uint16 categoryB = contact->GetFixtureB()->GetFilterData().categoryBits;
 	
@@ -38,8 +39,10 @@ void BlockContactListener::BeginContact(b2Contact* contact) {
 	}
 
 	if (bodyUserDataA && bodyUserDataB && (categoryB & Block::getActiveCategoryBits() || categoryA & Block::getActiveCategoryBits())) {
-		Vec2 posA = static_cast<Sprite*>(bodyUserDataA)->getPosition();
-		Vec2 posB = static_cast<Sprite*>(bodyUserDataB)->getPosition();
+		auto spriteA = static_cast<Sprite*>(bodyUserDataA);
+		auto spriteB = static_cast<Sprite*>(bodyUserDataB);
+		Vec2 posA = spriteA->getPosition();
+		Vec2 posB = spriteB->getPosition();
 
 		if ((round(posA.y) <= round(posB.y) || round(posA.y) >= round(posB.y)) && abs(posA.x - posB.x) <= MOD) {
 			Block::bodiesStructArgs *bodies = new Block::bodiesStructArgs;
@@ -67,11 +70,12 @@ void BlockContactListener::BeginContact(b2Contact* contact) {
 	else if (!bodyUserDataA && bodyUserDataB
 				&& (categoryB & Block::getActiveCategoryBits() 
 					&& (categoryA & Block::getActiveCategoryBits() || categoryB & Block::getPassiveCategoryBits())))  {
+		auto spriteB = static_cast<Sprite*>(bodyUserDataB);
 		Block::bodiesStructArgs *bodies = new Block::bodiesStructArgs;
 		bodies->b1 = contact->GetFixtureA()->GetBody();
 		bodies->b2 = contact->GetFixtureB()->GetBody();
-		bodies->pos.x = static_cast<Sprite*>(bodyUserDataB)->getPosition().x;
-		bodies->pos.y = static_cast<Sprite*>(bodyUserDataB)->getPosition().y;
+		bodies->pos.x = spriteB->getPosition().x;
+		bodies->pos.y = spriteB->getPosition().y;
 		MessagesQueue::addMessageToQueue(
 			MessagesQueue::Message{ MessagesQueue::MessageType::CREATE_JOINT, bodies });
 
@@ -92,8 +96,9 @@ void BlockContactListener::BeginContact(b2Contact* contact) {
 			Block::bodiesStructArgs *bodies = new Block::bodiesStructArgs;
 			bodies->b1 = contact->GetFixtureA()->GetBody();
 			bodies->b2 = contact->GetFixtureB()->GetBody();
-			bodies->pos.x = static_cast<Sprite*>(bodyUserDataB)->getPosition().x;
-			bodies->pos.y = static_cast<Sprite*>(bodyUserDataB)->getPosition().y;
+			auto spriteB = static_cast<Sprite*>(bodyUserDataB);
+			bodies->pos.x = spriteB->getPosition().x;
+			bodies->pos.y = spriteB->getPosition().y;
 			MessagesQueue::addMessageToQueue(
 				MessagesQueue::Message{ MessagesQueue::MessageType::CREATE_JOINT, bodies });
 		}
@@ -101,5 +106,5 @@ void BlockContactListener::BeginContact(b2Contact* contact) {
 		void* ptr = nullptr;
 		MessagesQueue::addMessageToQueue(
 			MessagesQueue::Message{ MessagesQueue::MessageType::UPDATE_GAME_FIELD, ptr});
-	}*/
+	}
 }

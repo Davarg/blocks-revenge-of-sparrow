@@ -8,11 +8,16 @@
 #include "GameField.h"
 #include "MessagesQueue.h"
 #include "SimpleUI.h"
+#include "GLES-Render.h"
 
 USING_NS_CC;
 
 class MainGameScene : public Layer {
 private:
+	static b2World* world;
+	static MainGameScene* gameScene;
+	static GLESDebugDraw* debugDraw;
+
 	SimpleUI *_simpleUI;
 	Block *_currentBlock;
 	BlockContactListener _blockContactListener;
@@ -24,6 +29,7 @@ public:
 	~MainGameScene();
 	static b2World* getWorld();
 	static Scene* createScene();
+	static SimpleUI* getUI() { return MainGameScene::gameScene->_simpleUI; }
 	static void wrapperToAddBlockListener(void* ptrObj, void* args);
 	
 	bool init() override;

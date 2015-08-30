@@ -3,10 +3,12 @@
 #include "Constants.h"
 #include "GameField.h"
 #include <math.h>
+#include "BackgroundElementUI.h"
 
 const char* Block::_blockRedPath = "block_red.png";
 const char* Block::_blockGreenPath = "block_green.png";
 const char* Block::_blockYellowPath = "block_yellow.png";
+Size Block::_spriteSize = { 0, 0 };
 
 void Block::destroy() {
 	_sprite->removeFromParentAndCleanup(true);
@@ -23,6 +25,7 @@ bool Block::init(Sprite* _sprite) {
 #ifdef _DEBUG
 		_sprite->setOpacity(60);
 #endif
+		Block::_spriteSize = _sprite->getContentSize();
 
 		b2BodyDef bodyDef;
 		bodyDef.position = b2Vec2(_sprite->getPositionX() / SCALE_RATIO_BOX2D, _sprite->getPositionY() / SCALE_RATIO_BOX2D);
@@ -176,9 +179,14 @@ Size Block::getSize() {
 
 Vec2 Block::getPosOnField() {
 	Vec2 result;
-
-	result.y = round(_sprite->getPositionY() / _sprite->getContentSize().height);
-	result.x = round(_sprite->getPositionX() / _sprite->getContentSize().width);
+	Vec2 localPosAnimSprite;
+	BackgroundElementUI *beui = 
+		(BackgroundElementUI*)MainGameScene::getUI()->getChildrenByName(BackgroundElementUI::name());
+	auto animSprite = beui->getAnimatedSprite();
+	localPosAnimSprite = animSprite->convertToNodeSpace(_sprite->getPosition());
+	
+	result.y = abs(round(localPosAnimSprite.y / _sprite->getContentSize().height));
+	result.x = abs(round(localPosAnimSprite.x / _sprite->getContentSize().width));
 
 	return result;
 }
@@ -196,9 +204,16 @@ void Block::createJointListener(void* args) {
 	auto bodies = static_cast<bodiesStructArgs*>(args);
 	b2WeldJointDef jointDef;
 	jointDef.collideConnected = false;
-	jointDef.localAnchorA = b2Vec2(bodies->b1->GetLocalPoint(b2Vec2(bodies->pos.x / SCALE_RATIO_BOX2D, 0)).x
-									, bodies->b1->GetLocalPoint(b2Vec2(0, bodies->pos.y / SCALE_RATIO_BOX2D)).y + 0.1f);
-	jointDef.localAnchorB = b2Vec2(0, 0);
+
+	auto a = bodies->pos.x / SCALE_RATIO_BOX2D;
+	auto b = ((Block::_spriteSize.width / 2) / SCALE_RATIO_BOX2D);
+	auto c = bodies->pos.y / SCALE_RATIO_BOX2D;
+	auto d = ((Block::_spriteSize.height / 2) / SCALE_RATIO_BOX2D);
+
+	jointDef.localAnchorA = { a + b
+		, c + d };
+
+	jointDef.localAnchorB = { 0, 0 };
 	jointDef.bodyA = bodies->b1;
 	jointDef.bodyB = bodies->b2;
 	MainGameScene::getWorld()->CreateJoint(&jointDef);
