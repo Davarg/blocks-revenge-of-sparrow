@@ -8,7 +8,6 @@
 const char* Block::_blockRedPath = "block_red.png";
 const char* Block::_blockGreenPath = "block_green.png";
 const char* Block::_blockYellowPath = "block_yellow.png";
-Size Block::_spriteSize = { 0, 0 };
 
 void Block::destroy() {
 	_sprite->removeFromParentAndCleanup(true);
@@ -25,7 +24,6 @@ bool Block::init(Sprite* _sprite) {
 #ifdef _DEBUG
 		_sprite->setOpacity(60);
 #endif
-		Block::_spriteSize = _sprite->getContentSize();
 
 		b2BodyDef bodyDef;
 		bodyDef.position = b2Vec2(_sprite->getPositionX() / SCALE_RATIO_BOX2D, _sprite->getPositionY() / SCALE_RATIO_BOX2D);
@@ -202,17 +200,11 @@ Vec2 Block::getPosOnField(Sprite *spr) {
 
 void Block::createJointListener(void* args) {
 	auto bodies = static_cast<bodiesStructArgs*>(args);
+	auto dst = bodies->b2->GetPosition() - bodies->b1->GetPosition();
 	b2WeldJointDef jointDef;
+	
 	jointDef.collideConnected = false;
-
-	auto a = bodies->pos.x / SCALE_RATIO_BOX2D;
-	auto b = ((Block::_spriteSize.width / 2) / SCALE_RATIO_BOX2D);
-	auto c = bodies->pos.y / SCALE_RATIO_BOX2D;
-	auto d = ((Block::_spriteSize.height / 2) / SCALE_RATIO_BOX2D);
-
-	jointDef.localAnchorA = { a + b
-		, c + d };
-
+	jointDef.localAnchorA = { dst.x, dst.y };
 	jointDef.localAnchorB = { 0, 0 };
 	jointDef.bodyA = bodies->b1;
 	jointDef.bodyB = bodies->b2;

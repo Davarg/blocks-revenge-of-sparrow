@@ -18,7 +18,7 @@ MainGameScene::~MainGameScene() {
 
 b2World* MainGameScene::getWorld() {
 	if (!world) {
-		b2Vec2 gravityVec{ 0, -1.8f };
+		b2Vec2 gravityVec{ 0, -6.8f };
 		world = new b2World(gravityVec);
 
 #ifdef _DEBUG

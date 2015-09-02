@@ -28,7 +28,6 @@ private:
 	static const char* _blockRedPath;
 	static const char* _blockGreenPath;
 	static const char* _blockYellowPath;
-	static Size _spriteSize;
 
 	void setSprite(Sprite* sprite) { _sprite = sprite; }
 	void setScores(int scores) { _scores = scores; }
@@ -38,7 +37,6 @@ public:
 	struct bodiesStructArgs {
 		b2Body *b1 = nullptr;
 		b2Body *b2 = nullptr;
-		b2Vec2 pos;
 	};
 
 	static Block* createBlock(Sprite *sprite, int scores, Color3B color, bool isAttached = false);

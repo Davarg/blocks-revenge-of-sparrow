@@ -6,7 +6,7 @@
 #include "Constants.h"
 
 void BlockContactListener::BeginContact(b2Contact* contact) {
-	const int MOD = 4;
+	const int MOD = 6;
 	void* bodyUserDataA = contact->GetFixtureA()->GetBody()->GetUserData(); //Static body, in rare cases, it may be dynamic body
 	void* bodyUserDataB = contact->GetFixtureB()->GetBody()->GetUserData(); //Dynamic body, in rare cases, it may be static body
 	const uint16 categoryA = contact->GetFixtureA()->GetFilterData().categoryBits;
@@ -48,8 +48,6 @@ void BlockContactListener::BeginContact(b2Contact* contact) {
 			Block::bodiesStructArgs *bodies = new Block::bodiesStructArgs;
 			bodies->b1 = contact->GetFixtureA()->GetBody();
 			bodies->b2 = contact->GetFixtureB()->GetBody();
-			bodies->pos.x = posB.x;
-			bodies->pos.y = posB.y;
 			MessagesQueue::addMessageToQueue(
 				MessagesQueue::Message{ MessagesQueue::MessageType::CREATE_JOINT, bodies });
 
@@ -70,12 +68,9 @@ void BlockContactListener::BeginContact(b2Contact* contact) {
 	else if (!bodyUserDataA && bodyUserDataB
 				&& (categoryB & Block::getActiveCategoryBits() 
 					&& (categoryA & Block::getActiveCategoryBits() || categoryB & Block::getPassiveCategoryBits())))  {
-		auto spriteB = static_cast<Sprite*>(bodyUserDataB);
 		Block::bodiesStructArgs *bodies = new Block::bodiesStructArgs;
 		bodies->b1 = contact->GetFixtureA()->GetBody();
 		bodies->b2 = contact->GetFixtureB()->GetBody();
-		bodies->pos.x = spriteB->getPosition().x;
-		bodies->pos.y = spriteB->getPosition().y;
 		MessagesQueue::addMessageToQueue(
 			MessagesQueue::Message{ MessagesQueue::MessageType::CREATE_JOINT, bodies });
 
@@ -96,9 +91,6 @@ void BlockContactListener::BeginContact(b2Contact* contact) {
 			Block::bodiesStructArgs *bodies = new Block::bodiesStructArgs;
 			bodies->b1 = contact->GetFixtureA()->GetBody();
 			bodies->b2 = contact->GetFixtureB()->GetBody();
-			auto spriteB = static_cast<Sprite*>(bodyUserDataB);
-			bodies->pos.x = spriteB->getPosition().x;
-			bodies->pos.y = spriteB->getPosition().y;
 			MessagesQueue::addMessageToQueue(
 				MessagesQueue::Message{ MessagesQueue::MessageType::CREATE_JOINT, bodies });
 		}
