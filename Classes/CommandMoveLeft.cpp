@@ -14,7 +14,7 @@ void CommandMoveLeft::update(float dt) {
 
 	if (!_isUndo && !_isRedo) {
 		if (_positionOld.x - _block->getBody()->GetPosition().x >=
-			(_block->getSprite()->getContentSize().width - JOINT_BLOCK_DIST) / SCALE_RATIO_BOX2D) {
+			(_block->getSprite()->getContentSize().width - X_OFFSET_BLOCK) / SCALE_RATIO_BOX2D) {
 			_block->getBody()->SetLinearVelocity((b2Vec2(0, oldVelocity.y)));
 			_block->getAttachedBody()->SetLinearVelocity((b2Vec2(0, oldVelocity.y)));
 			Director::getInstance()->getScheduler()->unscheduleUpdate(this);

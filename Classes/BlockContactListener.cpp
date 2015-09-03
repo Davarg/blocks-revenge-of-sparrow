@@ -6,7 +6,6 @@
 #include "Constants.h"
 
 void BlockContactListener::BeginContact(b2Contact* contact) {
-	const int MOD = 6;
 	void* bodyUserDataA = contact->GetFixtureA()->GetBody()->GetUserData(); //Static body, in rare cases, it may be dynamic body
 	void* bodyUserDataB = contact->GetFixtureB()->GetBody()->GetUserData(); //Dynamic body, in rare cases, it may be static body
 	const uint16 categoryA = contact->GetFixtureA()->GetFilterData().categoryBits;
@@ -44,7 +43,7 @@ void BlockContactListener::BeginContact(b2Contact* contact) {
 		Vec2 posA = spriteA->getPosition();
 		Vec2 posB = spriteB->getPosition();
 
-		if ((round(posA.y) <= round(posB.y) || round(posA.y) >= round(posB.y)) && abs(posA.x - posB.x) <= MOD) {
+		if ((round(posA.y) <= round(posB.y) || round(posA.y) >= round(posB.y)) && abs(posA.x - posB.x) <= X_OFFSET_BLOCK) {
 			Block::bodiesStructArgs *bodies = new Block::bodiesStructArgs;
 			bodies->b1 = contact->GetFixtureA()->GetBody();
 			bodies->b2 = contact->GetFixtureB()->GetBody();
