@@ -183,7 +183,10 @@ Vec2 Block::getPosOnField() {
 	auto animSprite = beui->getAnimatedSprite();
 	localPosAnimSprite = animSprite->convertToNodeSpace(_sprite->getPosition());
 	
-	result.y = abs(round(localPosAnimSprite.y / _sprite->getContentSize().height));
+	
+	auto a = round(ceilf(localPosAnimSprite.y / _sprite->getContentSize().height));
+	auto b = round(localPosAnimSprite.x / _sprite->getContentSize().width);
+	result.y = abs(round(ceilf(localPosAnimSprite.y / _sprite->getContentSize().height)));
 	result.x = abs(round(localPosAnimSprite.x / _sprite->getContentSize().width));
 
 	return result;
