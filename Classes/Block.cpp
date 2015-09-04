@@ -203,18 +203,21 @@ Vec2 Block::getPosOnField(Sprite *spr) {
 
 void Block::createJointListener(void* args) {
 	auto bodies = static_cast<bodiesStructArgs*>(args);
-	auto dst = bodies->b2->GetPosition() - bodies->b1->GetPosition();
-	b2WeldJointDef jointDef;
-	
-	bodies->b1->SetGravityScale(GRAVITY_SCALE_Y);
-	bodies->b2->SetGravityScale(GRAVITY_SCALE_Y);
 
-	jointDef.collideConnected = false;
-	jointDef.localAnchorA = { dst.x, dst.y };
-	jointDef.localAnchorB = { 0, 0 };
-	jointDef.bodyA = bodies->b1;
-	jointDef.bodyB = bodies->b2;
-	MainGameScene::getWorld()->CreateJoint(&jointDef);
+	if (bodies->b1->GetContactList() && bodies->b2->GetContactList()) {
+		auto dst = bodies->b2->GetPosition() - bodies->b1->GetPosition();
+		b2WeldJointDef jointDef;
+
+		bodies->b1->SetGravityScale(GRAVITY_SCALE_Y);
+		bodies->b2->SetGravityScale(GRAVITY_SCALE_Y);
+
+		jointDef.collideConnected = false;
+		jointDef.localAnchorA = { dst.x, dst.y };
+		jointDef.localAnchorB = { 0, 0 };
+		jointDef.bodyA = bodies->b1;
+		jointDef.bodyB = bodies->b2;
+		MainGameScene::getWorld()->CreateJoint(&jointDef);
+	}
 
 	CC_SAFE_DELETE(args);
 }
