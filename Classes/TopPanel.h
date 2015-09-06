@@ -11,15 +11,11 @@ private:
 	static const char* _name;
 	const char* _panelPath = "ui/top.png";
 	const char* _labelNextPath = "ui/label_next.png";
-	const char* _labelScorePath = "ui/label_score.png";
-	const char* _fieldScorePath = "ui/field_score.png";
 
 	bool _disable;
 	Layer *_layerBack;
 	Sprite *_labelNext;
-	Sprite *_labelScore;
 	Layer *_layerParent;
-	Sprite *_fieldScore;
 	Sprite *_spritePanel;
 
 public:

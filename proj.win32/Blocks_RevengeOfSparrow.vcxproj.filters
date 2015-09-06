@@ -75,6 +75,9 @@
     <ClCompile Include="..\Classes\GLES-Render.cpp">
       <Filter>src\utils</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\ScoresElementUI.cpp">
+      <Filter>src\ui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -141,6 +144,9 @@
       <Filter>src\utils</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\AbstractElementUI.h">
+      <Filter>src\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\ScoresElementUI.h">
       <Filter>src\ui</Filter>
     </ClInclude>
   </ItemGroup>

@@ -103,6 +103,7 @@ b2Vec2 GameField::getSize() {
 void GameField::checkField() {
 	Color3B currentColor = Color3B::WHITE;
 	int counterLeftRight = 0;
+	int *SCORES = new int(0);
 	int counterTopDown = 0;
 	int bottom = 0;
 	int right = 0;
@@ -227,6 +228,7 @@ void GameField::checkField() {
 
 			for (; l <= r; l++) {
 				if (_arrayBlocks[row][l]) {
+					*SCORES += _arrayBlocks[row][l]->getScores();
 					_arrayBlocks[row][l]->destroy();
 					CC_SAFE_RELEASE(_arrayBlocks[row][l]);
 					_arrayBlocks[row][l] = nullptr;
@@ -245,6 +247,7 @@ void GameField::checkField() {
 
 			for (; b <= t; b++) {
 				if (_arrayBlocks[b][collumn]) {
+					*SCORES += _arrayBlocks[b][collumn]->getScores();
 					_arrayBlocks[b][collumn]->destroy();
 					CC_SAFE_RELEASE(_arrayBlocks[b][collumn]);
 					_arrayBlocks[b][collumn] = nullptr;
@@ -252,6 +255,10 @@ void GameField::checkField() {
 			}
 		}
 	}
+
+	if (*SCORES)
+		MessagesQueue::addMessageToQueue(
+			MessagesQueue::Message{ MessagesQueue::MessageType::UPDATE_SCORES, SCORES });
 }
 
 void GameField::recountGameField() {

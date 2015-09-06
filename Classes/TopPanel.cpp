@@ -5,8 +5,6 @@ const char* TopPanel::_name = "TOP_PANEL_HANDMADE";
 TopPanel::~TopPanel() {
 	CC_SAFE_RELEASE_NULL(_layerBack);
 	CC_SAFE_RELEASE_NULL(_labelNext);
-	CC_SAFE_RELEASE_NULL(_labelScore);
-	CC_SAFE_RELEASE_NULL(_fieldScore);
 	CC_SAFE_RELEASE_NULL(_spritePanel);
 }
 
@@ -30,32 +28,12 @@ TopPanel::TopPanel(Layer *layer, Size winSize) {
 #endif
 	_labelNext->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
 	
-	_labelScore = Sprite::create(_labelScorePath);
-#ifdef _DEBUG 
-	_labelScore->setScaleX(0.6f);
-	_labelScore->setScaleY(0.4f);
-	_labelScore->setPosition(90, 27);
-#endif
-	_labelScore->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
-	
-	_fieldScore = Sprite::create(_fieldScorePath);
-#ifdef _DEBUG 
-	_fieldScore->setScaleX(0.6f);
-	_fieldScore->setScaleY(0.4f);
-	_fieldScore->setPosition(90, 3);
-#endif
-	_fieldScore->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
-
 #ifdef _DEBUG
 	_spritePanel->setOpacity(60);
 	_labelNext->setOpacity(60);
-	_labelScore->setOpacity(60);
-	_fieldScore->setOpacity(60);
 #endif
 	_layerBack->addChild(_spritePanel);
 	_layerBack->addChild(_labelNext);
-	_layerBack->addChild(_labelScore);
-	_layerBack->addChild(_fieldScore);
 }
 
 void TopPanel::disable(bool flag) {

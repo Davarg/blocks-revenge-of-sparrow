@@ -13,7 +13,9 @@ public:
 	enum MessageType {
 		ADD_BLOCK_ON_SCENE,
 		UPDATE_GAME_FIELD,
+		UPDATE_SCORES,
 		CREATE_JOINT
+		
 	};
 
 	struct Message {
