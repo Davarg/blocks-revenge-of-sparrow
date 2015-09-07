@@ -92,6 +92,8 @@ bool MainGameScene::init() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 	auto listener = EventListenerKeyboard::create();
 	listener->onKeyPressed = CC_CALLBACK_2(MainGameScene::onKeyPressed, this);
+	UserInput *ui = (UserInput*)_simpleUI->getChildrenByName(UserInput::name());
+	listener->onKeyReleased = CC_CALLBACK_2(UserInput::onKeyReleased, ui);
 	Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this);
 #endif
 

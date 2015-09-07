@@ -32,14 +32,17 @@ private:
 	Button *_btnDown;
 	Layer *_layerBack;
 	Button *_btnRight;
+	bool _isKeyPressed;
 	Button *_btnRotate;
 	Command *_moveLeft;
 	Command *_moveDown;
 	Command *_moveRight;
 	Layer *_layerParent;
+	Block *_currentBlock;
 	Command *_moveClockwise;
 	Command *_moveCounterClockwise;
-
+	EventKeyboard::KeyCode _currentPressedKey;
+	
 public:
 	UserInput(Layer*, Size);
 	~UserInput();
@@ -50,9 +53,11 @@ public:
 	Layer* getLayer() { return _layerBack; }
 	virtual void disable(bool) override;
 	virtual void show() override;
+	void update(float);
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
-	void onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event, Block*); //Custom function
+	void onKeyPressed(EventKeyboard::KeyCode, Event*, Block*); //Custom function
+	void onKeyReleased(EventKeyboard::KeyCode, Event*);
 #endif
 };
 

@@ -68,6 +68,9 @@ UserInput::UserInput(Layer* layer, Size winSize) {
 	_layerBack->addChild(_btnLeft);
 	_layerBack->addChild(_btnRight);
 	_layerBack->addChild(_btnRotate);
+
+	Director::getInstance()->getScheduler()->scheduleUpdate(this, 4, false);
+	_isKeyPressed = false;
 }
 
 void UserInput::disable(bool flag) {
@@ -82,8 +85,24 @@ void UserInput::show() {
 	_layerParent->addChild(_layerBack);
 }
 
+void UserInput::update(float dt) {
+	if (_isKeyPressed)
+		onKeyPressed(_currentPressedKey, nullptr, _currentBlock);
+}
+
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+	void UserInput::onKeyReleased(EventKeyboard::KeyCode keyCode, Event *event) {
+		if (_currentPressedKey == keyCode) {
+			_isKeyPressed = false;
+			_currentBlock = nullptr;
+		}
+	}
+
 	void UserInput::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event, Block* currentBlock) {
+		_isKeyPressed = true;
+		_currentBlock = currentBlock;
+		_currentPressedKey = keyCode;
+		
 		switch (keyCode) {
 		case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
 			if (!_moveRight->isExecute()) {

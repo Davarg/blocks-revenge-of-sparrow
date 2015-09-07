@@ -208,8 +208,8 @@ void Block::createJointListener(void* args) {
 		auto dst = bodies->b2->GetPosition() - bodies->b1->GetPosition();
 		b2WeldJointDef jointDef;
 
-		bodies->b1->SetGravityScale(GRAVITY_SCALE_Y);
-		bodies->b2->SetGravityScale(GRAVITY_SCALE_Y);
+		/*bodies->b1->SetGravityScale(GRAVITY_SCALE_Y);
+		bodies->b2->SetGravityScale(GRAVITY_SCALE_Y);*/
 
 		jointDef.collideConnected = false;
 		jointDef.localAnchorA = { dst.x, dst.y };
