@@ -5,6 +5,7 @@
 #include "UserInput.h"
 #include "ScoresElementUI.h"
 #include "MessagesQueue.h"
+#include "NextBlockElementUI.h"
 
 SimpleUI::~SimpleUI() {
 	for (auto iterator : _childrens) {
@@ -27,6 +28,9 @@ SimpleUI::SimpleUI(Layer* layer) {
 
 	ScoresElementUI *seui = new ScoresElementUI(tp->getLayer(), tp->getLayer()->getContentSize());
 	_childrens.push_back(seui);
+
+	NextBlockElementUI *nbeui = new NextBlockElementUI(tp->getLayer(), tp->getLayer()->getContentSize());
+	_childrens.push_back(nbeui);
 
 	BottomPanel *bp = new BottomPanel(layer, winSize);
 	_childrens.push_back(bp);

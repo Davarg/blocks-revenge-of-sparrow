@@ -78,6 +78,9 @@
     <ClCompile Include="..\Classes\ScoresElementUI.cpp">
       <Filter>src\ui</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\NextBlockElementUI.cpp">
+      <Filter>src\ui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -147,6 +150,9 @@
       <Filter>src\ui</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\ScoresElementUI.h">
+      <Filter>src\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\NextBlockElementUI.h">
       <Filter>src\ui</Filter>
     </ClInclude>
   </ItemGroup>

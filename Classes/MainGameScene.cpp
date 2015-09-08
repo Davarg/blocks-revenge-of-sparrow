@@ -1,6 +1,7 @@
 #include "MainGameScene.h"
 #include "Constants.h"
 #include "BackgroundElementUI.h"
+#include "NextBlockElementUI.h"
 #include <math.h>
 #include "UserInput.h"
 
@@ -138,7 +139,8 @@ void MainGameScene::addBlockListener(void* args) {
 	GameField::setBlock(_currentBlock);
 	GameField::checkField();
 
-	_currentBlock = Block::generateBlock();
+	NextBlockElementUI *nbeui = (NextBlockElementUI*)_simpleUI->getChildrenByName(NextBlockElementUI::name());
+	_currentBlock = nbeui->getBlock();
 	BackgroundElementUI *beui = (BackgroundElementUI*)_simpleUI->getChildrenByName(BackgroundElementUI::name());
 	const Size gameFieldSizePxl = beui->getUserSize();
 	auto spriteBack = beui->getLayer()->getChildByTag(0);

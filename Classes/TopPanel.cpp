@@ -4,7 +4,6 @@ const char* TopPanel::_name = "TOP_PANEL_HANDMADE";
 
 TopPanel::~TopPanel() {
 	CC_SAFE_RELEASE_NULL(_layerBack);
-	CC_SAFE_RELEASE_NULL(_labelNext);
 	CC_SAFE_RELEASE_NULL(_spritePanel);
 }
 
@@ -20,20 +19,10 @@ TopPanel::TopPanel(Layer *layer, Size winSize) {
 	_spritePanel->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
 	_spritePanel->setPosition(Vec2::ZERO);
 
-	_labelNext = Sprite::create(_labelNextPath);
-#ifdef _DEBUG
-	_labelNext->setScaleX(0.6f);
-	_labelNext->setScaleY(0.4f);
-	_labelNext->setPosition(335, 27);
-#endif
-	_labelNext->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
-	
 #ifdef _DEBUG
 	_spritePanel->setOpacity(60);
-	_labelNext->setOpacity(60);
 #endif
 	_layerBack->addChild(_spritePanel);
-	_layerBack->addChild(_labelNext);
 }
 
 void TopPanel::disable(bool flag) {
