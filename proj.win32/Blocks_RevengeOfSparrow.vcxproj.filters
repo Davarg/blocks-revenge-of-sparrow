@@ -19,21 +19,18 @@
     <Filter Include="src\utils">
       <UniqueIdentifier>{65d84de3-b714-46c7-8678-0ed2d855e8c0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\common">
+      <UniqueIdentifier>{b65b7210-6c9f-47f6-81b3-ef4910c8b9ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\scenes">
+      <UniqueIdentifier>{d1405def-5ce4-4e71-bf58-24c37f896229}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>win32</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\AppDelegate.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\Block.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\GameField.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\MainGameScene.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\BackgroundElementUI.cpp">
@@ -81,21 +78,21 @@
     <ClCompile Include="..\Classes\NextBlockElementUI.cpp">
       <Filter>src\ui</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\Block.cpp">
+      <Filter>src\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\GameField.cpp">
+      <Filter>src\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\MainGameScene.cpp">
+      <Filter>src\scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
       <Filter>win32</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\AppDelegate.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Block.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\GameField.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\MainGameScene.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\AbstractUI.h">
@@ -137,9 +134,6 @@
     <ClInclude Include="..\Classes\BlockContactListener.h">
       <Filter>src\utils</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\Constants.h">
-      <Filter>src\utils</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\MessagesQueue.h">
       <Filter>src\utils</Filter>
     </ClInclude>
@@ -154,6 +148,18 @@
     </ClInclude>
     <ClInclude Include="..\Classes\NextBlockElementUI.h">
       <Filter>src\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\GameField.h">
+      <Filter>src\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Block.h">
+      <Filter>src\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Constants.h">
+      <Filter>src\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\MainGameScene.h">
+      <Filter>src\scenes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -12,10 +12,10 @@ private:
 	static const char* _name;
 	const char* _labelNextPath = "ui/label_next.png";
 
+	Block::blockInfo _nextBlock;
 	Sprite *_labelSpriteNext;
 	Block *_currentBlock;
 	Layer *_layerParent;
-	Block *_nextBlock;
 	Layer *_layerBack;
 	bool _disable;
 

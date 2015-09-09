@@ -39,12 +39,24 @@ public:
 		b2Body *b2 = nullptr;
 	};
 
-	static Block* createBlock(Sprite *sprite, int scores, Color3B color, bool isAttached = false);
+	struct blockInfo {
+		int scoresFirst;
+		int scoresSecond;
+		Color3B colorFirst;
+		Color3B colorSecond;
+		std::string spritePathFirst;
+		std::string spritePathSecond;
+	};
+
+	
+	static Block* createBlock(Sprite*, int, Color3B, bool = false);
 	static uint16 getPassiveCategoryBits() { return 0x0999; }
 	static uint16 getActiveCategoryBits() { return 0x0666; }
-	static void createJointListener(void* args);
-	static Vec2 getPosOnField(Sprite *spr);
+	static void createJointListener(void*);
+	static Block* createBlock(blockInfo);
+	static blockInfo generateBlockInfo();
 	static b2WeldJointDef getJointDef();
+	static Vec2 getPosOnField(Sprite*);
 	static Block* generateBlock();
 
 	CC_PROPERTY(Size, _size, Size);
@@ -57,10 +69,10 @@ public:
 	CC_SYNTHESIZE_READONLY(b2Body*, _attachedBody, AttachedBody);
 	CC_SYNTHESIZE_READONLY(Block*, _attachedBlock, AttachedBlock);
 	
-	void setJointWith(Block *block);
-	void setPositionInPxl(Vec2 pos);
-	bool init(Sprite* _sprite);
+	void setPositionInPxl(Vec2);
+	void setJointWith(Block*);
 	Vec2 getPosOnField();
+	bool init(Sprite*);
 	void destroy();
 };
 

@@ -54,6 +54,53 @@ bool Block::init(Sprite* _sprite) {
 	return true;
 }
 
+Block::blockInfo Block::generateBlockInfo() {
+	blockInfo result;
+	std::mt19937 generator(time(0));
+	std::uniform_int_distribution<> uid(0, 2);
+
+	const int COLOR1 = uid(generator);
+	const int COLOR2 = uid(generator);
+
+	switch (COLOR1) {
+	case 0:
+		result.colorFirst = Color3B::GREEN;
+		result.spritePathFirst = _blockGreenPath;
+		break;
+
+	case 1:
+		result.colorFirst = Color3B::RED;
+		result.spritePathFirst = _blockRedPath;
+		break;
+
+	case 2:
+		result.colorFirst = Color3B::YELLOW;
+		result.spritePathFirst = _blockYellowPath;
+		break;
+	}
+
+	switch (COLOR2) {
+	case 0:
+		result.colorSecond = Color3B::GREEN;
+		result.spritePathSecond = _blockGreenPath;
+		break;
+
+	case 1:
+		result.colorSecond = Color3B::RED;
+		result.spritePathSecond = _blockRedPath;
+		break;
+
+	case 2:
+		result.colorSecond = Color3B::YELLOW;
+		result.spritePathSecond = _blockYellowPath;
+		break;
+	}
+
+	result.scoresFirst = 100;
+	result.scoresSecond = 100;
+	return result;
+}
+
 Block* Block::generateBlock() {
 	Block* block = nullptr;
 	std::mt19937 generator(time(0));
@@ -115,6 +162,35 @@ Block* Block::generateBlock() {
 	}
 
 	return block;
+}
+
+Block* Block::createBlock(blockInfo info) {
+	Block *result = nullptr;
+
+	auto spriteA = Sprite::create(info.spritePathFirst);
+	spriteA->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+	auto a = Block::create(spriteA);
+	a->setScores(info.scoresFirst);
+	a->setColor(info.colorFirst);
+	a->setisAttached(false);
+	a->setSprite(spriteA);
+	result = a;
+
+	auto spriteB = Sprite::create(info.spritePathSecond);
+	spriteB->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+	auto b = Block::create(spriteB);
+	b->setScores(info.scoresSecond);
+	b->setColor(info.colorSecond);
+	b->setisAttached(true);
+	b->setSprite(spriteB);
+	result->setJointWith(b);
+
+	if (result) {
+		CC_SAFE_RETAIN(result);
+		CC_SAFE_RETAIN(result->getAttachedBlock());
+	}
+
+	return result;
 }
 
 Block* Block::createBlock(Sprite *sprite, int scores, Color3B color, bool isAttached) {

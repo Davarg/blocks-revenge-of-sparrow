@@ -8,7 +8,6 @@ NextBlockElementUI::~NextBlockElementUI() {
 
 NextBlockElementUI::NextBlockElementUI(Layer *layer, Size winSize) {
 	_currentBlock = nullptr;
-	_nextBlock = nullptr;
 	_layerParent = layer;
 	_layerBack = Layer::create();
 	_layerBack->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
@@ -27,19 +26,19 @@ NextBlockElementUI::NextBlockElementUI(Layer *layer, Size winSize) {
 
 Block* NextBlockElementUI::getBlock() {
 	if (_currentBlock != nullptr) {
-		_currentBlock = _nextBlock;
-		_nextBlock = Block::generateBlock();
-		show();
+		_currentBlock = Block::createBlock(_nextBlock);
+		_nextBlock = Block::generateBlockInfo();
+		//show();
 	}
 	else {
 		_currentBlock = Block::generateBlock();
-		_nextBlock = Block::generateBlock();
+		_nextBlock = Block::generateBlockInfo();
 	}
-	//BUG, Need to safely disable body or remove it (_nextBlock)
+
 	Layer *layerNextBlocksSprites = Layer::create();
 	layerNextBlocksSprites->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
-	auto spriteA = _nextBlock->getSprite();
-	auto spriteB = _nextBlock->getAttachedBlock()->getSprite();
+	auto spriteA = Sprite::create(_nextBlock.spritePathFirst);
+	auto spriteB = Sprite::create(_nextBlock.spritePathSecond);
 #ifdef _DEBUG
 	//layerNextBlocksSprites->setScaleX(0.6f);
 	//layerNextBlocksSprites->setScaleY(0.4f);
