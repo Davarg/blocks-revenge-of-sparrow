@@ -11,6 +11,7 @@ class NextBlockElementUI : public AbstractElementUI {
 private:
 	static const char* _name;
 	const char* _labelNextPath = "ui/label_next.png";
+	const char* _layerNextBlocksName = "nextBlockLayer";
 
 	Block::blockInfo _nextBlock;
 	Sprite *_labelSpriteNext;

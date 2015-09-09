@@ -61,7 +61,8 @@ bool MainGameScene::init() {
 		return false;
 
 	_simpleUI = new SimpleUI(this);
-	_currentBlock = Block::generateBlock();
+	NextBlockElementUI *nbeui = (NextBlockElementUI*)_simpleUI->getChildrenByName(NextBlockElementUI::name());
+	_currentBlock = nbeui->getBlock();
 
 	BackgroundElementUI *beui = (BackgroundElementUI*)_simpleUI->getChildrenByName(BackgroundElementUI::name());
 	

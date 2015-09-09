@@ -48,8 +48,6 @@ public:
 		std::string spritePathSecond;
 	};
 
-	
-	static Block* createBlock(Sprite*, int, Color3B, bool = false);
 	static uint16 getPassiveCategoryBits() { return 0x0999; }
 	static uint16 getActiveCategoryBits() { return 0x0666; }
 	static void createJointListener(void*);
@@ -57,7 +55,6 @@ public:
 	static blockInfo generateBlockInfo();
 	static b2WeldJointDef getJointDef();
 	static Vec2 getPosOnField(Sprite*);
-	static Block* generateBlock();
 
 	CC_PROPERTY(Size, _size, Size);
 	CREATE_FUNC_CUSTOM(Block, Sprite*);

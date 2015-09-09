@@ -28,25 +28,29 @@ Block* NextBlockElementUI::getBlock() {
 	if (_currentBlock != nullptr) {
 		_currentBlock = Block::createBlock(_nextBlock);
 		_nextBlock = Block::generateBlockInfo();
-		//show();
 	}
 	else {
-		_currentBlock = Block::generateBlock();
+		_currentBlock = Block::createBlock(Block::generateBlockInfo());
 		_nextBlock = Block::generateBlockInfo();
 	}
 
 	Layer *layerNextBlocksSprites = Layer::create();
 	layerNextBlocksSprites->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
+	layerNextBlocksSprites->setName(_layerNextBlocksName);
 	auto spriteA = Sprite::create(_nextBlock.spritePathFirst);
 	auto spriteB = Sprite::create(_nextBlock.spritePathSecond);
 #ifdef _DEBUG
-	//layerNextBlocksSprites->setScaleX(0.6f);
-	//layerNextBlocksSprites->setScaleY(0.4f);
-	layerNextBlocksSprites->setPosition(335, 20);
-	layerNextBlocksSprites->setOpacity(60);
+	spriteA->setScale(0.4f);
+	spriteB->setScale(0.4f);
+	spriteA->setOpacity(60);
+	spriteB->setOpacity(60);
+	layerNextBlocksSprites->setPosition(355, 15);
+	spriteB->setPosition(21, spriteA->getPositionY());
 #endif
 	layerNextBlocksSprites->addChild(spriteA);
 	layerNextBlocksSprites->addChild(spriteB);
+
+	_layerBack->removeChildByName(_layerNextBlocksName);
 	_layerBack->addChild(layerNextBlocksSprites);
 
 	return _currentBlock;

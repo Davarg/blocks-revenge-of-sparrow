@@ -101,68 +101,7 @@ Block::blockInfo Block::generateBlockInfo() {
 	return result;
 }
 
-Block* Block::generateBlock() {
-	Block* block = nullptr;
-	std::mt19937 generator(time(0));
-	std::uniform_int_distribution<> uid(0, 2);
 
-	const int COLOR1 = uid(generator);
-	const int COLOR2 = uid(generator);
-	Sprite *blockSprite2 = nullptr;
-	Sprite *blockSprite = nullptr;
-
-	switch (COLOR1) {
-	case 0:
-		blockSprite = Sprite::create(_blockGreenPath);
-		blockSprite->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
-
-		block = Block::createBlock(blockSprite, 100, Color3B::GREEN);
-		break;
-
-	case 1:
-		blockSprite = Sprite::create(_blockRedPath);
-		blockSprite->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
-
-		block = Block::createBlock(blockSprite, 100, Color3B::RED);
-		break;
-
-	case 2:
-		blockSprite = Sprite::create(_blockYellowPath);
-		blockSprite->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
-
-		block = Block::createBlock(blockSprite, 100, Color3B::YELLOW);
-		break;
-	}
-
-	switch (COLOR2) {
-	case 0:
-		blockSprite2 = Sprite::create(_blockGreenPath);
-		blockSprite2->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
-
-		block->setJointWith(Block::createBlock(blockSprite2, 100, Color3B::GREEN, true));
-		break;
-
-	case 1:
-		blockSprite2 = Sprite::create(_blockRedPath);
-		blockSprite2->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
-
-		block->setJointWith(Block::createBlock(blockSprite2, 100, Color3B::RED, true));
-		break;
-
-	case 2:
-		blockSprite2 = Sprite::create(_blockYellowPath);
-		blockSprite2->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
-
-		block->setJointWith(Block::createBlock(blockSprite2, 100, Color3B::YELLOW, true));
-		break;
-	}
-	if (block) {
-		CC_SAFE_RETAIN(block);
-		CC_SAFE_RETAIN(block->getAttachedBlock());
-	}
-
-	return block;
-}
 
 Block* Block::createBlock(blockInfo info) {
 	Block *result = nullptr;
@@ -191,19 +130,6 @@ Block* Block::createBlock(blockInfo info) {
 	}
 
 	return result;
-}
-
-Block* Block::createBlock(Sprite *sprite, int scores, Color3B color, bool isAttached) {
-	Block* block = Block::create(sprite);
-	block->setSprite(sprite);
-	block->setScores(scores);
-	block->setColor(color);
-	block->setisAttached(isAttached);
-
-	if (block)
-		return block;
-	else
-		return nullptr;
 }
 
 b2WeldJointDef Block::getJointDef() {
@@ -279,8 +205,14 @@ Vec2 Block::getPosOnField(Sprite *spr) {
 
 void Block::createJointListener(void* args) {
 	auto bodies = static_cast<bodiesStructArgs*>(args);
+	auto typeA = bodies->b1->GetType();
+	auto typeB = bodies->b2->GetType();
 
-	if (bodies->b1->GetContactList() && bodies->b2->GetContactList()) {
+	if ((bodies->b1->GetContactList() && bodies->b2->GetContactList())
+		&& (typeA == b2BodyType::b2_dynamicBody
+				|| typeA == b2BodyType::b2_staticBody)
+			&& (typeB == b2BodyType::b2_dynamicBody
+				|| typeB == b2BodyType::b2_staticBody)) {
 		auto dst = bodies->b2->GetPosition() - bodies->b1->GetPosition();
 		b2WeldJointDef jointDef;
 
