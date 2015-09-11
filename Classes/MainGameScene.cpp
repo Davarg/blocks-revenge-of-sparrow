@@ -2,6 +2,7 @@
 #include "Constants.h"
 #include "BackgroundElementUI.h"
 #include "NextBlockElementUI.h"
+#include "RandomBlockDrop.h"
 #include <math.h>
 #include "UserInput.h"
 
@@ -53,6 +54,8 @@ Scene* MainGameScene::createScene() {
 	scene->addChild(layer);
 	layer->scheduleUpdate();
 
+	layer->_currentBlock = RandomBlockDrop::dropBlock();
+
 	return scene;
 }
 
@@ -61,23 +64,6 @@ bool MainGameScene::init() {
 		return false;
 
 	_simpleUI = new SimpleUI(this);
-	NextBlockElementUI *nbeui = (NextBlockElementUI*)_simpleUI->getChildrenByName(NextBlockElementUI::name());
-	_currentBlock = nbeui->getBlock();
-
-	BackgroundElementUI *beui = (BackgroundElementUI*)_simpleUI->getChildrenByName(BackgroundElementUI::name());
-	
-	if (_currentBlock) {
-#ifdef _DEBUG
-		Vec2 pos = { beui->getAnimatedPosition().x + 52, 740 };
-#endif
-		_currentBlock->setPositionInPxl(pos);
-		beui->getLayer()->addChild(_currentBlock->getSprite());
-
-		_currentBlock->getAttachedBlock()->setPositionInPxl({ _currentBlock->getSprite()->getContentSize().width
-				+ _currentBlock->getSprite()->getPositionX()
-			, _currentBlock->getSprite()->getPositionY() });
-		beui->getLayer()->addChild(_currentBlock->getAttachedBlock()->getSprite());
-	}
 	
 	/*const Size gameFieldSizePxl = beui->getUserSize();
 	const Size sizeBlock = _currentBlock->getSprite()->getContentSize();
@@ -139,25 +125,7 @@ void MainGameScene::addBlockListener(void* args) {
 
 	GameField::setBlock(_currentBlock);
 	GameField::checkField();
-
-	NextBlockElementUI *nbeui = (NextBlockElementUI*)_simpleUI->getChildrenByName(NextBlockElementUI::name());
-	_currentBlock = nbeui->getBlock();
-	BackgroundElementUI *beui = (BackgroundElementUI*)_simpleUI->getChildrenByName(BackgroundElementUI::name());
-	const Size gameFieldSizePxl = beui->getUserSize();
-	auto spriteBack = beui->getLayer()->getChildByTag(0);
-
-	if (_currentBlock) {
-#ifdef _DEBUG
-		Vec2 pos = { beui->getAnimatedPosition().x + 52, 740 };
-#endif
-		_currentBlock->setPositionInPxl(pos);
-		beui->getLayer()->addChild(_currentBlock->getSprite());
-
-		_currentBlock->getAttachedBlock()->setPositionInPxl({ _currentBlock->getSprite()->getContentSize().width
-			+ _currentBlock->getSprite()->getPositionX()
-			, _currentBlock->getSprite()->getPositionY() });
-		beui->getLayer()->addChild(_currentBlock->getAttachedBlock()->getSprite());
-	}
+	_currentBlock = RandomBlockDrop::dropBlock();
 
 	resumeSchedulerAndActions();
 }

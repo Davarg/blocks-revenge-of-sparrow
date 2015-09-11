@@ -1,8 +1,10 @@
 #include "GameField.h"
 #include "MessagesQueue.h"
 
-int GameField::_fieldWidth = 8;
-int GameField::_fieldHeight = 13;
+#ifdef _DEBUG
+	int GameField::_fieldWidth = 8;
+	int GameField::_fieldHeight = 13;
+#endif
 Block ***_arrayBlocks = nullptr;
 
 GameField::~GameField() {

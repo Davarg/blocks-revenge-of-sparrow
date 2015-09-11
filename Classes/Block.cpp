@@ -60,8 +60,6 @@ Block::blockInfo Block::generateBlockInfo() {
 	std::uniform_int_distribution<> uid(0, 2);
 
 	const int COLOR1 = uid(generator);
-	const int COLOR2 = uid(generator);
-
 	switch (COLOR1) {
 	case 0:
 		result.colorFirst = Color3B::GREEN;
@@ -79,6 +77,7 @@ Block::blockInfo Block::generateBlockInfo() {
 		break;
 	}
 
+	const int COLOR2 = uid(generator);
 	switch (COLOR2) {
 	case 0:
 		result.colorSecond = Color3B::GREEN;
@@ -184,10 +183,7 @@ Vec2 Block::getPosOnField() {
 		(BackgroundElementUI*)MainGameScene::getUI()->getChildrenByName(BackgroundElementUI::name());
 	auto animSprite = beui->getAnimatedSprite();
 	localPosAnimSprite = animSprite->convertToNodeSpace(_sprite->getPosition());
-	
-	
-	auto a = round(ceilf(localPosAnimSprite.y / _sprite->getContentSize().height));
-	auto b = round(localPosAnimSprite.x / _sprite->getContentSize().width);
+		
 	result.y = abs(round(ceilf(localPosAnimSprite.y / _sprite->getContentSize().height)));
 	result.x = abs(round(localPosAnimSprite.x / _sprite->getContentSize().width));
 
