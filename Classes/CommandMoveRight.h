@@ -8,13 +8,14 @@
 class CommandMoveRight : public Command {
 private:
 	b2Vec2 _positionOld;
-	b2Vec2 _positionNew;
+	Size _blockSize;
 	bool _isExecute;
 	Block *_block;
 	bool _isUndo;
 	bool _isRedo;
-	
 
+	void stopBlock();
+	
 public:
 	virtual void undo() override;
 	virtual void redo() override;

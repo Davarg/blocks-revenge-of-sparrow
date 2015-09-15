@@ -96,7 +96,7 @@ void BackgroundElementUI::createGlass() {
 
 	b2PolygonShape shapeLeft;
 #ifdef _DEBUG
-	shapeLeft.SetAsBox(1.11f, 25, { 0, 0 }, 0);
+	shapeLeft.SetAsBox(1, 25, { 0, 0 }, 0);
 #endif
 	b2FixtureDef fixtureDefLeft;
 	fixtureDefLeft.density = 1;
@@ -107,7 +107,7 @@ void BackgroundElementUI::createGlass() {
 
 	b2PolygonShape shapeRight;
 #ifdef _DEBUG
-	shapeRight.SetAsBox(1.11f, 25, { 15, 0 }, 0);
+	shapeRight.SetAsBox(1.11f, 25, { 15.1f, 0 }, 0);
 #endif
 	b2FixtureDef fixtureDefRight;
 	fixtureDefRight.density = 1;
