@@ -7,7 +7,8 @@
 
 class CommandMoveRight : public Command {
 private:
-	b2Vec2 _positionOld;
+	b2Vec2 _positionOldSecond;
+	b2Vec2 _positionOldFirst;
 	Size _blockSize;
 	bool _isExecute;
 	Block *_block;
