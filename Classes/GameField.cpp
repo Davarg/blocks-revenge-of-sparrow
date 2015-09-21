@@ -54,8 +54,13 @@ void GameField::setBlock(Block* block) {
 	const int x2 = block->getAttachedBlock()->getPosOnField().x;
 	const int y2 = block->getAttachedBlock()->getPosOnField().y;
 
-	_arrayBlocks[y1][x1] = block;
-	_arrayBlocks[y2][x2] = block->getAttachedBlock();
+	if (y1 < _fieldHeight && y2 < _fieldHeight
+		&& x1 < _fieldWidth && x2 < _fieldWidth) {
+		_arrayBlocks[y1][x1] = block;
+		_arrayBlocks[y2][x2] = block->getAttachedBlock();
+	}
+	else
+		assert(false);
 }
 
 void GameField::setBlock(int y, int x, Block* block){

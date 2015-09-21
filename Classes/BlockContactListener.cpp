@@ -37,7 +37,8 @@ void BlockContactListener::BeginContactStatic(b2Contact* contact) {
 			, contact->GetFixtureA()->GetBody()->GetLinearVelocity().y));
 	}
 
-	if (bodyUserDataA && bodyUserDataB && (categoryB & Block::getActiveCategoryBits() || categoryA & Block::getActiveCategoryBits())) {
+	if (bodyUserDataA && bodyUserDataB && (categoryB == Block::getActiveCategoryBits() 
+											|| categoryA == Block::getActiveCategoryBits())) {
 		auto spriteA = static_cast<Sprite*>(bodyUserDataA);
 		auto spriteB = static_cast<Sprite*>(bodyUserDataB);
 		Vec2 posA = spriteA->getPosition();
@@ -48,7 +49,8 @@ void BlockContactListener::BeginContactStatic(b2Contact* contact) {
 			bodies->b1 = contact->GetFixtureA()->GetBody();
 			bodies->b2 = contact->GetFixtureB()->GetBody();
 
-			if (!bodies->b1->GetLinearVelocity().x && !bodies->b2->GetLinearVelocity().x) {
+			if ((!bodies->b1->GetLinearVelocity().x && categoryA == Block::getActiveCategoryBits())
+				|| (!bodies->b2->GetLinearVelocity().x && categoryB == Block::getActiveCategoryBits())) {
 				MessagesQueue::addMessageToQueue(
 					MessagesQueue::Message{ MessagesQueue::MessageType::CREATE_JOINT, bodies });
 
@@ -59,10 +61,14 @@ void BlockContactListener::BeginContactStatic(b2Contact* contact) {
 				if (fixtureABodyA && fixtureABodyB) {
 					fixtureABodyA->GetFixtureList()->SetFilterData(passiveFilter);
 					fixtureABodyB->GetFixtureList()->SetFilterData(passiveFilter);
+					contact->GetFixtureA()->GetBody()->GetJointList()->joint->GetBodyA()->SetLinearVelocity({ 0, 0 });
+					contact->GetFixtureA()->GetBody()->GetJointList()->joint->GetBodyB()->SetLinearVelocity({ 0, 0 });
 				}
 				if (fixtureBBodyA && fixtureBBodyB) {
 					fixtureBBodyA->GetFixtureList()->SetFilterData(passiveFilter);
 					fixtureBBodyB->GetFixtureList()->SetFilterData(passiveFilter);
+					contact->GetFixtureB()->GetBody()->GetJointList()->joint->GetBodyA()->SetLinearVelocity({ 0, 0 });
+					contact->GetFixtureB()->GetBody()->GetJointList()->joint->GetBodyB()->SetLinearVelocity({ 0, 0 });
 				}
 			}
 			else {
