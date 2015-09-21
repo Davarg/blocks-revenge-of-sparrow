@@ -48,8 +48,9 @@ public:
 		std::string spritePathSecond;
 	};
 
-	static uint16 getPassiveCategoryBits() { return 0x0999; }
-	static uint16 getActiveCategoryBits() { return 0x0666; }
+	static uint16 getNeedToStopCategoryBits() { return 0x0003; }
+	static uint16 getPassiveCategoryBits() { return 0x0001; }
+	static uint16 getActiveCategoryBits() { return 0x0002; }
 	static void createJointListener(void*);
 	static Block* createBlock(blockInfo);
 	static blockInfo generateBlockInfo();

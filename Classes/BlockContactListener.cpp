@@ -5,12 +5,12 @@
 #include "MessagesQueue.h"
 #include "Constants.h"
 
-void BlockContactListener::BeginContact(b2Contact* contact) {
+void BlockContactListener::BeginContactStatic(b2Contact* contact) {
 	void* bodyUserDataA = contact->GetFixtureA()->GetBody()->GetUserData(); //Static body, in rare cases, it may be dynamic body
 	void* bodyUserDataB = contact->GetFixtureB()->GetBody()->GetUserData(); //Dynamic body, in rare cases, it may be static body
 	const uint16 categoryA = contact->GetFixtureA()->GetFilterData().categoryBits;
 	const uint16 categoryB = contact->GetFixtureB()->GetFilterData().categoryBits;
-	
+
 	b2Filter passiveFilter;
 	passiveFilter.groupIndex = contact->GetFixtureB()->GetFilterData().groupIndex;
 	passiveFilter.maskBits = contact->GetFixtureB()->GetFilterData().maskBits;
@@ -47,13 +47,38 @@ void BlockContactListener::BeginContact(b2Contact* contact) {
 			Block::bodiesStructArgs *bodies = new Block::bodiesStructArgs;
 			bodies->b1 = contact->GetFixtureA()->GetBody();
 			bodies->b2 = contact->GetFixtureB()->GetBody();
-			MessagesQueue::addMessageToQueue(
-				MessagesQueue::Message{ MessagesQueue::MessageType::CREATE_JOINT, bodies });
 
-			void* ptr = nullptr;
-			MessagesQueue::addMessageToQueue(
-				MessagesQueue::Message{ MessagesQueue::MessageType::ADD_BLOCK_ON_SCENE, ptr });
+			if (!bodies->b1->GetLinearVelocity().x && !bodies->b2->GetLinearVelocity().x) {
+				MessagesQueue::addMessageToQueue(
+					MessagesQueue::Message{ MessagesQueue::MessageType::CREATE_JOINT, bodies });
 
+				void* ptr = nullptr;
+				MessagesQueue::addMessageToQueue(
+					MessagesQueue::Message{ MessagesQueue::MessageType::ADD_BLOCK_ON_SCENE, ptr });
+
+				if (fixtureABodyA && fixtureABodyB) {
+					fixtureABodyA->GetFixtureList()->SetFilterData(passiveFilter);
+					fixtureABodyB->GetFixtureList()->SetFilterData(passiveFilter);
+				}
+				if (fixtureBBodyA && fixtureBBodyB) {
+					fixtureBBodyA->GetFixtureList()->SetFilterData(passiveFilter);
+					fixtureBBodyB->GetFixtureList()->SetFilterData(passiveFilter);
+				}
+			}
+			else {
+				passiveFilter.categoryBits = Block::getNeedToStopCategoryBits();
+				if (fixtureABodyA && fixtureABodyB) {
+					fixtureABodyA->GetFixtureList()->SetFilterData(passiveFilter);
+					fixtureABodyB->GetFixtureList()->SetFilterData(passiveFilter);
+				}
+				if (fixtureBBodyA && fixtureBBodyB) {
+					fixtureBBodyA->GetFixtureList()->SetFilterData(passiveFilter);
+					fixtureBBodyB->GetFixtureList()->SetFilterData(passiveFilter);
+				}
+			}
+		}
+		else {
+			passiveFilter.categoryBits = Block::getNeedToStopCategoryBits();
 			if (fixtureABodyA && fixtureABodyB) {
 				fixtureABodyA->GetFixtureList()->SetFilterData(passiveFilter);
 				fixtureABodyB->GetFixtureList()->SetFilterData(passiveFilter);
@@ -65,24 +90,38 @@ void BlockContactListener::BeginContact(b2Contact* contact) {
 		}
 	}
 	else if (!bodyUserDataA && bodyUserDataB
-				&& (categoryB & Block::getActiveCategoryBits() 
-					&& (categoryA & Block::getActiveCategoryBits() || categoryB & Block::getPassiveCategoryBits())))  {
+		&& (categoryB & Block::getActiveCategoryBits()
+		&& (categoryA & Block::getActiveCategoryBits() || categoryB & Block::getPassiveCategoryBits())))  {
 		Block::bodiesStructArgs *bodies = new Block::bodiesStructArgs;
 		bodies->b1 = contact->GetFixtureA()->GetBody();
 		bodies->b2 = contact->GetFixtureB()->GetBody();
-		MessagesQueue::addMessageToQueue(
-			MessagesQueue::Message{ MessagesQueue::MessageType::CREATE_JOINT, bodies });
 
-		void* ptr = nullptr;
-		MessagesQueue::addMessageToQueue(
-			MessagesQueue::Message{ MessagesQueue::MessageType::ADD_BLOCK_ON_SCENE, ptr });
-		if (fixtureABodyA && fixtureABodyB) {
-			fixtureABodyA->GetFixtureList()->SetFilterData(passiveFilter);
-			fixtureABodyB->GetFixtureList()->SetFilterData(passiveFilter);
+		if (!bodies->b1->GetLinearVelocity().x && !bodies->b2->GetLinearVelocity().x) {
+			MessagesQueue::addMessageToQueue(
+				MessagesQueue::Message{ MessagesQueue::MessageType::CREATE_JOINT, bodies });
+
+			void* ptr = nullptr;
+			MessagesQueue::addMessageToQueue(
+				MessagesQueue::Message{ MessagesQueue::MessageType::ADD_BLOCK_ON_SCENE, ptr });
+			if (fixtureABodyA && fixtureABodyB) {
+				fixtureABodyA->GetFixtureList()->SetFilterData(passiveFilter);
+				fixtureABodyB->GetFixtureList()->SetFilterData(passiveFilter);
+			}
+			if (fixtureBBodyA && fixtureBBodyB) {
+				fixtureBBodyA->GetFixtureList()->SetFilterData(passiveFilter);
+				fixtureBBodyB->GetFixtureList()->SetFilterData(passiveFilter);
+			}
 		}
-		if (fixtureBBodyA && fixtureBBodyB) {
-			fixtureBBodyA->GetFixtureList()->SetFilterData(passiveFilter);
-			fixtureBBodyB->GetFixtureList()->SetFilterData(passiveFilter);
+		else {
+			passiveFilter.categoryBits = Block::getNeedToStopCategoryBits();
+			if (fixtureABodyA && fixtureABodyB) {
+				fixtureABodyA->GetFixtureList()->SetFilterData(passiveFilter);
+				fixtureABodyB->GetFixtureList()->SetFilterData(passiveFilter);
+			}
+			if (fixtureBBodyA && fixtureBBodyB) {
+				fixtureBBodyA->GetFixtureList()->SetFilterData(passiveFilter);
+				fixtureBBodyB->GetFixtureList()->SetFilterData(passiveFilter);
+			}
 		}
 	}
 	else {
@@ -90,12 +129,33 @@ void BlockContactListener::BeginContact(b2Contact* contact) {
 			Block::bodiesStructArgs *bodies = new Block::bodiesStructArgs;
 			bodies->b1 = contact->GetFixtureA()->GetBody();
 			bodies->b2 = contact->GetFixtureB()->GetBody();
-			MessagesQueue::addMessageToQueue(
-				MessagesQueue::Message{ MessagesQueue::MessageType::CREATE_JOINT, bodies });
+
+			if (!bodies->b1->GetLinearVelocity().x && !bodies->b2->GetLinearVelocity().x) {
+				MessagesQueue::addMessageToQueue(
+					MessagesQueue::Message{ MessagesQueue::MessageType::CREATE_JOINT, bodies });
+			}
+			else {
+				passiveFilter.categoryBits = Block::getNeedToStopCategoryBits();
+				if (fixtureABodyA && fixtureABodyB) {
+					fixtureABodyA->GetFixtureList()->SetFilterData(passiveFilter);
+					fixtureABodyB->GetFixtureList()->SetFilterData(passiveFilter);
+				}
+				if (fixtureBBodyA && fixtureBBodyB) {
+					fixtureBBodyA->GetFixtureList()->SetFilterData(passiveFilter);
+					fixtureBBodyB->GetFixtureList()->SetFilterData(passiveFilter);
+				}
+			}
 		}
 
-		void* ptr = nullptr;
-		MessagesQueue::addMessageToQueue(
-			MessagesQueue::Message{ MessagesQueue::MessageType::UPDATE_GAME_FIELD, ptr});
+		if (!contact->GetFixtureA()->GetBody()->GetLinearVelocity().x
+			&& !contact->GetFixtureB()->GetBody()->GetLinearVelocity().x) {
+			void* ptr = nullptr;
+			MessagesQueue::addMessageToQueue(
+				MessagesQueue::Message{ MessagesQueue::MessageType::UPDATE_GAME_FIELD, ptr });
+		}
 	}
+}
+
+void BlockContactListener::BeginContact(b2Contact* contact) {
+	BlockContactListener::BeginContactStatic(contact);
 }

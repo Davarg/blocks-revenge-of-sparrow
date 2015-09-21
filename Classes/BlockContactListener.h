@@ -9,6 +9,7 @@ USING_NS_CC;
 class BlockContactListener : public b2ContactListener {
 public:
 	void BeginContact(b2Contact* contact) override;
+	static void BeginContactStatic(b2Contact* contact);
 };
 
 #endif

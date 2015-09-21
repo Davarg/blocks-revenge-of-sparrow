@@ -1,5 +1,7 @@
 #include "CommandMoveLeft.h"
 #include "Constants.h"
+#include "MainGameScene.h"
+#include "MessagesQueue.h"
 
 bool CommandMoveLeft::init() {
 	_isExecute = false;
@@ -23,6 +25,41 @@ void CommandMoveLeft::update(float dt) {
 	auto body2 = _block->getAttachedBody();
 	float32 offset = MOVEOFFSET;
 	float32 blockSizeInMeters = _blockSize.width / SCALE_RATIO_BOX2D;
+	
+	if (body1->GetFixtureList()->GetFilterData().categoryBits == Block::getNeedToStopCategoryBits()) {
+		Sprite *sprite1 = nullptr;
+		Sprite *sprite2 = nullptr;
+		Size size;
+
+		if (!_isUndo) {
+			body1->SetTransform({ _positionOldFirst.x - blockSizeInMeters, body1->GetPosition().y }, 0);
+			body2->SetTransform({ _positionOldSecond.x - blockSizeInMeters, body2->GetPosition().y }, 0);
+			sprite1 = (Sprite*)body1->GetUserData();
+			sprite2 = (Sprite*)body2->GetUserData();
+			size = sprite1->getContentSize();
+			sprite1->setPosition({ (body1->GetPosition().x * SCALE_RATIO_BOX2D) - size.width / 2
+				, (body1->GetPosition().y * SCALE_RATIO_BOX2D) - size.height / 2 });
+			sprite2->setPosition({ (body2->GetPosition().x * SCALE_RATIO_BOX2D) - size.width / 2
+				, (body2->GetPosition().y * SCALE_RATIO_BOX2D) - size.height / 2 });
+		}
+		else {
+			body1->SetTransform({ _positionOldFirst.x + blockSizeInMeters, body1->GetPosition().y }, 0);
+			body2->SetTransform({ _positionOldSecond.x + blockSizeInMeters, body2->GetPosition().y }, 0);
+		}
+		stopBlock();
+
+		auto filter = body1->GetFixtureList()->GetFilterData();
+		filter.categoryBits ^= Block::getNeedToStopCategoryBits();
+		filter.categoryBits = Block::getActiveCategoryBits();
+		body1->GetFixtureList()->SetFilterData(filter);
+		filter = body2->GetFixtureList()->GetFilterData();
+		filter.categoryBits ^= Block::getNeedToStopCategoryBits();
+		filter.categoryBits = Block::getActiveCategoryBits();
+		body2->GetFixtureList()->SetFilterData(filter);
+
+		/*BlockContactListener::BeginContactStatic(body1->GetContactList()->contact);
+		BlockContactListener::BeginContactStatic(body2->GetContactList()->contact);*/
+	}
 
 	if ((_positionOldFirst.x - body1->GetPosition().x) < blockSizeInMeters
 			&& !_isUndo
