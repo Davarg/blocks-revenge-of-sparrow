@@ -86,8 +86,8 @@ void UserInput::show() {
 }
 
 void UserInput::update(float dt) {
-	/*if (_isKeyPressed)
-		onKeyPressed(_currentPressedKey, nullptr, _currentBlock);*/
+	if (_isKeyPressed)
+		onKeyPressed(_currentPressedKey, nullptr, _currentBlock);
 }
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)

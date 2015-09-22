@@ -23,9 +23,13 @@ void CommandMoveLeft::update(float dt) {
 	auto body2 = _block->getAttachedBody();
 	float32 offset = MOVEOFFSET;
 	float32 blockSizeInMeters = _blockSize.width / SCALE_RATIO_BOX2D;
+
+	if (body1->GetFixtureList()->GetFilterData().categoryBits == Block::blockFlags::PASSIVE
+		|| body2->GetFixtureList()->GetFilterData().categoryBits == Block::blockFlags::PASSIVE)
+		stopBlock();
 	
-	if (body1->GetFixtureList()->GetFilterData().categoryBits == Block::getNeedToStopCategoryBits()
-		|| body2->GetFixtureList()->GetFilterData().categoryBits == Block::getNeedToStopCategoryBits()) {
+	if (body1->GetFixtureList()->GetFilterData().categoryBits == Block::blockFlags::NEED_TO_STOP
+		|| body2->GetFixtureList()->GetFilterData().categoryBits == Block::blockFlags::NEED_TO_STOP) {
 		Sprite *sprite1 = nullptr;
 		Sprite *sprite2 = nullptr;
 		Size size;
@@ -49,13 +53,13 @@ void CommandMoveLeft::update(float dt) {
 		stopBlock();
 
 		auto filter = body1->GetFixtureList()->GetFilterData();
-		filter.categoryBits ^= Block::getNeedToStopCategoryBits();
-		filter.categoryBits = Block::getActiveCategoryBits();
+		filter.categoryBits ^= Block::blockFlags::NEED_TO_STOP;
+		filter.categoryBits = Block::blockFlags::STOPPED;
 		body1->GetFixtureList()->SetFilterData(filter);
 		
 		filter = body2->GetFixtureList()->GetFilterData();
-		filter.categoryBits ^= Block::getNeedToStopCategoryBits();
-		filter.categoryBits = Block::getActiveCategoryBits();
+		filter.categoryBits ^= Block::blockFlags::NEED_TO_STOP;
+		filter.categoryBits = Block::blockFlags::STOPPED;
 		body2->GetFixtureList()->SetFilterData(filter);
 
 		body1->SetActive(false);

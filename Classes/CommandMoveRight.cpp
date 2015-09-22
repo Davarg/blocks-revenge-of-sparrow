@@ -1,5 +1,6 @@
 #include "CommandMoveRight.h"
 #include "Constants.h"
+#include "GameField.h"
 
 bool CommandMoveRight::init() {
 	_isExecute = false;
@@ -24,11 +25,30 @@ void CommandMoveRight::update(float dt) {
 	float32 offset = MOVEOFFSET;
 	float32 blockSizeInMeters = _blockSize.width / SCALE_RATIO_BOX2D;
 
-	if (body1->GetFixtureList()->GetFilterData().categoryBits == Block::getNeedToStopCategoryBits()
-		|| body2->GetFixtureList()->GetFilterData().categoryBits == Block::getNeedToStopCategoryBits()) {
+	if (body1->GetFixtureList()->GetFilterData().categoryBits == Block::blockFlags::PASSIVE
+		|| body2->GetFixtureList()->GetFilterData().categoryBits == Block::blockFlags::PASSIVE)
+		stopBlock();
+
+	if (body1->GetFixtureList()->GetFilterData().categoryBits == Block::blockFlags::NEED_TO_STOP
+		|| body2->GetFixtureList()->GetFilterData().categoryBits == Block::blockFlags::NEED_TO_STOP) {
+		Vec2 posOnField = _block->getPosOnField();
 		Sprite *sprite1 = nullptr;
 		Sprite *sprite2 = nullptr;
+		b2Filter filter;
 		Size size;
+		if (GameField::getBlock({ posOnField.x + 2, posOnField.y })){
+			stopBlock();
+
+			filter = body1->GetFixtureList()->GetFilterData();
+			filter.categoryBits = Block::blockFlags::ACTIVE;
+			body1->GetFixtureList()->SetFilterData(filter);
+
+			filter = body2->GetFixtureList()->GetFilterData();
+			filter.categoryBits = Block::blockFlags::ACTIVE;
+			body2->GetFixtureList()->SetFilterData(filter);
+
+			return;
+		}
 
 		if (!_isUndo) {
 			body1->SetTransform({ _positionOldFirst.x + blockSizeInMeters, body1->GetPosition().y }, 0);
@@ -48,14 +68,12 @@ void CommandMoveRight::update(float dt) {
 
 		stopBlock();
 
-		auto filter = body1->GetFixtureList()->GetFilterData();
-		filter.categoryBits ^= Block::getNeedToStopCategoryBits();
-		filter.categoryBits = Block::getActiveCategoryBits();
+		filter = body1->GetFixtureList()->GetFilterData();
+		filter.categoryBits = Block::blockFlags::STOPPED;
 		body1->GetFixtureList()->SetFilterData(filter);
 
 		filter = body2->GetFixtureList()->GetFilterData();
-		filter.categoryBits ^= Block::getNeedToStopCategoryBits();
-		filter.categoryBits = Block::getActiveCategoryBits();
+		filter.categoryBits = Block::blockFlags::STOPPED;
 		body2->GetFixtureList()->SetFilterData(filter);
 
 		body1->SetActive(false);

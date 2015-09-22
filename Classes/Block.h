@@ -48,9 +48,13 @@ public:
 		std::string spritePathSecond;
 	};
 
-	static uint16 getNeedToStopCategoryBits() { return 0x0003; }
-	static uint16 getPassiveCategoryBits() { return 0x0001; }
-	static uint16 getActiveCategoryBits() { return 0x0002; }
+	enum blockFlags {
+		ACTIVE  = 0x1001,
+		PASSIVE = 0x0011,
+		NEED_TO_STOP = 0x0111,
+		STOPPED = 0x1111
+	};
+
 	static void createJointListener(void*);
 	static Block* createBlock(blockInfo);
 	static blockInfo generateBlockInfo();

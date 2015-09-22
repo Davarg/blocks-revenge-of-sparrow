@@ -39,7 +39,7 @@ bool Block::init(Sprite* _sprite) {
 		fixtureDef.friction = 0;
 		fixtureDef.restitution = 0;
 		fixtureDef.shape = &shape;
-		fixtureDef.filter.categoryBits = Block::getActiveCategoryBits();
+		fixtureDef.filter.categoryBits = Block::blockFlags::ACTIVE;
 
 		_body = MainGameScene::getWorld()->CreateBody(&bodyDef);
 		_body->CreateFixture(&fixtureDef);

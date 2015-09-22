@@ -91,7 +91,7 @@ void BackgroundElementUI::createGlass() {
 	fixtureDefBottom.friction = 1000;
 	fixtureDefBottom.restitution = -0.3f;
 	fixtureDefBottom.shape = &shapeBottom;
-	fixtureDefBottom.filter.categoryBits = Block::getActiveCategoryBits();
+	fixtureDefBottom.filter.categoryBits = Block::blockFlags::ACTIVE;
 	_bodyGlass->CreateFixture(&fixtureDefBottom);
 
 	b2PolygonShape shapeLeft;
