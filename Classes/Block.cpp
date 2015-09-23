@@ -59,7 +59,7 @@ Block::blockInfo Block::generateBlockInfo() {
 	std::mt19937 generator(time(0));
 	std::uniform_int_distribution<> uid(0, 2);
 
-	const int COLOR1 = uid(generator);
+	const int COLOR1 = 0;//uid(generator);
 	switch (COLOR1) {
 	case 0:
 		result.colorFirst = Color3B::GREEN;
@@ -77,7 +77,7 @@ Block::blockInfo Block::generateBlockInfo() {
 		break;
 	}
 
-	const int COLOR2 = uid(generator);
+	const int COLOR2 = 0; //uid(generator);
 	switch (COLOR2) {
 	case 0:
 		result.colorSecond = Color3B::GREEN;
@@ -197,6 +197,13 @@ Vec2 Block::getPosOnField(Sprite *spr) {
 	result.x = round(spr->getPositionX() / spr->getContentSize().width);
 
 	return result;
+}
+
+b2Body* Block::getBody() {
+	if (_sprite)
+		return _body;
+	else
+		return nullptr;
 }
 
 void Block::createJointListener(void* args) {

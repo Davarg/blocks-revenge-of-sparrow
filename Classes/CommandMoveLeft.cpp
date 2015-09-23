@@ -1,5 +1,6 @@
 #include "CommandMoveLeft.h"
 #include "Constants.h"
+#include "GameField.h"
 
 bool CommandMoveLeft::init() {
 	_isExecute = false;
@@ -20,7 +21,15 @@ void CommandMoveLeft::stopBlock() {
 
 void CommandMoveLeft::update(float dt) {
 	auto body1 = _block->getBody();
+	if (!body1) {
+		stopBlock();
+		return;
+	}
 	auto body2 = _block->getAttachedBody();
+	if (!body2) {
+		stopBlock();
+		return;
+	}
 	float32 offset = MOVEOFFSET;
 	float32 blockSizeInMeters = _blockSize.width / SCALE_RATIO_BOX2D;
 
@@ -30,9 +39,33 @@ void CommandMoveLeft::update(float dt) {
 	
 	if (body1->GetFixtureList()->GetFilterData().categoryBits == Block::blockFlags::NEED_TO_STOP
 		|| body2->GetFixtureList()->GetFilterData().categoryBits == Block::blockFlags::NEED_TO_STOP) {
-		Sprite *sprite1 = nullptr;
-		Sprite *sprite2 = nullptr;
-		Size size;
+		Vec2 posOnField = _block->getPosOnField();
+		Sprite *sprite1 = (Sprite*)body1->GetUserData();
+		Sprite *sprite2 = (Sprite*)body2->GetUserData();
+		Size size = sprite1->getContentSize();
+		b2Filter filter;
+
+		if (GameField::getBlock({ posOnField.x - 1, posOnField.y })){
+			stopBlock();
+
+			filter = body1->GetFixtureList()->GetFilterData();
+			filter.categoryBits = Block::blockFlags::ACTIVE;
+			body1->GetFixtureList()->SetFilterData(filter);
+
+			filter = body2->GetFixtureList()->GetFilterData();
+			filter.categoryBits = Block::blockFlags::ACTIVE;
+			body2->GetFixtureList()->SetFilterData(filter);
+
+			body1->SetTransform(_positionOldFirst, 0);
+			body2->SetTransform(_positionOldSecond, 0);
+
+			sprite1->setPosition({ (body1->GetPosition().x * SCALE_RATIO_BOX2D) - size.width / 2
+				, (body1->GetPosition().y * SCALE_RATIO_BOX2D) - size.height / 2 });
+			sprite2->setPosition({ (body2->GetPosition().x * SCALE_RATIO_BOX2D) - size.width / 2
+				, (body2->GetPosition().y * SCALE_RATIO_BOX2D) - size.height / 2 });
+
+			return;
+		}
 
 		if (!_isUndo) {
 			body1->SetTransform({ _positionOldFirst.x - blockSizeInMeters, body1->GetPosition().y }, 0);
@@ -42,9 +75,6 @@ void CommandMoveLeft::update(float dt) {
 			body1->SetTransform({ _positionOldFirst.x + blockSizeInMeters, body1->GetPosition().y }, 0);
 			body2->SetTransform({ _positionOldSecond.x + blockSizeInMeters, body2->GetPosition().y }, 0);
 		}
-		sprite1 = (Sprite*)body1->GetUserData();
-		sprite2 = (Sprite*)body2->GetUserData();
-		size = sprite1->getContentSize();
 		sprite1->setPosition({ (body1->GetPosition().x * SCALE_RATIO_BOX2D) - size.width / 2
 			, (body1->GetPosition().y * SCALE_RATIO_BOX2D) - size.height / 2 });
 		sprite2->setPosition({ (body2->GetPosition().x * SCALE_RATIO_BOX2D) - size.width / 2
@@ -52,7 +82,7 @@ void CommandMoveLeft::update(float dt) {
 
 		stopBlock();
 
-		auto filter = body1->GetFixtureList()->GetFilterData();
+		filter = body1->GetFixtureList()->GetFilterData();
 		filter.categoryBits ^= Block::blockFlags::NEED_TO_STOP;
 		filter.categoryBits = Block::blockFlags::STOPPED;
 		body1->GetFixtureList()->SetFilterData(filter);

@@ -6,6 +6,7 @@
 #include "Constants.h"
 
 void BlockContactListener::BeginContactStatic(b2Contact* contact) {
+	const float inertia = 0.005f;
 	void* bodyUserDataA = contact->GetFixtureA()->GetBody()->GetUserData(); //Static body, in rare cases, it may be dynamic body
 	void* bodyUserDataB = contact->GetFixtureB()->GetBody()->GetUserData(); //Dynamic body, in rare cases, it may be static body
 	const uint16 categoryA = contact->GetFixtureA()->GetFilterData().categoryBits;
@@ -51,8 +52,8 @@ void BlockContactListener::BeginContactStatic(b2Contact* contact) {
 			bodies->b1 = contact->GetFixtureA()->GetBody();
 			bodies->b2 = contact->GetFixtureB()->GetBody();
 
-			if (!bodies->b1->GetLinearVelocity().x
-				|| !bodies->b2->GetLinearVelocity().x
+			if (!(abs(bodies->b1->GetLinearVelocity().x) > inertia) 
+				|| !(abs(bodies->b2->GetLinearVelocity().x) > inertia)
 				|| categoryB == Block::blockFlags::STOPPED
 				|| categoryA == Block::blockFlags::STOPPED) {
 				MessagesQueue::addMessageToQueue(
@@ -104,11 +105,11 @@ void BlockContactListener::BeginContactStatic(b2Contact* contact) {
 			&& categoryB == Block::blockFlags::ACTIVE)
 		|| categoryA == Block::blockFlags::STOPPED
 		|| categoryB == Block::blockFlags::STOPPED)  {
-		Block::bodiesStructArgs *bodies = new Block::bodiesStructArgs;
+				Block::bodiesStructArgs *bodies = new Block::bodiesStructArgs;
 		bodies->b1 = contact->GetFixtureA()->GetBody();
 		bodies->b2 = contact->GetFixtureB()->GetBody();
 
-		if (!bodies->b1->GetLinearVelocity().x && !bodies->b2->GetLinearVelocity().x) {
+		if (!(abs(bodies->b1->GetLinearVelocity().x) > inertia) && !(abs(bodies->b2->GetLinearVelocity().x) > inertia)) {
 			MessagesQueue::addMessageToQueue(
 				MessagesQueue::Message{ MessagesQueue::MessageType::CREATE_JOINT, bodies });
 
@@ -145,7 +146,7 @@ void BlockContactListener::BeginContactStatic(b2Contact* contact) {
 			bodies->b1 = contact->GetFixtureA()->GetBody();
 			bodies->b2 = contact->GetFixtureB()->GetBody();
 
-			if ((!bodies->b1->GetLinearVelocity().x && !bodies->b2->GetLinearVelocity().x)
+			if ((!(abs(bodies->b1->GetLinearVelocity().x) > inertia) && !(abs(bodies->b2->GetLinearVelocity().x) > inertia))
 				|| (categoryB == Block::blockFlags::PASSIVE && categoryA == Block::blockFlags::PASSIVE)
 				|| (categoryB == Block::blockFlags::PASSIVE && !bodyUserDataA)) {
 				MessagesQueue::addMessageToQueue(

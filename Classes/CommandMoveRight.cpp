@@ -32,10 +32,11 @@ void CommandMoveRight::update(float dt) {
 	if (body1->GetFixtureList()->GetFilterData().categoryBits == Block::blockFlags::NEED_TO_STOP
 		|| body2->GetFixtureList()->GetFilterData().categoryBits == Block::blockFlags::NEED_TO_STOP) {
 		Vec2 posOnField = _block->getPosOnField();
-		Sprite *sprite1 = nullptr;
-		Sprite *sprite2 = nullptr;
+		Sprite *sprite1 = (Sprite*)body1->GetUserData();
+		Sprite *sprite2 = (Sprite*)body2->GetUserData();
+		Size size = sprite1->getContentSize();
 		b2Filter filter;
-		Size size;
+		
 		if (GameField::getBlock({ posOnField.x + 2, posOnField.y })){
 			stopBlock();
 
@@ -46,6 +47,14 @@ void CommandMoveRight::update(float dt) {
 			filter = body2->GetFixtureList()->GetFilterData();
 			filter.categoryBits = Block::blockFlags::ACTIVE;
 			body2->GetFixtureList()->SetFilterData(filter);
+
+			body1->SetTransform(_positionOldFirst, 0);
+			body2->SetTransform(_positionOldSecond, 0);
+
+			sprite1->setPosition({ (body1->GetPosition().x * SCALE_RATIO_BOX2D) - size.width / 2
+				, (body1->GetPosition().y * SCALE_RATIO_BOX2D) - size.height / 2 });
+			sprite2->setPosition({ (body2->GetPosition().x * SCALE_RATIO_BOX2D) - size.width / 2
+				, (body2->GetPosition().y * SCALE_RATIO_BOX2D) - size.height / 2 });
 
 			return;
 		}
@@ -58,9 +67,7 @@ void CommandMoveRight::update(float dt) {
 			body1->SetTransform({ _positionOldFirst.x - blockSizeInMeters, body1->GetPosition().y }, 0);
 			body2->SetTransform({ _positionOldSecond.x - blockSizeInMeters, body2->GetPosition().y }, 0);
 		}
-		sprite1 = (Sprite*)body1->GetUserData();
-		sprite2 = (Sprite*)body2->GetUserData();
-		size = sprite1->getContentSize();
+		
 		sprite1->setPosition({ (body1->GetPosition().x * SCALE_RATIO_BOX2D) - size.width / 2
 			, (body1->GetPosition().y * SCALE_RATIO_BOX2D) - size.height / 2 });
 		sprite2->setPosition({ (body2->GetPosition().x * SCALE_RATIO_BOX2D) - size.width / 2

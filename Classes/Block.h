@@ -29,6 +29,8 @@ private:
 	static const char* _blockGreenPath;
 	static const char* _blockYellowPath;
 
+	b2Body *_body;
+
 	void setSprite(Sprite* sprite) { _sprite = sprite; }
 	void setScores(int scores) { _scores = scores; }
 	void setColor(Color3B color) { _color = color; }
@@ -65,7 +67,6 @@ public:
 	CREATE_FUNC_CUSTOM(Block, Sprite*);
 	CC_SYNTHESIZE_READONLY(int, _scores, Scores);
 	CC_SYNTHESIZE(bool, _isAttached, isAttached);
-	CC_SYNTHESIZE_READONLY(b2Body*, _body, Body);
 	CC_SYNTHESIZE_READONLY(Color3B, _color, Color);
 	CC_SYNTHESIZE_READONLY(Sprite*, _sprite, Sprite);
 	CC_SYNTHESIZE_READONLY(b2Body*, _attachedBody, AttachedBody);
@@ -75,6 +76,7 @@ public:
 	void setJointWith(Block*);
 	Vec2 getPosOnField();
 	bool init(Sprite*);
+	b2Body* getBody();
 	void destroy();
 };
 
