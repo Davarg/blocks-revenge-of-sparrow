@@ -53,6 +53,7 @@ public:
 	Layer* getLayer() { return _layerBack; }
 	virtual void disable(bool) override;
 	virtual void show() override;
+	void dropInputEvents();
 	void update(float);
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)

@@ -34,6 +34,7 @@ Block* NextBlockElementUI::getBlock() {
 		_nextBlock = Block::generateBlockInfo();
 	}
 
+
 	Layer *layerNextBlocksSprites = Layer::create();
 	layerNextBlocksSprites->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
 	layerNextBlocksSprites->setName(_layerNextBlocksName);

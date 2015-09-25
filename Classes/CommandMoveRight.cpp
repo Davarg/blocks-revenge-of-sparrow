@@ -1,6 +1,9 @@
 #include "CommandMoveRight.h"
 #include "Constants.h"
 #include "GameField.h"
+#include "UserInput.h"
+#include "SimpleUI.h"
+#include "MainGameScene.h"
 
 bool CommandMoveRight::init() {
 	_isExecute = false;
@@ -11,17 +14,42 @@ bool CommandMoveRight::init() {
 }
 
 void CommandMoveRight::stopBlock() {
+	b2Body *body1 = nullptr;
+	b2Body *body2 = nullptr;
+
+	if (_block) {
+		body1 = _block->getBody();
+		body2 = _block->getAttachedBody();
+	}
 	Director::getInstance()->getScheduler()->unscheduleUpdate(this);
 	_isExecute = false;
 	_isRedo = false;
 	_isUndo = false;
-	_block->getBody()->SetLinearVelocity({ 0, _block->getBody()->GetLinearVelocity().y });
-	_block->getAttachedBody()->SetLinearVelocity({ 0, _block->getAttachedBody()->GetLinearVelocity().y });
+	if (body1 && body2) {
+		body1->SetLinearVelocity({ 0, body1->GetLinearVelocity().y });
+		body2->SetLinearVelocity({ 0, body2->GetLinearVelocity().y });
+	}
+	_block = nullptr;
+
+	SimpleUI *simpleUI = MainGameScene::getUI();
+	UserInput *input = (UserInput*)simpleUI->getChildrenByName(UserInput::name());
+	input->dropInputEvents();
 }
 
 void CommandMoveRight::update(float dt) {
+	if (!_block)
+		return;
+
 	auto body1 = _block->getBody();
+	if (!body1) {
+		stopBlock();
+		return;
+	}
 	auto body2 = _block->getAttachedBody();
+	if (!body2) {
+		stopBlock();
+		return;
+	}
 	float32 offset = MOVEOFFSET;
 	float32 blockSizeInMeters = _blockSize.width / SCALE_RATIO_BOX2D;
 
@@ -148,9 +176,19 @@ void CommandMoveRight::update(float dt) {
 }
 
 void CommandMoveRight::execute(Block *block) {
+	auto body1 = block->getBody();
+	if (!body1) {
+		stopBlock();
+		return;
+	}
+	auto body2 = block->getAttachedBody();
+	if (!body2) {
+		stopBlock();
+		return;
+	}
 	_block = block;
-	_positionOldFirst = _block->getBody()->GetPosition();
-	_positionOldSecond = _block->getAttachedBody()->GetPosition();
+	_positionOldFirst = body1->GetPosition();
+	_positionOldSecond = body2->GetPosition();
 	_blockSize = block->getSprite()->getContentSize();
 	_isUndo = false;
 	_isRedo = false;

@@ -17,6 +17,7 @@ void Block::destroy() {
 	if (joint != nullptr)
 	world->DestroyJoint(joint);*/
 	world->DestroyBody(_body);
+	_body = nullptr;
 }
 
 bool Block::init(Sprite* _sprite) {
@@ -46,6 +47,7 @@ bool Block::init(Sprite* _sprite) {
 
 		_body->SetLinearDamping(2);
 		_body->SetAngularDamping(10);
+		_attachedBody = nullptr;
 	}
 	catch (...) {
 		cocos2d::log("Error while init Block");
@@ -55,11 +57,14 @@ bool Block::init(Sprite* _sprite) {
 }
 
 Block::blockInfo Block::generateBlockInfo() {
+	std::uniform_int_distribution<int> uniform_dist(0, 2);
+	std::random_device randomDevice;
+	std::default_random_engine randomEngine(randomDevice());
+	
 	blockInfo result;
-	std::mt19937 generator(time(0));
-	std::uniform_int_distribution<> uid(0, 2);
-
-	const int COLOR1 = 0;//uid(generator);
+	const int COLOR1 = uniform_dist(randomEngine);
+	const int COLOR2 = uniform_dist(randomEngine);
+	 
 	switch (COLOR1) {
 	case 0:
 		result.colorFirst = Color3B::GREEN;
@@ -76,8 +81,7 @@ Block::blockInfo Block::generateBlockInfo() {
 		result.spritePathFirst = _blockYellowPath;
 		break;
 	}
-
-	const int COLOR2 = 0; //uid(generator);
+	
 	switch (COLOR2) {
 	case 0:
 		result.colorSecond = Color3B::GREEN;
@@ -197,13 +201,6 @@ Vec2 Block::getPosOnField(Sprite *spr) {
 	result.x = round(spr->getPositionX() / spr->getContentSize().width);
 
 	return result;
-}
-
-b2Body* Block::getBody() {
-	if (_sprite)
-		return _body;
-	else
-		return nullptr;
 }
 
 void Block::createJointListener(void* args) {

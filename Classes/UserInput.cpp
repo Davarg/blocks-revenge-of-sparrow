@@ -90,6 +90,12 @@ void UserInput::update(float dt) {
 		onKeyPressed(_currentPressedKey, nullptr, _currentBlock);
 }
 
+void UserInput::dropInputEvents() {
+	_isKeyPressed = false;
+	_currentPressedKey = EventKeyboard::KeyCode::KEY_F9;
+	_currentBlock = nullptr;
+}
+
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 	void UserInput::onKeyReleased(EventKeyboard::KeyCode keyCode, Event *event) {
 		if (_currentPressedKey == keyCode) {

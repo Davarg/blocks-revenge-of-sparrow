@@ -17,12 +17,13 @@ private:
 
 	void stopBlock();
 	
+	
 public:
 	virtual void undo() override;
 	virtual void redo() override;
 	virtual bool init() override;
-	virtual void update(float dt) override;
-	virtual void execute(Block *block) override;
+	virtual void update(float) override;
+	virtual void execute(Block*) override;
 	virtual bool isExecute() override { return _isExecute; }
 	
 	CREATE_FUNC(CommandMoveRight);
