@@ -29,16 +29,17 @@ UserInput::UserInput(Layer* layer, Size winSize) {
 	_btnRotate->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
 
 	_moveLeft = CommandMoveLeft::create();
+	_moveDown = CommandMoveDown::create();
 	_moveRight = CommandMoveRight::create();
 	_moveCounterClockwise = CommandMoveCounterClockwise::create();
 
-	if (_moveLeft && _moveRight && _moveCounterClockwise) {
+	if (_moveLeft && _moveRight && _moveCounterClockwise && _moveDown) {
 		CC_SAFE_RETAIN(_moveLeft);
+		CC_SAFE_RETAIN(_moveDown);
 		CC_SAFE_RETAIN(_moveRight);
 		CC_SAFE_RETAIN(_moveCounterClockwise);
 	}
 	_moveClockwise = nullptr;//new CommandMoveClockwise(); //Memory Leak
-	_moveDown = nullptr;//CommandMoveDown::create();
 	
 #ifdef _DEBUG
 	_btnDown->setScaleX(0.7f);
@@ -86,14 +87,28 @@ void UserInput::show() {
 }
 
 void UserInput::update(float dt) {
-	if (_isKeyPressed)
-		onKeyPressed(_currentPressedKey, nullptr, _currentBlock);
+	using namespace std::chrono;
+	if (_isKeyPressed) {
+		if (_currentPressedKey == EventKeyboard::KeyCode::KEY_UP_ARROW) {
+			auto mls = duration_cast<milliseconds>(high_resolution_clock::now() - _startTime);
+			if (mls.count() >= 350) {
+				onKeyPressed(_currentPressedKey, nullptr, _currentBlock);
+				_startTime = high_resolution_clock::now();
+			}
+		}
+		else
+			onKeyPressed(_currentPressedKey, nullptr, _currentBlock);
+	}
 }
 
 void UserInput::dropInputEvents() {
 	_isKeyPressed = false;
 	_currentPressedKey = EventKeyboard::KeyCode::KEY_F9;
 	_currentBlock = nullptr;
+
+	bool isBodyNeedToBeStopped = false;
+	if (_moveDown->isExecute())
+		((CommandMoveDown*)_moveDown)->stopBlock(isBodyNeedToBeStopped);
 }
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
@@ -101,10 +116,13 @@ void UserInput::dropInputEvents() {
 		if (_currentPressedKey == keyCode) {
 			_isKeyPressed = false;
 			_currentBlock = nullptr;
+			if (_moveDown->isExecute())
+				((CommandMoveDown*)_moveDown)->stopBlock();
 		}
 	}
 
 	void UserInput::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event, Block* currentBlock) {
+		_startTime = std::chrono::high_resolution_clock::now();
 		_isKeyPressed = true;
 		_currentBlock = currentBlock;
 		_currentPressedKey = keyCode;
@@ -140,10 +158,8 @@ void UserInput::dropInputEvents() {
 			break;
 
 		case EventKeyboard::KeyCode::KEY_DOWN_ARROW:
-			/*if (!_moveDown->isExecute()) {
-			_moveDown->execute(_currentBlock);
-			Director::getInstance()->getScheduler()->scheduleUpdate(_moveDown, 3, false);
-			}*/
+			if (!_moveDown->isExecute())
+				_moveDown->execute(_currentBlock);
 			break;
 		}
 	}

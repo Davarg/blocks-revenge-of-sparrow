@@ -17,7 +17,6 @@ private:
 
 	void stopBlock();
 	
-	
 public:
 	virtual void undo() override;
 	virtual void redo() override;

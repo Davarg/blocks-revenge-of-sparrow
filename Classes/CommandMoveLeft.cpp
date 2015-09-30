@@ -30,10 +30,6 @@ void CommandMoveLeft::stopBlock() {
 		body2->SetLinearVelocity({ 0, body2->GetLinearVelocity().y });
 	}
 	_block = nullptr;
-
-	SimpleUI *simpleUI = MainGameScene::getUI();
-	UserInput *input = (UserInput*)simpleUI->getChildrenByName(UserInput::name());
-	input->dropInputEvents();
 }
 
 void CommandMoveLeft::update(float dt) {
@@ -83,6 +79,10 @@ void CommandMoveLeft::update(float dt) {
 				, (body1->GetPosition().y * SCALE_RATIO_BOX2D) - size.height / 2 });
 			sprite2->setPosition({ (body2->GetPosition().x * SCALE_RATIO_BOX2D) - size.width / 2
 				, (body2->GetPosition().y * SCALE_RATIO_BOX2D) - size.height / 2 });
+
+			SimpleUI *simpleUI = MainGameScene::getUI();
+			UserInput *input = (UserInput*)simpleUI->getChildrenByName(UserInput::name());
+			input->dropInputEvents();
 
 			return;
 		}

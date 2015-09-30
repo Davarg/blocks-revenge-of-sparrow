@@ -42,6 +42,7 @@ private:
 	Command *_moveClockwise;
 	Command *_moveCounterClockwise;
 	EventKeyboard::KeyCode _currentPressedKey;
+	std::chrono::system_clock::time_point _startTime;
 	
 public:
 	UserInput(Layer*, Size);

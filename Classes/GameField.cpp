@@ -1,5 +1,8 @@
 #include "GameField.h"
 #include "MessagesQueue.h"
+#include "SimpleUI.h"
+#include "UserInput.h"
+#include "MainGameScene.h"
 
 #ifdef _DEBUG
 	int GameField::_fieldWidth = 8;
@@ -266,6 +269,10 @@ void GameField::checkField() {
 	if (*SCORES)
 		MessagesQueue::addMessageToQueue(
 			MessagesQueue::Message{ MessagesQueue::MessageType::UPDATE_SCORES, SCORES });
+
+	SimpleUI *simpleUI = MainGameScene::getUI();
+	UserInput *input = (UserInput*)simpleUI->getChildrenByName(UserInput::name());
+	input->dropInputEvents();
 }
 
 void GameField::recountGameField() {
