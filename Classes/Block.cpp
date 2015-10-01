@@ -36,7 +36,7 @@ bool Block::init(Sprite* _sprite) {
 			, (_sprite->getContentSize().height / SCALE_RATIO_BOX2D) / 2.2f);
 
 		b2FixtureDef fixtureDef;
-		fixtureDef.density = 1;
+		fixtureDef.density = 100;
 		fixtureDef.friction = 0;
 		fixtureDef.restitution = 0;
 		fixtureDef.shape = &shape;
