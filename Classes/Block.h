@@ -25,9 +25,10 @@ static __TYPE__* create(__VAR_TYPE__ var) \
 
 class Block : public Ref {
 private:
+	static const char* _emptyBlock;
 	static const char* _blockRedPath;
 	static const char* _blockGreenPath;
-	static const char* _blockYellowPath;
+	static const char* _blockVioletPath;
 
 	void setSprite(Sprite* sprite) { _sprite = sprite; }
 	void setScores(int scores) { _scores = scores; }

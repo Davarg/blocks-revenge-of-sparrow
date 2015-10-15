@@ -48,9 +48,6 @@
     <ClCompile Include="..\Classes\UserInput.cpp">
       <Filter>src\ui</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\CommandMoveClockwise.cpp">
-      <Filter>src\commands</Filter>
-    </ClCompile>
     <ClCompile Include="..\Classes\CommandMoveCounterClockwise.cpp">
       <Filter>src\commands</Filter>
     </ClCompile>
@@ -122,9 +119,6 @@
     <ClInclude Include="..\Classes\Command.h">
       <Filter>src\commands</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\CommandMoveClockwise.h">
-      <Filter>src\commands</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\CommandMoveCounterClockwise.h">
       <Filter>src\commands</Filter>
     </ClInclude>
@@ -159,9 +153,6 @@
       <Filter>src\common</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\Block.h">
-      <Filter>src\common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Constants.h">
       <Filter>src\common</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\MainGameScene.h">

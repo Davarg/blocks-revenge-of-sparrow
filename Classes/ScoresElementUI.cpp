@@ -18,22 +18,18 @@ ScoresElementUI::ScoresElementUI(Layer *layer, Size winSize) {
 	_labelScores->setColor(Color3B::BLACK);
 
 	_labelSpriteScore = Sprite::create(_labelScorePath);
-#ifdef _DEBUG 
 	_labelSpriteScore->setScaleX(0.6f);
 	_labelSpriteScore->setScaleY(0.4f);
 	_labelSpriteScore->setPosition(90, 27);
-#endif
 	_labelSpriteScore->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
 
 	_labelScores->setPosition(_labelSpriteScore->getContentSize().width / 2
 			, _labelSpriteScore->getContentSize().height / 2);
 
 	_fieldScore = Sprite::create(_fieldScorePath);
-#ifdef _DEBUG 
 	_fieldScore->setScaleX(0.6f);
 	_fieldScore->setScaleY(0.4f);
 	_fieldScore->setPosition(90, 3);
-#endif
 	_fieldScore->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
 
 #ifdef _DEBUG

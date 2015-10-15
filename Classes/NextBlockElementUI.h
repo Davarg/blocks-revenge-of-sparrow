@@ -1,9 +1,9 @@
 #ifndef __NEXT_BLOCK_ELEMENT_UI_H__
 #define __NEXT_BLOCK_ELEMENT_UI_H__
 
-#include "AbstractElementUI.h"
 #include "Block.h"
 #include <cocos2d.h>
+#include "AbstractElementUI.h"
 
 USING_NS_CC;
 

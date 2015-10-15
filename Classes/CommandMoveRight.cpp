@@ -1,9 +1,9 @@
-#include "CommandMoveRight.h"
-#include "Constants.h"
+#include "SimpleUI.h"
 #include "GameField.h"
 #include "UserInput.h"
-#include "SimpleUI.h"
 #include "MainGameScene.h"
+#include "CommandMoveRight.h"
+#include "ConstantsRegistry.h"
 
 bool CommandMoveRight::init() {
 	_isExecute = false;
@@ -46,8 +46,9 @@ void CommandMoveRight::update(float dt) {
 		stopBlock();
 		return;
 	}
-	float32 offset = MOVEOFFSET;
-	float32 blockSizeInMeters = _blockSize.width / SCALE_RATIO_BOX2D;
+	float32 offset = ConstantsRegistry::getValueForKey(ConstantsRegistry::constants::MOVEOFFSET);
+	float32 blockSizeInMeters = _blockSize.width 
+		/ ConstantsRegistry::getValueForKey(ConstantsRegistry::constants::SCALE_RATIO_BOX2D);
 
 	if (body1->GetFixtureList()->GetFilterData().categoryBits == Block::blockFlags::PASSIVE
 		|| body2->GetFixtureList()->GetFilterData().categoryBits == Block::blockFlags::PASSIVE)
@@ -75,10 +76,14 @@ void CommandMoveRight::update(float dt) {
 			body1->SetTransform(_positionOldFirst, 0);
 			body2->SetTransform(_positionOldSecond, 0);
 
-			sprite1->setPosition({ (body1->GetPosition().x * SCALE_RATIO_BOX2D) - size.width / 2
-				, (body1->GetPosition().y * SCALE_RATIO_BOX2D) - size.height / 2 });
-			sprite2->setPosition({ (body2->GetPosition().x * SCALE_RATIO_BOX2D) - size.width / 2
-				, (body2->GetPosition().y * SCALE_RATIO_BOX2D) - size.height / 2 });
+			sprite1->setPosition({ (body1->GetPosition().x 
+					* ConstantsRegistry::getValueForKey(ConstantsRegistry::constants::SCALE_RATIO_BOX2D)) - size.width / 2
+				, (body1->GetPosition().y 
+					* ConstantsRegistry::getValueForKey(ConstantsRegistry::constants::SCALE_RATIO_BOX2D)) - size.height / 2 });
+			sprite2->setPosition({ (body2->GetPosition().x 
+					* ConstantsRegistry::getValueForKey(ConstantsRegistry::constants::SCALE_RATIO_BOX2D)) - size.width / 2
+				, (body2->GetPosition().y 
+					* ConstantsRegistry::getValueForKey(ConstantsRegistry::constants::SCALE_RATIO_BOX2D)) - size.height / 2 });
 
 			SimpleUI *simpleUI = MainGameScene::getUI();
 			UserInput *input = (UserInput*)simpleUI->getChildrenByName(UserInput::name());
@@ -96,10 +101,14 @@ void CommandMoveRight::update(float dt) {
 			body2->SetTransform({ _positionOldSecond.x - blockSizeInMeters, body2->GetPosition().y }, 0);
 		}
 		
-		sprite1->setPosition({ (body1->GetPosition().x * SCALE_RATIO_BOX2D) - size.width / 2
-			, (body1->GetPosition().y * SCALE_RATIO_BOX2D) - size.height / 2 });
-		sprite2->setPosition({ (body2->GetPosition().x * SCALE_RATIO_BOX2D) - size.width / 2
-			, (body2->GetPosition().y * SCALE_RATIO_BOX2D) - size.height / 2 });
+		sprite1->setPosition({ (body1->GetPosition().x 
+				* ConstantsRegistry::getValueForKey(ConstantsRegistry::constants::SCALE_RATIO_BOX2D)) - size.width / 2
+			, (body1->GetPosition().y 
+				* ConstantsRegistry::getValueForKey(ConstantsRegistry::constants::SCALE_RATIO_BOX2D)) - size.height / 2 });
+		sprite2->setPosition({ (body2->GetPosition().x 
+				* ConstantsRegistry::getValueForKey(ConstantsRegistry::constants::SCALE_RATIO_BOX2D)) - size.width / 2
+			, (body2->GetPosition().y 
+				* ConstantsRegistry::getValueForKey(ConstantsRegistry::constants::SCALE_RATIO_BOX2D)) - size.height / 2 });
 
 		stopBlock();
 
@@ -122,7 +131,7 @@ void CommandMoveRight::update(float dt) {
 			&& _isExecute) {
 		if (((body1->GetPosition().x + offset) - _positionOldFirst.x) >= blockSizeInMeters) {
 			while (offset > 0) {
-				offset -= MOVEOFFSET / 100;
+				offset -= ConstantsRegistry::getValueForKey(ConstantsRegistry::constants::MOVEOFFSET) / 100;
 				if (((body1->GetPosition().x + offset) - _positionOldFirst.x) < blockSizeInMeters) {
 					stopBlock();
 					body1->SetTransform({ body1->GetPosition().x + offset, body1->GetPosition().y }, 0);
@@ -131,7 +140,7 @@ void CommandMoveRight::update(float dt) {
 				}
 			}
 		}
-		assert(offset);
+		CCASSERT(offset, "offset can't be 0");
 		if (body1->GetLinearVelocity().x < 0
 			&& (_positionOldFirst.x - body1->GetPosition().x) < (blockSizeInMeters / 7)) {
 			stopBlock();
@@ -149,7 +158,7 @@ void CommandMoveRight::update(float dt) {
 				&& _isExecute) {
 		if ((_positionOldFirst.x - (body1->GetPosition().x - offset)) >= blockSizeInMeters) {
 			while (offset > 0) {
-				offset -= MOVEOFFSET / 100;
+				offset -= ConstantsRegistry::getValueForKey(ConstantsRegistry::constants::MOVEOFFSET) / 100;
 				if ((_positionOldFirst.x - (body1->GetPosition().x - offset) < blockSizeInMeters)) {
 					stopBlock();
 					body1->SetTransform({ body1->GetPosition().x - offset, body1->GetPosition().y }, 0);
@@ -158,7 +167,7 @@ void CommandMoveRight::update(float dt) {
 				}
 			}
 		}
-		assert(offset);
+		CCASSERT(offset, "offset can't be 0");
 		if (body1->GetLinearVelocity().x > 0
 			&& (_positionOldFirst.x - body1->GetPosition().x) < (blockSizeInMeters / 7)) {
 			stopBlock();

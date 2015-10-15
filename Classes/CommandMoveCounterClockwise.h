@@ -1,9 +1,9 @@
 #ifndef __COMMAND_MOVE_COUNTER_CLOCKWISE_H__
 #define __COMMAND_MOVE_COUNTER_CLOCKWISE_H__
 
-#include "cocos2d.h"
-#include "Box2D\Box2D.h"
 #include "Command.h"
+#include <cocos2d.h>
+#include <Box2D\Box2D.h>
 
 class CommandMoveCounterClockwise : public Command {
 private:
@@ -18,8 +18,8 @@ public:
 	virtual void undo() override;
 	virtual void redo() override;
 	virtual bool init() override;
-	virtual void update(float dt) override;
-	virtual void execute(Block *block) override;
+	virtual void update(float) override;
+	virtual void execute(Block*) override;
 	virtual bool isExecute() override { return _isExecute; }
 
 	CREATE_FUNC(CommandMoveCounterClockwise);

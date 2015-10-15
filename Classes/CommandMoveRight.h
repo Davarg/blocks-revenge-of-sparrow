@@ -1,9 +1,9 @@
 #ifndef __COMMAND_MOVE_RIGHT_H__
 #define __COMMAND_MOVE_RIGHT_H__
 
-#include "cocos2d.h"
-#include "Box2D\Box2D.h"
 #include "Command.h"
+#include <cocos2d.h>
+#include <Box2D\Box2D.h>
 
 class CommandMoveRight : public Command {
 private:

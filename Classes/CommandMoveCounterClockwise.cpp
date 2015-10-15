@@ -1,7 +1,7 @@
-#include "CommandMoveCounterClockwise.h"
-#include "Constants.h"
 #include "GameField.h"
 #include "MainGameScene.h"
+#include "ConstantsRegistry.h"
+#include "CommandMoveCounterClockwise.h"
 
 bool CommandMoveCounterClockwise::init() {
 	_isExecute = false;
@@ -23,16 +23,19 @@ void moveBlock(int mainBlockY, int mainBlockX, int attachedBlockY, int attachedB
 
 		if (!GameField::getBlock(mainBlockY + 1, mainBlockX)) {
 			MainGameScene::getWorld()->DestroyJoint(block->getBody()->GetJointList()->joint);
-			jointDef.localAnchorA = { 0.5, JOINT_BLOCK_DIST };
+			jointDef.localAnchorA = { 0.5, ConstantsRegistry::getValueForKey(ConstantsRegistry::constants::JOINT_BLOCK_DIST) };
 			jointDef.localAnchorB = { 0.5, 0 };
 			MainGameScene::getWorld()->CreateJoint(&jointDef);
 
 			Size size = block->getSprite()->getContentSize();
 			b2Vec2 position;
 
-			position.x = (block->getSprite()->getPositionX() / SCALE_RATIO_BOX2D) + (size.width / 2) / SCALE_RATIO_BOX2D;
-			position.y = ((block->getSprite()->getPositionY() + size.height) / SCALE_RATIO_BOX2D) 
-							+ (size.height / 2) / SCALE_RATIO_BOX2D;
+			position.x = (block->getSprite()->getPositionX() 
+				/ ConstantsRegistry::getValueForKey(ConstantsRegistry::constants::SCALE_RATIO_BOX2D)) 
+					+ (size.width / 2) / ConstantsRegistry::getValueForKey(ConstantsRegistry::constants::SCALE_RATIO_BOX2D);
+			position.y = ((block->getSprite()->getPositionY() + size.height) 
+				/ ConstantsRegistry::getValueForKey(ConstantsRegistry::constants::SCALE_RATIO_BOX2D))
+					+ (size.height / 2) / ConstantsRegistry::getValueForKey(ConstantsRegistry::constants::SCALE_RATIO_BOX2D);
 
 			block->getAttachedBody()->SetTransform(position, 0);
 		}
@@ -43,16 +46,19 @@ void moveBlock(int mainBlockY, int mainBlockX, int attachedBlockY, int attachedB
 
 		if (!GameField::getBlock(mainBlockY - 1, mainBlockX)) {
 			MainGameScene::getWorld()->DestroyJoint(block->getBody()->GetJointList()->joint);
-			jointDef.localAnchorA = { 0.5, JOINT_BLOCK_DIST_NEGATIVE };
+			jointDef.localAnchorA = { 0.5, ConstantsRegistry::getValueForKey(ConstantsRegistry::constants::JOINT_BLOCK_DIST_NEGATIVE) };
 			jointDef.localAnchorB = { 0.5, 1 };
 			MainGameScene::getWorld()->CreateJoint(&jointDef);
 
 			Size size = block->getSprite()->getContentSize();
 			b2Vec2 position;
 
-			position.x = (block->getSprite()->getPositionX() / SCALE_RATIO_BOX2D) + (size.width / 2) / SCALE_RATIO_BOX2D;
-			position.y = ((block->getSprite()->getPositionY() - size.height) / SCALE_RATIO_BOX2D)
-							+ (size.height / 2) / SCALE_RATIO_BOX2D;
+			position.x = (block->getSprite()->getPositionX() 
+				/ ConstantsRegistry::getValueForKey(ConstantsRegistry::constants::SCALE_RATIO_BOX2D)) 
+					+ (size.width / 2) / ConstantsRegistry::getValueForKey(ConstantsRegistry::constants::SCALE_RATIO_BOX2D);
+			position.y = ((block->getSprite()->getPositionY() - size.height) 
+				/ ConstantsRegistry::getValueForKey(ConstantsRegistry::constants::SCALE_RATIO_BOX2D))
+					+ (size.height / 2) / ConstantsRegistry::getValueForKey(ConstantsRegistry::constants::SCALE_RATIO_BOX2D);
 
 			block->getAttachedBody()->SetTransform(position, 0);
 		}
@@ -63,16 +69,19 @@ void moveBlock(int mainBlockY, int mainBlockX, int attachedBlockY, int attachedB
 
 		if (!GameField::getBlock(mainBlockY, mainBlockX - 1)) {
 			MainGameScene::getWorld()->DestroyJoint(block->getBody()->GetJointList()->joint);
-			jointDef.localAnchorA = { JOINT_BLOCK_DIST_NEGATIVE, 0 };
+			jointDef.localAnchorA = { ConstantsRegistry::getValueForKey(ConstantsRegistry::constants::JOINT_BLOCK_DIST_NEGATIVE), 0 };
 			jointDef.localAnchorB = { 1, 0 };
 			MainGameScene::getWorld()->CreateJoint(&jointDef);
 
 			Size size = block->getSprite()->getContentSize();
 			b2Vec2 position;
 
-			position.x = ((block->getSprite()->getPositionX() - size.width) / SCALE_RATIO_BOX2D)
-							+ (size.width / 2) / SCALE_RATIO_BOX2D;
-			position.y = (block->getSprite()->getPositionY() / SCALE_RATIO_BOX2D) + (size.height / 2) / SCALE_RATIO_BOX2D;
+			position.x = ((block->getSprite()->getPositionX() - size.width) 
+				/ ConstantsRegistry::getValueForKey(ConstantsRegistry::constants::SCALE_RATIO_BOX2D))
+					+ (size.width / 2) / ConstantsRegistry::getValueForKey(ConstantsRegistry::constants::SCALE_RATIO_BOX2D);
+			position.y = (block->getSprite()->getPositionY() 
+				/ ConstantsRegistry::getValueForKey(ConstantsRegistry::constants::SCALE_RATIO_BOX2D)) 
+					+ (size.height / 2) / ConstantsRegistry::getValueForKey(ConstantsRegistry::constants::SCALE_RATIO_BOX2D);
 
 			block->getAttachedBody()->SetTransform(position, 0);
 		}
@@ -83,16 +92,19 @@ void moveBlock(int mainBlockY, int mainBlockX, int attachedBlockY, int attachedB
 
 		if (!GameField::getBlock(mainBlockY, mainBlockX + 1)) {
 			MainGameScene::getWorld()->DestroyJoint(block->getBody()->GetJointList()->joint);
-			jointDef.localAnchorA = { JOINT_BLOCK_DIST, 0 };
+			jointDef.localAnchorA = { ConstantsRegistry::getValueForKey(ConstantsRegistry::constants::JOINT_BLOCK_DIST), 0 };
 			jointDef.localAnchorB = { 0, 0 };
 			MainGameScene::getWorld()->CreateJoint(&jointDef);
 
 			Size size = block->getSprite()->getContentSize();
 			b2Vec2 position;
 
-			position.x = ((block->getSprite()->getPositionX() + size.width) / SCALE_RATIO_BOX2D)
-							+ (size.width / 2) / SCALE_RATIO_BOX2D;
-			position.y = (block->getSprite()->getPositionY() / SCALE_RATIO_BOX2D) + (size.height / 2) / SCALE_RATIO_BOX2D;
+			position.x = ((block->getSprite()->getPositionX() + size.width) 
+				/ ConstantsRegistry::getValueForKey(ConstantsRegistry::constants::SCALE_RATIO_BOX2D))
+					+ (size.width / 2) / ConstantsRegistry::getValueForKey(ConstantsRegistry::constants::SCALE_RATIO_BOX2D);
+			position.y = (block->getSprite()->getPositionY() 
+				/ ConstantsRegistry::getValueForKey(ConstantsRegistry::constants::SCALE_RATIO_BOX2D)) 
+					+ (size.height / 2) / ConstantsRegistry::getValueForKey(ConstantsRegistry::constants::SCALE_RATIO_BOX2D);
 
 			block->getAttachedBody()->SetTransform(position, 0);
 		}

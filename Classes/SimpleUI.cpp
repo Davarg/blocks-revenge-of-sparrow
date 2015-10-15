@@ -1,11 +1,11 @@
 #include "SimpleUI.h"
-#include "BackgroundElementUI.h"
 #include "TopPanel.h"
-#include "BottomPanel.h"
 #include "UserInput.h"
-#include "ScoresElementUI.h"
+#include "BottomPanel.h"
 #include "MessagesQueue.h"
+#include "ScoresElementUI.h"
 #include "NextBlockElementUI.h"
+#include "BackgroundElementUI.h"
 
 SimpleUI::~SimpleUI() {
 	for (auto iterator : _childrens) {

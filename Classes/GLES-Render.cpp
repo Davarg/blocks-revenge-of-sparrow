@@ -18,11 +18,12 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-#include "GLES-Render.h"
-#include "cocos2d.h"
+
 #include <stdio.h>
 #include <stdarg.h>
 #include <string.h>
+#include <cocos2d.h>
+#include "GLES-Render.h"
 
 USING_NS_CC;
 

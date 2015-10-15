@@ -1,13 +1,14 @@
-#include "Block.h"
-#include "MainGameScene.h"
-#include "Constants.h"
-#include "GameField.h"
 #include <math.h>
+#include "Block.h"
+#include "GameField.h"
+#include "MainGameScene.h"
+#include "ConstantsRegistry.h"
 #include "BackgroundElementUI.h"
 
-const char* Block::_blockRedPath = "block_red.png";
-const char* Block::_blockGreenPath = "block_green.png";
-const char* Block::_blockYellowPath = "block_yellow.png";
+const char* Block::_emptyBlock = "blocks/block.png";
+const char* Block::_blockRedPath = "blocks/red.png";
+const char* Block::_blockGreenPath = "blocks/green.png";
+const char* Block::_blockVioletPath = "blocks/violet.png";
 
 void Block::destroy() {
 	_sprite->removeFromParentAndCleanup(true);
@@ -27,13 +28,18 @@ bool Block::init(Sprite* _sprite) {
 #endif
 
 		b2BodyDef bodyDef;
-		bodyDef.position = b2Vec2(_sprite->getPositionX() / SCALE_RATIO_BOX2D, _sprite->getPositionY() / SCALE_RATIO_BOX2D);
+		bodyDef.position = b2Vec2(_sprite->getPositionX() 
+					/ ConstantsRegistry::getValueForKey(ConstantsRegistry::constants::SCALE_RATIO_BOX2D)
+				, _sprite->getPositionY() 
+					/ ConstantsRegistry::getValueForKey(ConstantsRegistry::constants::SCALE_RATIO_BOX2D));
 		bodyDef.userData = _sprite;
 		bodyDef.type = b2_dynamicBody;
 
 		b2PolygonShape shape;
-		shape.SetAsBox((_sprite->getContentSize().width / SCALE_RATIO_BOX2D) / 2.2f
-			, (_sprite->getContentSize().height / SCALE_RATIO_BOX2D) / 2.2f);
+		shape.SetAsBox((_sprite->getContentSize().width 
+				/ ConstantsRegistry::getValueForKey(ConstantsRegistry::constants::SCALE_RATIO_BOX2D)) / 2.2f
+			, (_sprite->getContentSize().height 
+				/ ConstantsRegistry::getValueForKey(ConstantsRegistry::constants::SCALE_RATIO_BOX2D)) / 2.2f);
 
 		b2FixtureDef fixtureDef;
 		fixtureDef.density = 100;
@@ -77,8 +83,8 @@ Block::blockInfo Block::generateBlockInfo() {
 		break;
 
 	case 2:
-		result.colorFirst = Color3B::YELLOW;
-		result.spritePathFirst = _blockYellowPath;
+		result.colorFirst = Color3B::MAGENTA;
+		result.spritePathFirst = _blockVioletPath;
 		break;
 	}
 	
@@ -94,8 +100,8 @@ Block::blockInfo Block::generateBlockInfo() {
 		break;
 
 	case 2:
-		result.colorSecond = Color3B::YELLOW;
-		result.spritePathSecond = _blockYellowPath;
+		result.colorSecond = Color3B::MAGENTA;
+		result.spritePathSecond = _blockVioletPath;
 		break;
 	}
 
@@ -111,6 +117,10 @@ Block* Block::createBlock(blockInfo info) {
 
 	auto spriteA = Sprite::create(info.spritePathFirst);
 	spriteA->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+	auto spriteAEmpty = Sprite::create(_emptyBlock);
+	spriteAEmpty->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+	spriteA->addChild(spriteAEmpty);
+
 	auto a = Block::create(spriteA);
 	a->setScores(info.scoresFirst);
 	a->setColor(info.colorFirst);
@@ -120,6 +130,10 @@ Block* Block::createBlock(blockInfo info) {
 
 	auto spriteB = Sprite::create(info.spritePathSecond);
 	spriteB->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+	auto spriteBEmpty = Sprite::create(_emptyBlock);
+	spriteBEmpty->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+	spriteB->addChild(spriteBEmpty);
+
 	auto b = Block::create(spriteB);
 	b->setScores(info.scoresSecond);
 	b->setColor(info.colorSecond);
@@ -138,7 +152,7 @@ Block* Block::createBlock(blockInfo info) {
 b2WeldJointDef Block::getJointDef() {
 	b2WeldJointDef jointDef;
 	jointDef.collideConnected = false;
-	jointDef.localAnchorA = b2Vec2(JOINT_BLOCK_DIST, 0);
+	jointDef.localAnchorA = b2Vec2(ConstantsRegistry::getValueForKey(ConstantsRegistry::constants::JOINT_BLOCK_DIST), 0);
 	jointDef.localAnchorB = b2Vec2(0, 0);
 
 	return jointDef;
@@ -163,8 +177,12 @@ void Block::setPositionInPxl(Vec2 pos) {
 	_sprite->setPosition(pos);
 	Vec2 posSprite = _sprite->getPosition();
 	Size size = _sprite->getContentSize();
-	_body->SetTransform({ (posSprite.x / SCALE_RATIO_BOX2D) + ((size.width / 2) / SCALE_RATIO_BOX2D)
-		, (posSprite.y / SCALE_RATIO_BOX2D) + ((size.height / 2) / SCALE_RATIO_BOX2D) }, 0);
+	_body->SetTransform({ (posSprite.x 
+			/ ConstantsRegistry::getValueForKey(ConstantsRegistry::constants::SCALE_RATIO_BOX2D)) 
+				+ ((size.width / 2) / ConstantsRegistry::getValueForKey(ConstantsRegistry::constants::SCALE_RATIO_BOX2D))
+		, (posSprite.y 
+			/ ConstantsRegistry::getValueForKey(ConstantsRegistry::constants::SCALE_RATIO_BOX2D)) 
+				+ ((size.height / 2) / ConstantsRegistry::getValueForKey(ConstantsRegistry::constants::SCALE_RATIO_BOX2D)) }, 0);
 }
 
 Size Block::getSize() {

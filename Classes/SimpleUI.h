@@ -1,8 +1,8 @@
 #ifndef __SIMPLE_UI_H__
 #define __SIMPLE_UI_H__
 
+#include <cocos2d.h>
 #include "AbstractUI.h"
-#include "cocos2d.h"
 
 USING_NS_CC;
 

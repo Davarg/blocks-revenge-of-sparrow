@@ -21,8 +21,8 @@
 #ifndef RENDER_H
 #define RENDER_H
 
-#include "Box2D/Box2D.h"
-#include "cocos2d.h"
+#include <cocos2d.h>
+#include <Box2D/Box2D.h>
 
 struct b2AABB;
 
@@ -31,7 +31,7 @@ struct b2AABB;
 class GLESDebugDraw : public b2Draw
 {
     float32 mRatio;
-    cocos2d::CCGLProgram* mShaderProgram;
+	cocos2d::GLProgram* mShaderProgram;
     GLint        mColorLocation;
 
     void initShader( void );

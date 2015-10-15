@@ -1,8 +1,8 @@
 #ifndef __SCORES_ELEMENT_UI_H__
 #define __SCORES_ELEMENT_UI_H__
 
-#include "AbstractElementUI.h"
 #include <cocos2d.h>
+#include "AbstractElementUI.h"
 
 USING_NS_CC;
 

@@ -1,19 +1,16 @@
 #ifndef __CONSTANTS_REGISTRY_H__
 #define __CONSTANTS_REGISTRY_H__
 
-#include <Box2D\Box2D.h>
 #include <cocos2d.h>
+#include <Box2D\Box2D.h>
 
 USING_NS_CC;
 
 class ConstantsRegistry {
 private:
-	static bool isLocked;
-	static ConstantsRegistry constantsRegistry;
-
+	bool _locked;
 	std::map<int, float32> _values;
-	
-	CC_DISALLOW_IMPLICIT_CONSTRUCTORS(ConstantsRegistry);
+	static ConstantsRegistry _registry;
 
 public:
 	enum constants {
@@ -25,10 +22,10 @@ public:
 		JOINT_BLOCK_DIST_NEGATIVE
 	};
 
-	static void lock() { isLocked = true; }
 	static float32 getValueForKey(constants);
-	static bool isLocked() { return isLocked; }
 	static void setValueForKey(constants, float32);
+	static void lock() { _registry._locked = true; }
+	static bool isLocked() { return _registry._locked; }
 };
 
 #endif

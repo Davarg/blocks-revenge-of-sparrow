@@ -11,7 +11,6 @@ UserInput::~UserInput() {
 	CC_SAFE_RELEASE_NULL(_moveLeft);
 	CC_SAFE_RELEASE_NULL(_moveRight);
 	CC_SAFE_RELEASE_NULL(_moveCounterClockwise);
-	CC_SAFE_RELEASE_NULL(_moveClockwise);
 	CC_SAFE_RELEASE_NULL(_moveDown);
 }
 
@@ -39,9 +38,7 @@ UserInput::UserInput(Layer* layer, Size winSize) {
 		CC_SAFE_RETAIN(_moveRight);
 		CC_SAFE_RETAIN(_moveCounterClockwise);
 	}
-	_moveClockwise = nullptr;//new CommandMoveClockwise(); //Memory Leak
 	
-#ifdef _DEBUG
 	_btnDown->setScaleX(0.7f);
 	_btnDown->setScaleY(0.6f);
 	_btnDown->setPosition({ 390, 5 });
@@ -57,7 +54,6 @@ UserInput::UserInput(Layer* layer, Size winSize) {
 	_btnRotate->setScaleX(0.7f);
 	_btnRotate->setScaleY(0.6f);
 	_btnRotate->setPosition({ 48, 5 });
-#endif
 
 #ifdef _DEBUG
 	_btnDown->setOpacity(80);
@@ -111,7 +107,7 @@ void UserInput::dropInputEvents() {
 		((CommandMoveDown*)_moveDown)->stopBlock(isBodyNeedToBeStopped);
 }
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
 	void UserInput::onKeyReleased(EventKeyboard::KeyCode keyCode, Event *event) {
 		if (_currentPressedKey == keyCode) {
 			_isKeyPressed = false;

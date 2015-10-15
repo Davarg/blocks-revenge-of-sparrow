@@ -1,5 +1,5 @@
-#include "MessagesQueue.h"
 #include "Block.h"
+#include "MessagesQueue.h"
 
 struct funcAndObj {
 	void* obj = nullptr;

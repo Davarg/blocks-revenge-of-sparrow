@@ -1,14 +1,12 @@
-#include "GameField.h"
-#include "MessagesQueue.h"
 #include "SimpleUI.h"
 #include "UserInput.h"
+#include "GameField.h"
+#include "MessagesQueue.h"
 #include "MainGameScene.h"
 
-#ifdef _DEBUG
-	int GameField::_fieldWidth = 8;
-	int GameField::_fieldHeight = 13;
-#endif
 Block ***_arrayBlocks = nullptr;
+int GameField::_fieldWidth = 0;
+int GameField::_fieldHeight = 0;
 
 GameField::~GameField() {
 	if (_arrayBlocks) {
@@ -27,7 +25,9 @@ void GameField::init(const int width, const int height) {
 		if (height && width) {
 			_fieldHeight = height;
 			_fieldWidth = width;
-		}
+		} 
+		else 
+			CCASSERT(false, "width & height must be inited");
 
 		_arrayBlocks = new Block**[_fieldHeight];
 		for (int i = 0; i < _fieldHeight; i++)
@@ -63,7 +63,7 @@ void GameField::setBlock(Block* block) {
 		_arrayBlocks[y2][x2] = block->getAttachedBlock();
 	}
 	else
-		assert(false);
+		CCASSERT(false, "Can't set block on GameField");
 }
 
 void GameField::setBlock(int y, int x, Block* block){

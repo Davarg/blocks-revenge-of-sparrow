@@ -1,9 +1,9 @@
-#include "BlockContactListener.h"
-#include "MainGameScene.h"
 #include <math.h>
 #include "Block.h"
+#include "MainGameScene.h"
 #include "MessagesQueue.h"
-#include "Constants.h"
+#include "ConstantsRegistry.h"
+#include "BlockContactListener.h"
 
 void BlockContactListener::BeginContactStatic(b2Contact* contact) {
 	const float inertia = 0.005f;
@@ -47,7 +47,8 @@ void BlockContactListener::BeginContactStatic(b2Contact* contact) {
 		Vec2 posA = spriteA->getPosition();
 		Vec2 posB = spriteB->getPosition();
 
-		if ((round(posA.y) <= round(posB.y) || round(posA.y) >= round(posB.y)) && abs(posA.x - posB.x) <= X_OFFSET_BLOCK) {
+		if ((round(posA.y) <= round(posB.y) || round(posA.y) >= round(posB.y)) && abs(posA.x - posB.x) 
+				<= ConstantsRegistry::getValueForKey(ConstantsRegistry::constants::X_OFFSET_BLOCK)) {
 			Block::bodiesStructArgs *bodies = new Block::bodiesStructArgs;
 			bodies->b1 = contact->GetFixtureA()->GetBody();
 			bodies->b2 = contact->GetFixtureB()->GetBody();

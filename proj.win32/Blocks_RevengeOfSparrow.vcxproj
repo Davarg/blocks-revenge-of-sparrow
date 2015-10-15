@@ -142,7 +142,6 @@ xcopy /Y /Q "$(EngineRoot)external\websockets\prebuilt\win32\*.*" "$(OutDir)"</C
     <ClCompile Include="..\Classes\Block.cpp" />
     <ClCompile Include="..\Classes\BlockContactListener.cpp" />
     <ClCompile Include="..\Classes\BottomPanel.cpp" />
-    <ClCompile Include="..\Classes\CommandMoveClockwise.cpp" />
     <ClCompile Include="..\Classes\CommandMoveCounterClockwise.cpp" />
     <ClCompile Include="..\Classes\CommandMoveDown.cpp" />
     <ClCompile Include="..\Classes\CommandMoveLeft.cpp" />
@@ -169,12 +168,10 @@ xcopy /Y /Q "$(EngineRoot)external\websockets\prebuilt\win32\*.*" "$(OutDir)"</C
     <ClInclude Include="..\Classes\BlockContactListener.h" />
     <ClInclude Include="..\Classes\BottomPanel.h" />
     <ClInclude Include="..\Classes\Command.h" />
-    <ClInclude Include="..\Classes\CommandMoveClockwise.h" />
     <ClInclude Include="..\Classes\CommandMoveCounterClockwise.h" />
     <ClInclude Include="..\Classes\CommandMoveDown.h" />
     <ClInclude Include="..\Classes\CommandMoveLeft.h" />
     <ClInclude Include="..\Classes\CommandMoveRight.h" />
-    <ClInclude Include="..\Classes\Constants.h" />
     <ClInclude Include="..\Classes\ConstantsRegistry.h" />
     <ClInclude Include="..\Classes\GameField.h" />
     <ClInclude Include="..\Classes\GLES-Render.h" />

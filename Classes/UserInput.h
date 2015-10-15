@@ -2,14 +2,13 @@
 #define __USER_INPUT_H__
 
 #include <cocos2d.h>
-#include <ui\CocosGUI.h>
-#include "AbstractElementUI.h"
 #include "Command.h"
+#include <ui\CocosGUI.h>
 #include "CommandMoveLeft.h"
-#include "CommandMoveRight.h"
-#include "CommandMoveCounterClockwise.h"
-#include "CommandMoveClockwise.h"
 #include "CommandMoveDown.h"
+#include "CommandMoveRight.h"
+#include "AbstractElementUI.h"
+#include "CommandMoveCounterClockwise.h"
 
 USING_NS_CC;
 using namespace ui;
@@ -39,7 +38,6 @@ private:
 	Command *_moveRight;
 	Layer *_layerParent;
 	Block *_currentBlock;
-	Command *_moveClockwise;
 	Command *_moveCounterClockwise;
 	EventKeyboard::KeyCode _currentPressedKey;
 	std::chrono::system_clock::time_point _startTime;
@@ -57,7 +55,7 @@ public:
 	void dropInputEvents();
 	void update(float);
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
 	void onKeyPressed(EventKeyboard::KeyCode, Event*, Block*); //Custom function
 	void onKeyReleased(EventKeyboard::KeyCode, Event*);
 #endif
