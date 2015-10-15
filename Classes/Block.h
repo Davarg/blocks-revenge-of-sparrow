@@ -1,7 +1,7 @@
 #ifndef __BLOCK_H__
 #define __BLOCK_H__
 
-#include "cocos2d.h"
+#include <cocos2d.h>
 #include <Box2D/Box2D.h>
 
 USING_NS_CC;

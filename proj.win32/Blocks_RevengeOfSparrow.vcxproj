@@ -147,6 +147,7 @@ xcopy /Y /Q "$(EngineRoot)external\websockets\prebuilt\win32\*.*" "$(OutDir)"</C
     <ClCompile Include="..\Classes\CommandMoveDown.cpp" />
     <ClCompile Include="..\Classes\CommandMoveLeft.cpp" />
     <ClCompile Include="..\Classes\CommandMoveRight.cpp" />
+    <ClCompile Include="..\Classes\ConstantsRegistry.cpp" />
     <ClCompile Include="..\Classes\GameField.cpp" />
     <ClCompile Include="..\Classes\GLES-Render.cpp" />
     <ClCompile Include="..\Classes\MainGameScene.cpp" />
@@ -174,6 +175,7 @@ xcopy /Y /Q "$(EngineRoot)external\websockets\prebuilt\win32\*.*" "$(OutDir)"</C
     <ClInclude Include="..\Classes\CommandMoveLeft.h" />
     <ClInclude Include="..\Classes\CommandMoveRight.h" />
     <ClInclude Include="..\Classes\Constants.h" />
+    <ClInclude Include="..\Classes\ConstantsRegistry.h" />
     <ClInclude Include="..\Classes\GameField.h" />
     <ClInclude Include="..\Classes\GLES-Render.h" />
     <ClInclude Include="..\Classes\MainGameScene.h" />
