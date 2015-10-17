@@ -27,12 +27,8 @@ private:
 	const char* _rotatePressedPath = "btns/rotate_down.png";
 
 	bool _disable;
-	Button *_btnLeft;
-	Button *_btnDown;
 	Layer *_layerBack;
-	Button *_btnRight;
 	bool _isKeyPressed;
-	Button *_btnRotate;
 	Command *_moveLeft;
 	Command *_moveDown;
 	Command *_moveRight;
@@ -41,6 +37,25 @@ private:
 	Command *_moveCounterClockwise;
 	EventKeyboard::KeyCode _currentPressedKey;
 	std::chrono::system_clock::time_point _startTime;
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	Button *_btnLeft;
+	Button *_btnDown;
+	Button *_btnRight;
+	Button *_btnRotate;
+#endif
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
+	Sprite *_btnLeft;
+	Sprite *_btnDown;
+	Sprite *_btnRight;
+	Sprite *_btnRotate;
+
+	Sprite *_btnLeftPressed;
+	Sprite *_btnDownPressed;
+	Sprite *_btnRightPressed;
+	Sprite *_btnRotatePressed;
+#endif 
 	
 public:
 	UserInput(Layer*, Size);

@@ -17,10 +17,61 @@ UserInput::~UserInput() {
 UserInput::UserInput(Layer* layer, Size winSize) {
 	_layerParent = layer;
 	_layerBack = Layer::create();
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	_btnDown = Button::create(_downNormalPath, _downPressedPath);
 	_btnLeft = Button::create(_leftNormalPath, _leftPressedPath);
 	_btnRight = Button::create(_rightNormalPath, _rightPressedPath);
 	_btnRotate = Button::create(_rotateNormalPath, _rotatePressedPath);
+#endif
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
+	_btnDown = Sprite::create(_downNormalPath);
+	_btnLeft = Sprite::create(_leftNormalPath);
+	_btnRight = Sprite::create(_rightNormalPath);
+	_btnRotate = Sprite::create(_rotateNormalPath);
+
+	_btnLeftPressed = Sprite::create(_leftPressedPath);
+	_btnDownPressed = Sprite::create(_downPressedPath);
+	_btnRightPressed = Sprite::create(_rightPressedPath);
+	_btnRotatePressed = Sprite::create(_rotatePressedPath);
+
+	_btnLeftPressed->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+	_btnDownPressed->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+	_btnRightPressed->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+	_btnRotatePressed->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+
+	_btnDownPressed->setZOrder(-1);
+	_btnDownPressed->setScaleX(0.7f);
+	_btnDownPressed->setScaleY(0.6f);
+	_btnDownPressed->setPosition({ 390, 5 });
+
+	_btnLeftPressed->setZOrder(-1);
+	_btnLeftPressed->setScaleX(0.7f);
+	_btnLeftPressed->setScaleY(0.6f);
+	_btnLeftPressed->setPosition({ 280, 5 });
+
+	_btnRightPressed->setZOrder(-1);
+	_btnRightPressed->setScaleX(0.7f);
+	_btnRightPressed->setScaleY(0.6f);
+	_btnRightPressed->setPosition({ 180, 5 });
+
+	_btnRotatePressed->setZOrder(-1);
+	_btnRotatePressed->setScaleX(0.7f);
+	_btnRotatePressed->setScaleY(0.6f);
+	_btnRotatePressed->setPosition({ 48, 5 });
+
+	_layerBack->addChild(_btnDownPressed);
+	_layerBack->addChild(_btnLeftPressed);
+	_layerBack->addChild(_btnRightPressed);
+	_layerBack->addChild(_btnRotatePressed);
+
+#ifdef _DEBUG
+	_btnLeftPressed->setOpacity(80);
+	_btnDownPressed->setOpacity(80);
+	_btnRightPressed->setOpacity(80);
+	_btnRotatePressed->setOpacity(80);
+#endif
+#endif
 
 	_btnDown->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
 	_btnLeft->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
@@ -110,6 +161,28 @@ void UserInput::dropInputEvents() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
 	void UserInput::onKeyReleased(EventKeyboard::KeyCode keyCode, Event *event) {
 		if (_currentPressedKey == keyCode) {
+			switch (_currentPressedKey) {
+			case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
+				_btnLeft->setVisible(true);
+				_btnLeftPressed->setZOrder(-1);
+				break;
+
+			case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
+				_btnRight->setVisible(true);
+				_btnRightPressed->setZOrder(-1);
+				break;
+
+			case EventKeyboard::KeyCode::KEY_UP_ARROW:
+				_btnRotate->setVisible(true);
+				_btnRotatePressed->setZOrder(-1);
+				break;
+
+			case EventKeyboard::KeyCode::KEY_DOWN_ARROW:
+				_btnDown->setVisible(true);
+				_btnDownPressed->setZOrder(-1);
+				break;
+			}
+
 			_isKeyPressed = false;
 			_currentBlock = nullptr;
 			if (_moveDown->isExecute())
@@ -127,6 +200,8 @@ void UserInput::dropInputEvents() {
 		case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
 			if (!_moveRight->isExecute()) {
 				if (!_moveLeft->isExecute()) {
+					_btnLeft->setVisible(false);
+					_btnLeftPressed->setZOrder(1);
 					_moveLeft->execute(currentBlock);
 					Director::getInstance()->getScheduler()->scheduleUpdate(_moveLeft, 3, false);
 				}
@@ -138,6 +213,8 @@ void UserInput::dropInputEvents() {
 		case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
 			if (!_moveLeft->isExecute()) {
 				if (!_moveRight->isExecute()) {
+					_btnRight->setVisible(false);
+					_btnRightPressed->setZOrder(1);
 					_moveRight->execute(currentBlock);
 					Director::getInstance()->getScheduler()->scheduleUpdate(_moveRight, 3, false);
 				}
@@ -148,6 +225,8 @@ void UserInput::dropInputEvents() {
 
 		case EventKeyboard::KeyCode::KEY_UP_ARROW:
 			if (!_moveCounterClockwise->isExecute()) {
+				_btnRotate->setVisible(false);
+				_btnRotatePressed->setZOrder(1);
 				_moveCounterClockwise->execute(currentBlock);
 				Director::getInstance()->getScheduler()->scheduleUpdate(_moveCounterClockwise, 3, false);
 			}
@@ -155,6 +234,8 @@ void UserInput::dropInputEvents() {
 
 		case EventKeyboard::KeyCode::KEY_DOWN_ARROW:
 			if (!_moveDown->isExecute())
+				_btnDown->setVisible(false);
+				_btnDownPressed->setZOrder(1);
 				_moveDown->execute(_currentBlock);
 			break;
 		}
