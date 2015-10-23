@@ -66,28 +66,18 @@ bool MainGameScene::init() {
 	
 	GameField::init(8, 13);
 	MainGameScene::getWorld()->SetContactListener(&_blockContactListener);
-	MessagesQueue::addListener(MessagesQueue::MessageType::ADD_BLOCK_ON_SCENE, static_cast<void*>(this)
-				, &MainGameScene::wrapperToAddBlockListener);
-	MessagesQueue::addListener(MessagesQueue::MessageType::CREATE_JOINT, &Block::createJointListener);
+
+	MessagesQueue::messageQueueCallback_2 c2Scene = MainGameScene::wrapperToAddBlockListener;
+	MessagesQueue::messageQueueCallback_1 c1Block = Block::createJointListener;
+	MessagesQueue::WrapperMessageQueueCallback_2 callback2(c2Scene, "MainGameSceneAddBlock");
+	MessagesQueue::WrapperMessageQueueCallback_1 callback1(c1Block, "BlockCreateJoint");
+	MessagesQueue::addListener(MessagesQueue::MessageType::ADD_BLOCK_ON_SCENE, static_cast<void*>(this), callback2);
+	MessagesQueue::addListener(MessagesQueue::MessageType::CREATE_JOINT, callback1);
 
 	_simpleUI->show();
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
-	auto listener = EventListenerKeyboard::create();
-	listener->onKeyPressed = CC_CALLBACK_2(MainGameScene::onKeyPressed, this);
-	UserInput *ui = (UserInput*)_simpleUI->getChildrenByName(UserInput::name());
-	listener->onKeyReleased = CC_CALLBACK_2(UserInput::onKeyReleased, ui);
-	Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this);
-#endif
-
 	return true;
 }
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
-	void MainGameScene::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {
-		UserInput *ui = (UserInput*)_simpleUI->getChildrenByName(UserInput::name());
-		ui->onKeyPressed(keyCode, event, _currentBlock);
-	}
-#endif
 
 void MainGameScene::update(float dt) {
 	int velocityIterations = 10;

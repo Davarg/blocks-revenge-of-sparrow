@@ -17,7 +17,7 @@ SimpleUI::~SimpleUI() {
 }
 
 SimpleUI::SimpleUI(Layer* layer) {
-	const Size winSize = Director::sharedDirector()->getVisibleSize();
+	const Size winSize = Director::getInstance()->getVisibleSize();
 	_layer = layer;
 	
 	BackgroundElementUI *beui = new BackgroundElementUI(layer, winSize);
@@ -38,8 +38,9 @@ SimpleUI::SimpleUI(Layer* layer) {
 	UserInput *ui = new UserInput(bp->getLayer(), bp->getLayer()->getContentSize());
 	_childrens.push_back(ui);
 
-	MessagesQueue::addListener(MessagesQueue::MessageType::UPDATE_SCORES,
-				static_cast<void*>(seui), &ScoresElementUI::wrapperToUpdateScores);
+	MessagesQueue::messageQueueCallback_2 c2Update = ScoresElementUI::wrapperToUpdateScores;
+	MessagesQueue::WrapperMessageQueueCallback_2 callback2(c2Update, "ScoresUpdate");
+	MessagesQueue::addListener(MessagesQueue::MessageType::UPDATE_SCORES, static_cast<void*>(seui), callback2);
 }
 
 void SimpleUI::show(){

@@ -29,17 +29,15 @@ public:
 	~MainGameScene();
 	static b2World* getWorld();
 	static Scene* createScene();
-	static SimpleUI* getUI() { return MainGameScene::gameScene->_simpleUI; }
 	static void wrapperToAddBlockListener(void*, void*);
+	static SimpleUI* getUI() { return MainGameScene::gameScene->_simpleUI; }
+	static Block* getCurrentBlock() { return MainGameScene::gameScene->_currentBlock; }
 	
 	bool init() override;
 	void update(float) override;
 	void addBlockListener(void*);
 
 	CREATE_FUNC(MainGameScene);
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
-	void onKeyPressed(EventKeyboard::KeyCode, Event*);
-#endif
 };
 
 #endif //__MAIN_GAME_SCENE_H__

@@ -1,4 +1,5 @@
 #include "UserInput.h"
+#include "MainGameScene.h"
 
 const char* UserInput::_name = "USER_INPUT_HANDMADE";
 
@@ -17,14 +18,25 @@ UserInput::~UserInput() {
 UserInput::UserInput(Layer* layer, Size winSize) {
 	_layerParent = layer;
 	_layerBack = Layer::create();
+
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	_btnDown = Button::create(_downNormalPath, _downPressedPath);
 	_btnLeft = Button::create(_leftNormalPath, _leftPressedPath);
 	_btnRight = Button::create(_rightNormalPath, _rightPressedPath);
 	_btnRotate = Button::create(_rotateNormalPath, _rotatePressedPath);
+
+	_btnDown->addTouchEventListener(CC_CALLBACK_2(UserInput::onTouch, this));
+	_btnLeft->addTouchEventListener(CC_CALLBACK_2(UserInput::onTouch, this));
+	_btnRight->addTouchEventListener(CC_CALLBACK_2(UserInput::onTouch, this));
+	_btnRotate->addTouchEventListener(CC_CALLBACK_2(UserInput::onTouch, this));
+
+	_btnDown->setTag(buttonsTags::DOWN);
+	_btnLeft->setTag(buttonsTags::LEFT);
+	_btnRight->setTag(buttonsTags::RIGHT);
+	_btnRotate->setTag(buttonsTags::ROTATE);
 #endif
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 	_btnDown = Sprite::create(_downNormalPath);
 	_btnLeft = Sprite::create(_leftNormalPath);
 	_btnRight = Sprite::create(_rightNormalPath);
@@ -40,22 +52,22 @@ UserInput::UserInput(Layer* layer, Size winSize) {
 	_btnRightPressed->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
 	_btnRotatePressed->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
 
-	_btnDownPressed->setZOrder(-1);
+	_btnDownPressed->setLocalZOrder(-1);
 	_btnDownPressed->setScaleX(0.7f);
 	_btnDownPressed->setScaleY(0.6f);
 	_btnDownPressed->setPosition({ 390, 5 });
 
-	_btnLeftPressed->setZOrder(-1);
+	_btnLeftPressed->setLocalZOrder(-1);
 	_btnLeftPressed->setScaleX(0.7f);
 	_btnLeftPressed->setScaleY(0.6f);
 	_btnLeftPressed->setPosition({ 280, 5 });
 
-	_btnRightPressed->setZOrder(-1);
+	_btnRightPressed->setLocalZOrder(-1);
 	_btnRightPressed->setScaleX(0.7f);
 	_btnRightPressed->setScaleY(0.6f);
 	_btnRightPressed->setPosition({ 180, 5 });
 
-	_btnRotatePressed->setZOrder(-1);
+	_btnRotatePressed->setLocalZOrder(-1);
 	_btnRotatePressed->setScaleX(0.7f);
 	_btnRotatePressed->setScaleY(0.6f);
 	_btnRotatePressed->setPosition({ 48, 5 });
@@ -64,6 +76,11 @@ UserInput::UserInput(Layer* layer, Size winSize) {
 	_layerBack->addChild(_btnLeftPressed);
 	_layerBack->addChild(_btnRightPressed);
 	_layerBack->addChild(_btnRotatePressed);
+
+	auto listener = EventListenerKeyboard::create();
+	listener->onKeyPressed = CC_CALLBACK_2(UserInput::onKeyPressed, this);
+	listener->onKeyReleased = CC_CALLBACK_2(UserInput::onKeyReleased, this);
+	Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(listener, 1);
 
 #ifdef _DEBUG
 	_btnLeftPressed->setOpacity(80);
@@ -139,18 +156,42 @@ void UserInput::update(float dt) {
 		if (_currentPressedKey == EventKeyboard::KeyCode::KEY_UP_ARROW) {
 			auto mls = duration_cast<milliseconds>(high_resolution_clock::now() - _startTime);
 			if (mls.count() >= 350) {
-				onKeyPressed(_currentPressedKey, nullptr, _currentBlock);
+				onKeyPressed(_currentPressedKey, nullptr);
 				_startTime = high_resolution_clock::now();
 			}
 		}
 		else
-			onKeyPressed(_currentPressedKey, nullptr, _currentBlock);
+			onKeyPressed(_currentPressedKey, nullptr);
 	}
 }
 
 void UserInput::dropInputEvents() {
-	_isKeyPressed = false;
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
+	switch (_currentPressedKey) {
+	case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
+		_btnLeft->setVisible(true);
+		_btnLeftPressed->setLocalZOrder(-1);
+		break;
+
+	case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
+		_btnRight->setVisible(true);
+		_btnRightPressed->setLocalZOrder(-1);
+		break;
+
+	case EventKeyboard::KeyCode::KEY_UP_ARROW:
+		_btnRotate->setVisible(true);
+		_btnRotatePressed->setLocalZOrder(-1);
+		break;
+
+	case EventKeyboard::KeyCode::KEY_DOWN_ARROW:
+		_btnDown->setVisible(true);
+		_btnDownPressed->setLocalZOrder(-1);
+		break;
+	}
 	_currentPressedKey = EventKeyboard::KeyCode::KEY_F9;
+#endif
+
+	_isKeyPressed = false;
 	_currentBlock = nullptr;
 
 	bool isBodyNeedToBeStopped = false;
@@ -158,28 +199,81 @@ void UserInput::dropInputEvents() {
 		((CommandMoveDown*)_moveDown)->stopBlock(isBodyNeedToBeStopped);
 }
 
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	void UserInput::onTouch(Ref* ref, Widget::TouchEventType type) {
+		if (type == Widget::TouchEventType::BEGAN) {
+			Button *btn = (Button*)ref;
+			_startTime = std::chrono::high_resolution_clock::now();
+			_isKeyPressed = true;
+			_currentBlock = MainGameScene::getCurrentBlock();
+
+			switch (btn->getTag()) {
+			case buttonsTags::DOWN:
+				if (!_moveDown->isExecute())
+					_moveDown->execute(_currentBlock);
+				break;
+
+			case buttonsTags::LEFT:
+				if (!_moveRight->isExecute()) {
+					if (!_moveLeft->isExecute()) {
+						_moveLeft->execute(_currentBlock);
+						Director::getInstance()->getScheduler()->scheduleUpdate(_moveLeft, 3, false);
+					}
+				}
+				else
+					_moveRight->undo();
+				break;
+
+			case buttonsTags::RIGHT:
+				if (!_moveLeft->isExecute()) {
+					if (!_moveRight->isExecute()) {
+						_moveRight->execute(_currentBlock);
+						Director::getInstance()->getScheduler()->scheduleUpdate(_moveRight, 3, false);
+					}
+				}
+				else
+					_moveLeft->undo();
+				break;
+
+			case buttonsTags::ROTATE:
+				if (!_moveCounterClockwise->isExecute()) {
+					_moveCounterClockwise->execute(_currentBlock);
+					Director::getInstance()->getScheduler()->scheduleUpdate(_moveCounterClockwise, 3, false);
+				}
+				break;
+			}
+		}
+		else if (type == Widget::TouchEventType::ENDED) {
+			_isKeyPressed = false;
+			_currentBlock = nullptr;
+			if (_moveDown->isExecute())
+				((CommandMoveDown*)_moveDown)->stopBlock();
+		}
+	}
+#endif
+
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
 	void UserInput::onKeyReleased(EventKeyboard::KeyCode keyCode, Event *event) {
 		if (_currentPressedKey == keyCode) {
 			switch (_currentPressedKey) {
 			case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
 				_btnLeft->setVisible(true);
-				_btnLeftPressed->setZOrder(-1);
+				_btnLeftPressed->setLocalZOrder(-1);
 				break;
 
 			case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
 				_btnRight->setVisible(true);
-				_btnRightPressed->setZOrder(-1);
+				_btnRightPressed->setLocalZOrder(-1);
 				break;
 
 			case EventKeyboard::KeyCode::KEY_UP_ARROW:
 				_btnRotate->setVisible(true);
-				_btnRotatePressed->setZOrder(-1);
+				_btnRotatePressed->setLocalZOrder(-1);
 				break;
 
 			case EventKeyboard::KeyCode::KEY_DOWN_ARROW:
 				_btnDown->setVisible(true);
-				_btnDownPressed->setZOrder(-1);
+				_btnDownPressed->setLocalZOrder(-1);
 				break;
 			}
 
@@ -190,10 +284,10 @@ void UserInput::dropInputEvents() {
 		}
 	}
 
-	void UserInput::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event, Block* currentBlock) {
+	void UserInput::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {
 		_startTime = std::chrono::high_resolution_clock::now();
 		_isKeyPressed = true;
-		_currentBlock = currentBlock;
+		_currentBlock = MainGameScene::getCurrentBlock();
 		_currentPressedKey = keyCode;
 		
 		switch (keyCode) {
@@ -201,8 +295,8 @@ void UserInput::dropInputEvents() {
 			if (!_moveRight->isExecute()) {
 				if (!_moveLeft->isExecute()) {
 					_btnLeft->setVisible(false);
-					_btnLeftPressed->setZOrder(1);
-					_moveLeft->execute(currentBlock);
+					_btnLeftPressed->setLocalZOrder(1);
+					_moveLeft->execute(_currentBlock);
 					Director::getInstance()->getScheduler()->scheduleUpdate(_moveLeft, 3, false);
 				}
 			}
@@ -214,8 +308,8 @@ void UserInput::dropInputEvents() {
 			if (!_moveLeft->isExecute()) {
 				if (!_moveRight->isExecute()) {
 					_btnRight->setVisible(false);
-					_btnRightPressed->setZOrder(1);
-					_moveRight->execute(currentBlock);
+					_btnRightPressed->setLocalZOrder(1);
+					_moveRight->execute(_currentBlock);
 					Director::getInstance()->getScheduler()->scheduleUpdate(_moveRight, 3, false);
 				}
 			}
@@ -226,17 +320,18 @@ void UserInput::dropInputEvents() {
 		case EventKeyboard::KeyCode::KEY_UP_ARROW:
 			if (!_moveCounterClockwise->isExecute()) {
 				_btnRotate->setVisible(false);
-				_btnRotatePressed->setZOrder(1);
-				_moveCounterClockwise->execute(currentBlock);
+				_btnRotatePressed->setLocalZOrder(1);
+				_moveCounterClockwise->execute(_currentBlock);
 				Director::getInstance()->getScheduler()->scheduleUpdate(_moveCounterClockwise, 3, false);
 			}
 			break;
 
 		case EventKeyboard::KeyCode::KEY_DOWN_ARROW:
-			if (!_moveDown->isExecute())
+			if (!_moveDown->isExecute()) {
 				_btnDown->setVisible(false);
-				_btnDownPressed->setZOrder(1);
+				_btnDownPressed->setLocalZOrder(1);
 				_moveDown->execute(_currentBlock);
+			}
 			break;
 		}
 	}

@@ -3,8 +3,8 @@
 
 struct funcAndObj {
 	void* obj = nullptr;
-	void(*ptrFunc)(void*) = nullptr;
-	void(*ptrFuncExt)(void*, void*) = nullptr;
+	MessagesQueue::WrapperMessageQueueCallback_1 callback_1;
+	MessagesQueue::WrapperMessageQueueCallback_2 callback_2;
 };
 
 std::vector<MessagesQueue::Message> msgQueue;
@@ -16,10 +16,14 @@ void MessagesQueue::update(float dt) {
 		auto vec = mapListeners.at(it->mt);
 		if (vec.size()) {
 			for (auto vecIt = vec.begin(); vecIt != vec.end(); vecIt++) {
-				if (vecIt->obj != nullptr) 
-					static_cast<void(*)(void*, void*)>(vecIt->ptrFuncExt)(vecIt->obj, it->args);
-				else
-					static_cast<void(*)(void*)>(vecIt->ptrFunc)(it->args);
+				if (vecIt->obj != nullptr) {
+					auto a = vecIt->callback_2.getCallback();
+					a(vecIt->obj, it->args);
+				}
+				else {
+					auto b = vecIt->callback_1.getCallback();
+					b(it->args);
+				}
 			}
 		}
 		it = msgQueue.erase(it);
@@ -31,9 +35,9 @@ void MessagesQueue::addMessageToQueue(Message msg) {
 	msgQueue.push_back(msg);
 }
 
-void MessagesQueue::addListener(MessageType mt, void(*ptrFunc)(void*)) {
+void MessagesQueue::addListener(MessageType mt, WrapperMessageQueueCallback_1& callback) {
 	funcAndObj fao;
-	fao.ptrFunc = ptrFunc;
+	fao.callback_1 = callback;
 	
 	if (mapListeners.end() != mapListeners.find(mt)) {
 		auto iterator = mapListeners.find(mt);
@@ -46,9 +50,9 @@ void MessagesQueue::addListener(MessageType mt, void(*ptrFunc)(void*)) {
 	}
 }
 
-void MessagesQueue::addListener(MessageType mt, void* ptrObj, void(*ptrFunc)(void*, void*)) {
+void MessagesQueue::addListener(MessageType mt, void* ptrObj, WrapperMessageQueueCallback_2& callback) {
 	funcAndObj fao;
-	fao.ptrFuncExt = ptrFunc;
+	fao.callback_2 = callback;
 	fao.obj = ptrObj;
 
 	if (mapListeners.end() != mapListeners.find(mt)) {
@@ -62,11 +66,11 @@ void MessagesQueue::addListener(MessageType mt, void* ptrObj, void(*ptrFunc)(voi
 	}
 }
 
-void MessagesQueue::removeListener(MessageType mt, void(*ptrFunc)(void*)) {
+void MessagesQueue::removeListener(MessageType mt, WrapperMessageQueueCallback_1& callback) {
 	if (mapListeners.end() != mapListeners.find(mt)) {
 		auto it = mapListeners.find(mt);
 		for (auto itVec = it->second.begin(); itVec != it->second.end();) {
-			if (itVec->ptrFunc == ptrFunc) {
+			if (itVec->callback_1.getUniqId() == callback.getUniqId()) {
 				itVec = it->second.erase(itVec);
 			}
 		}
@@ -74,11 +78,11 @@ void MessagesQueue::removeListener(MessageType mt, void(*ptrFunc)(void*)) {
 	}
 }
 
-void MessagesQueue::removeListener(MessageType mt, void* ptrObj, void(*ptrFunc)(void*, void*)) {
+void MessagesQueue::removeListener(MessageType mt, void* ptrObj, WrapperMessageQueueCallback_2& callback) {
 	if (mapListeners.end() != mapListeners.find(mt)) {
 		auto it = mapListeners.find(mt);
 		for (auto itVec = it->second.begin(); itVec != it->second.end();) {
-			if (itVec->ptrFuncExt == ptrFunc && itVec->obj == ptrObj) {
+			if (itVec->callback_2.getUniqId() == callback.getUniqId() && itVec->obj == ptrObj) {
 				itVec = it->second.erase(itVec);
 			}
 		}

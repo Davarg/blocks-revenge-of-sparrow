@@ -35,7 +35,6 @@ private:
 	Layer *_layerParent;
 	Block *_currentBlock;
 	Command *_moveCounterClockwise;
-	EventKeyboard::KeyCode _currentPressedKey;
 	std::chrono::system_clock::time_point _startTime;
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
@@ -43,9 +42,16 @@ private:
 	Button *_btnDown;
 	Button *_btnRight;
 	Button *_btnRotate;
+
+	enum buttonsTags {
+		DOWN,
+		LEFT,
+		RIGHT,
+		ROTATE
+	};
 #endif
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 	Sprite *_btnLeft;
 	Sprite *_btnDown;
 	Sprite *_btnRight;
@@ -55,8 +61,10 @@ private:
 	Sprite *_btnDownPressed;
 	Sprite *_btnRightPressed;
 	Sprite *_btnRotatePressed;
+
+	EventKeyboard::KeyCode _currentPressedKey;
 #endif 
-	
+
 public:
 	UserInput(Layer*, Size);
 	~UserInput();
@@ -71,8 +79,12 @@ public:
 	void update(float);
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
-	void onKeyPressed(EventKeyboard::KeyCode, Event*, Block*); //Custom function
+	void onKeyPressed(EventKeyboard::KeyCode, Event*);
 	void onKeyReleased(EventKeyboard::KeyCode, Event*);
+#endif
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	void onTouch(Ref*, Widget::TouchEventType);
 #endif
 };
 

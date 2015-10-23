@@ -114,14 +114,12 @@ include_directories(
 )
 
 set(GAME_SRC
-  Classes/AppDelegate.cpp
-  Classes/HelloWorldScene.cpp
+  Classes/*.cpp
   ${PLATFORM_SPECIFIC_SRC}
 )
 
 set(GAME_HEADERS
-  Classes/AppDelegate.h
-  Classes/HelloWorldScene.h
+  Classes/*.h
   ${PLATFORM_SPECIFIC_HEADERS}
 )
 
