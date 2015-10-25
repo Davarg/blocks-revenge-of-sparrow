@@ -55,6 +55,13 @@ Scene* MainGameScene::createScene() {
 	layer->scheduleUpdate();
 	layer->_currentBlock = RandomBlockDrop::dropBlock();
 
+	MessagesQueue::WrapperMessageQueueCallback_1 callback1Scene(CC_CALLBACK_1(MainGameScene::addBlockListener, layer)
+		, "MainGameSceneAddBlock");
+	MessagesQueue::WrapperMessageQueueCallback_1 callback1Block(CC_CALLBACK_1(Block::createJointListener, layer->_currentBlock)
+		, "BlockCreateJoint");
+	MessagesQueue::addListener(MessagesQueue::MessageType::ADD_BLOCK_ON_SCENE, callback1Scene);
+	MessagesQueue::addListener(MessagesQueue::MessageType::CREATE_JOINT, callback1Block);
+
 	return scene;
 }
 
@@ -66,13 +73,6 @@ bool MainGameScene::init() {
 	
 	GameField::init(8, 13);
 	MainGameScene::getWorld()->SetContactListener(&_blockContactListener);
-
-	MessagesQueue::messageQueueCallback_2 c2Scene = MainGameScene::wrapperToAddBlockListener;
-	MessagesQueue::messageQueueCallback_1 c1Block = Block::createJointListener;
-	MessagesQueue::WrapperMessageQueueCallback_2 callback2(c2Scene, "MainGameSceneAddBlock");
-	MessagesQueue::WrapperMessageQueueCallback_1 callback1(c1Block, "BlockCreateJoint");
-	MessagesQueue::addListener(MessagesQueue::MessageType::ADD_BLOCK_ON_SCENE, static_cast<void*>(this), callback2);
-	MessagesQueue::addListener(MessagesQueue::MessageType::CREATE_JOINT, callback1);
 
 	_simpleUI->show();
 
@@ -100,11 +100,6 @@ void MainGameScene::update(float dt) {
 
 	MainGameScene::getWorld()->ClearForces();
 	MessagesQueue::update(dt);
-}
-
-void MainGameScene::wrapperToAddBlockListener(void* ptrObj, void* args) {
-	MainGameScene *ptrScene = static_cast<MainGameScene*>(ptrObj);
-	ptrScene->addBlockListener(args);
 }
 
 void MainGameScene::addBlockListener(void* args) {

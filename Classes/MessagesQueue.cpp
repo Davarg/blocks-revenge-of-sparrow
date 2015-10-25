@@ -1,14 +1,8 @@
 #include "Block.h"
 #include "MessagesQueue.h"
 
-struct funcAndObj {
-	void* obj = nullptr;
-	MessagesQueue::WrapperMessageQueueCallback_1 callback_1;
-	MessagesQueue::WrapperMessageQueueCallback_2 callback_2;
-};
-
 std::vector<MessagesQueue::Message> msgQueue;
-std::map<MessagesQueue::MessageType, std::vector<funcAndObj> > mapListeners;
+std::map<MessagesQueue::MessageType, std::vector<MessagesQueue::WrapperMessageQueueCallback_1> > mapListeners;
 
 void MessagesQueue::update(float dt) {
 	for (Vector<Message>::iterator it = msgQueue.begin();
@@ -16,14 +10,8 @@ void MessagesQueue::update(float dt) {
 		auto vec = mapListeners.at(it->mt);
 		if (vec.size()) {
 			for (auto vecIt = vec.begin(); vecIt != vec.end(); vecIt++) {
-				if (vecIt->obj != nullptr) {
-					auto a = vecIt->callback_2.getCallback();
-					a(vecIt->obj, it->args);
-				}
-				else {
-					auto b = vecIt->callback_1.getCallback();
-					b(it->args);
-				}
+				auto a = vecIt->getCallback();
+				a(it->args);
 			}
 		}
 		it = msgQueue.erase(it);
@@ -36,32 +24,13 @@ void MessagesQueue::addMessageToQueue(Message msg) {
 }
 
 void MessagesQueue::addListener(MessageType mt, WrapperMessageQueueCallback_1& callback) {
-	funcAndObj fao;
-	fao.callback_1 = callback;
-	
 	if (mapListeners.end() != mapListeners.find(mt)) {
 		auto iterator = mapListeners.find(mt);
-		iterator->second.push_back(fao);
+		iterator->second.push_back(callback);
 	}
 	else {
-		std::vector<funcAndObj> vec;
-		vec.push_back(fao);
-		mapListeners.insert(std::make_pair(mt, vec));
-	}
-}
-
-void MessagesQueue::addListener(MessageType mt, void* ptrObj, WrapperMessageQueueCallback_2& callback) {
-	funcAndObj fao;
-	fao.callback_2 = callback;
-	fao.obj = ptrObj;
-
-	if (mapListeners.end() != mapListeners.find(mt)) {
-		auto iterator = mapListeners.find(mt);
-		iterator->second.push_back(fao);
-	}
-	else {
-		std::vector<funcAndObj> vec;
-		vec.push_back(fao);
+		std::vector<WrapperMessageQueueCallback_1> vec;
+		vec.push_back(callback);
 		mapListeners.insert(std::make_pair(mt, vec));
 	}
 }
@@ -70,19 +39,7 @@ void MessagesQueue::removeListener(MessageType mt, WrapperMessageQueueCallback_1
 	if (mapListeners.end() != mapListeners.find(mt)) {
 		auto it = mapListeners.find(mt);
 		for (auto itVec = it->second.begin(); itVec != it->second.end();) {
-			if (itVec->callback_1.getUniqId() == callback.getUniqId()) {
-				itVec = it->second.erase(itVec);
-			}
-		}
-		it->second.shrink_to_fit();
-	}
-}
-
-void MessagesQueue::removeListener(MessageType mt, void* ptrObj, WrapperMessageQueueCallback_2& callback) {
-	if (mapListeners.end() != mapListeners.find(mt)) {
-		auto it = mapListeners.find(mt);
-		for (auto itVec = it->second.begin(); itVec != it->second.end();) {
-			if (itVec->callback_2.getUniqId() == callback.getUniqId() && itVec->obj == ptrObj) {
+			if (itVec->getUniqId() == callback.getUniqId()) {
 				itVec = it->second.erase(itVec);
 			}
 		}

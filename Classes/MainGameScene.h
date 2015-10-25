@@ -29,7 +29,6 @@ public:
 	~MainGameScene();
 	static b2World* getWorld();
 	static Scene* createScene();
-	static void wrapperToAddBlockListener(void*, void*);
 	static SimpleUI* getUI() { return MainGameScene::gameScene->_simpleUI; }
 	static Block* getCurrentBlock() { return MainGameScene::gameScene->_currentBlock; }
 	

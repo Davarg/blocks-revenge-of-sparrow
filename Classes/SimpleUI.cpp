@@ -38,9 +38,9 @@ SimpleUI::SimpleUI(Layer* layer) {
 	UserInput *ui = new UserInput(bp->getLayer(), bp->getLayer()->getContentSize());
 	_childrens.push_back(ui);
 
-	MessagesQueue::messageQueueCallback_2 c2Update = ScoresElementUI::wrapperToUpdateScores;
-	MessagesQueue::WrapperMessageQueueCallback_2 callback2(c2Update, "ScoresUpdate");
-	MessagesQueue::addListener(MessagesQueue::MessageType::UPDATE_SCORES, static_cast<void*>(seui), callback2);
+	MessagesQueue::WrapperMessageQueueCallback_1 callback1(CC_CALLBACK_1(ScoresElementUI::updateScores, seui)
+		, "ScoresUpdate");
+	MessagesQueue::addListener(MessagesQueue::MessageType::UPDATE_SCORES, callback1);
 }
 
 void SimpleUI::show(){

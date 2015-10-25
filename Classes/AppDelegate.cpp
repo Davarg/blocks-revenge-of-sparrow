@@ -37,10 +37,10 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	auto sizeFrame = new Size(480, 800);
 	
 	auto vecSearchPaths = FileUtils::getInstance()->getSearchPaths();
-	vecSearchPaths.push_back("../Resources/wvga");
-	vecSearchPaths.push_back("../Resources/wvga/ui/back_anim");
+	vecSearchPaths.push_back("wvga");
+	vecSearchPaths.push_back("wvga/ui/back_anim");
 	FileUtils::getInstance()->setSearchPaths(vecSearchPaths);
-    
+
 	auto director = Director::getInstance();
     auto glview = director->getOpenGLView();
     if(!glview) {

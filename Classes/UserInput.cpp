@@ -16,7 +16,9 @@ UserInput::~UserInput() {
 }
 
 UserInput::UserInput(Layer* layer, Size winSize) {
+	_disable = false;
 	_layerParent = layer;
+	_currentBlock = nullptr;
 	_layerBack = Layer::create();
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
@@ -34,9 +36,7 @@ UserInput::UserInput(Layer* layer, Size winSize) {
 	_btnLeft->setTag(buttonsTags::LEFT);
 	_btnRight->setTag(buttonsTags::RIGHT);
 	_btnRotate->setTag(buttonsTags::ROTATE);
-#endif
-
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 	_btnDown = Sprite::create(_downNormalPath);
 	_btnLeft = Sprite::create(_leftNormalPath);
 	_btnRight = Sprite::create(_rightNormalPath);
@@ -153,6 +153,7 @@ void UserInput::show() {
 void UserInput::update(float dt) {
 	using namespace std::chrono;
 	if (_isKeyPressed) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
 		if (_currentPressedKey == EventKeyboard::KeyCode::KEY_UP_ARROW) {
 			auto mls = duration_cast<milliseconds>(high_resolution_clock::now() - _startTime);
 			if (mls.count() >= 350) {
@@ -162,6 +163,15 @@ void UserInput::update(float dt) {
 		}
 		else
 			onKeyPressed(_currentPressedKey, nullptr);
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+		if (_currentPressedButton->getTag() == buttonsTags::ROTATE) {
+			auto mls = duration_cast<milliseconds>(high_resolution_clock::now() - _startTime);
+			if (mls.count() >= 350)
+				onTouch(_currentPressedButton, Widget::TouchEventType::BEGAN);
+		}
+		else
+			onTouch(_currentPressedButton, Widget::TouchEventType::BEGAN);
+#endif
 	}
 }
 
@@ -203,6 +213,7 @@ void UserInput::dropInputEvents() {
 	void UserInput::onTouch(Ref* ref, Widget::TouchEventType type) {
 		if (type == Widget::TouchEventType::BEGAN) {
 			Button *btn = (Button*)ref;
+			_currentPressedButton = (Button*)ref;
 			_startTime = std::chrono::high_resolution_clock::now();
 			_isKeyPressed = true;
 			_currentBlock = MainGameScene::getCurrentBlock();
@@ -250,9 +261,7 @@ void UserInput::dropInputEvents() {
 				((CommandMoveDown*)_moveDown)->stopBlock();
 		}
 	}
-#endif
-
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
 	void UserInput::onKeyReleased(EventKeyboard::KeyCode keyCode, Event *event) {
 		if (_currentPressedKey == keyCode) {
 			switch (_currentPressedKey) {

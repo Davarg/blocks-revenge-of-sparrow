@@ -32,7 +32,6 @@ public:
 	virtual void show() override;
 	void updateScores(void*);
 
-	static void wrapperToUpdateScores(void* ptrObj, void* args);
 	static const char* name() { return _name; }
 };
 

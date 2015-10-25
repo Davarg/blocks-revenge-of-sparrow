@@ -1,5 +1,10 @@
 cocos2d/
-proj.android/
+proj.android/ant.properties
+proj.android/blocks-key.keystore
+proj.android/bin
+proj.android/obj
+proj.android/assets
+proj.android/libs
 proj.ios_mac/
 proj.linux/
 proj.win8.1-universal/

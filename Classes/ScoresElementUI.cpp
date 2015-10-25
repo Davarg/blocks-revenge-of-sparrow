@@ -10,6 +10,7 @@ ScoresElementUI::~ScoresElementUI() {
 
 ScoresElementUI::ScoresElementUI(Layer *layer, Size winSize) {
 	_scores = 0;
+	_disable = false;
 	_layerParent = layer;
 	_layerBack = Layer::create();
 	_layerBack->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
@@ -53,11 +54,6 @@ void ScoresElementUI::disable(bool flag) {
 
 void ScoresElementUI::show() {
 	_layerParent->addChild(_layerBack);
-}
-
-void ScoresElementUI::wrapperToUpdateScores(void* ptrObj, void* args) {
-	ScoresElementUI *ptrScoresElement = static_cast<ScoresElementUI*>(ptrObj);
-	ptrScoresElement->updateScores(args);
 }
 
 void ScoresElementUI::updateScores(void *args) {

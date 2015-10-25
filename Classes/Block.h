@@ -55,8 +55,7 @@ public:
 		NEED_TO_STOP = 0x0111,
 		STOPPED = 0x1111
 	};
-
-	static void createJointListener(void*);
+	
 	static Block* createBlock(blockInfo);
 	static blockInfo generateBlockInfo();
 	static b2WeldJointDef getJointDef();
@@ -72,6 +71,7 @@ public:
 	CC_SYNTHESIZE_READONLY(b2Body*, _attachedBody, AttachedBody);
 	CC_SYNTHESIZE_READONLY(Block*, _attachedBlock, AttachedBlock);
 	
+	void createJointListener(void*);
 	void setPositionInPxl(Vec2);
 	void setJointWith(Block*);
 	Vec2 getPosOnField();

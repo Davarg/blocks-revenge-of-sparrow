@@ -37,8 +37,8 @@ void GameField::init(const int width, const int height) {
 			for (int k = 0; k < _fieldWidth; k++)
 				_arrayBlocks[i][k] = nullptr;
 
-		MessagesQueue::messageQueueCallback_1 c1Update = GameField::updateGameField;
-		MessagesQueue::WrapperMessageQueueCallback_1 callback1(c1Update, "GameFieldUpdate");
+		MessagesQueue::WrapperMessageQueueCallback_1 callback1(std::bind(&GameField::updateGameField, std::placeholders::_1)
+			, "GameFieldUpdate");
 		MessagesQueue::addListener(MessagesQueue::MessageType::UPDATE_GAME_FIELD, callback1);
 	}
 }
