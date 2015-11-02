@@ -11,7 +11,8 @@ LOCAL_MODULE := cocos2dcpp_shared
 
 LOCAL_MODULE_FILENAME := libcocos2dcpp
 
-LOCAL_SRC_FILES := 	../../Classes/AppDelegate.cpp\
+LOCAL_SRC_FILES := 	blockscpp/main.cpp\
+					../../Classes/AppDelegate.cpp\
 					../../Classes/BackgroundElementUI.cpp\
 					../../Classes/Block.cpp\
 					../../Classes/BlockContactListener.cpp\

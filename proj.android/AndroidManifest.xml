@@ -13,7 +13,7 @@
 					 
         <!-- Tell Cocos2dxActivity the name of our .so -->
         <meta-data android:name="android.app.lib_name"
-	              android:value="blockscpp" />
+	              android:value="cocos2dcpp" />
 
         <activity android:name="org.blocks.cpp.AppActivity"
                   android:label="@string/app_name"
