@@ -2,14 +2,13 @@
 #define __USER_INPUT_H__
 
 #include <cocos2d.h>
-#include <ui\CocosGUI.h>
-#include "AbstractElementUI.h"
 #include "Command.h"
+#include <ui\CocosGUI.h>
 #include "CommandMoveLeft.h"
-#include "CommandMoveRight.h"
-#include "CommandMoveCounterClockwise.h"
-#include "CommandMoveClockwise.h"
 #include "CommandMoveDown.h"
+#include "CommandMoveRight.h"
+#include "AbstractElementUI.h"
+#include "CommandMoveCounterClockwise.h"
 
 USING_NS_CC;
 using namespace ui;
@@ -28,22 +27,45 @@ private:
 	const char* _rotatePressedPath = "btns/rotate_down.png";
 
 	bool _disable;
-	Button *_btnLeft;
-	Button *_btnDown;
 	Layer *_layerBack;
-	Button *_btnRight;
 	bool _isKeyPressed;
-	Button *_btnRotate;
 	Command *_moveLeft;
 	Command *_moveDown;
 	Command *_moveRight;
 	Layer *_layerParent;
 	Block *_currentBlock;
-	Command *_moveClockwise;
 	Command *_moveCounterClockwise;
-	EventKeyboard::KeyCode _currentPressedKey;
-	std::chrono::system_clock::time_point _startTime;
+	std::chrono::time_point<std::chrono::high_resolution_clock> _startTime;
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	enum buttonsTags {
+		DOWN,
+		LEFT,
+		RIGHT,
+		ROTATE
+	};
+
+	Button *_btnLeft;
+	Button *_btnDown;
+	Button *_btnRight;
+	Button *_btnRotate;
+
+	Button *_currentPressedButton;
 	
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+	Sprite *_btnLeft;
+	Sprite *_btnDown;
+	Sprite *_btnRight;
+	Sprite *_btnRotate;
+
+	Sprite *_btnLeftPressed;
+	Sprite *_btnDownPressed;
+	Sprite *_btnRightPressed;
+	Sprite *_btnRotatePressed;
+
+	EventKeyboard::KeyCode _currentPressedKey;
+#endif 
+
 public:
 	UserInput(Layer*, Size);
 	~UserInput();
@@ -57,9 +79,11 @@ public:
 	void dropInputEvents();
 	void update(float);
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
-	void onKeyPressed(EventKeyboard::KeyCode, Event*, Block*); //Custom function
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
+	void onKeyPressed(EventKeyboard::KeyCode, Event*);
 	void onKeyReleased(EventKeyboard::KeyCode, Event*);
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	void onTouch(Ref*, Widget::TouchEventType);
 #endif
 };
 

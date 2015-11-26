@@ -1,6 +1,6 @@
-#include "BackgroundElementUI.h"
 #include "MainGameScene.h"
-#include "Constants.h"
+#include "ConstantsRegistry.h"
+#include "BackgroundElementUI.h"
 
 const char* BackgroundElementUI::_name = "BACKGROUND_HANDMADE";
 
@@ -14,14 +14,13 @@ BackgroundElementUI::~BackgroundElementUI() {
 
 BackgroundElementUI::BackgroundElementUI(Layer *layer, Size winSize) {
 	Vector<SpriteFrame*> animFrames(_numAnimFiles);
-	char str[10] = { 0 };
+	char str[256] = { 0 };
 	_animatedSprite = Sprite::create();
 
 	for (int i = 1; i <= animFrames.capacity(); i++) {
-		sprintf(str, "%d.png", i);
-#ifdef _DEBUG
+		sprintf(str, "%s%d.png", _animPathFolder, i);
+
 		auto frame = SpriteFrame::create(str, Rect(0, 0, 416, 680));
-#endif
 		animFrames.pushBack(frame);
 	}
 
@@ -36,9 +35,7 @@ BackgroundElementUI::BackgroundElementUI(Layer *layer, Size winSize) {
 	_spriteGlass->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
 	_spriteGlass->setPosition(Vec2::ZERO);
 
-#ifdef _DEBUG
 	_animatedSprite->setPosition(32, 65);
-#endif
 	_animatedSprite->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
 
 	auto animation = Animation::createWithSpriteFrames(animFrames, 0.2f);
@@ -78,14 +75,15 @@ Vec2 BackgroundElementUI::getAnimatedPosition() const {
 void BackgroundElementUI::createGlass() {
 	b2BodyDef glassDef;
 	glassDef.type = b2_staticBody;
-	glassDef.position = b2Vec2(_spriteGlass->getPositionX() / SCALE_RATIO_BOX2D
-		, _spriteGlass->getPositionY() / SCALE_RATIO_BOX2D);
+	glassDef.position = b2Vec2(_spriteGlass->getPositionX() 
+			/ ConstantsRegistry::getValueForKey(ConstantsRegistry::constants::SCALE_RATIO_BOX2D)
+		, _spriteGlass->getPositionY() 
+			/ ConstantsRegistry::getValueForKey(ConstantsRegistry::constants::SCALE_RATIO_BOX2D));
 	_bodyGlass = MainGameScene::getWorld()->CreateBody(&glassDef);
 
 	b2PolygonShape shapeBottom;
-#ifdef _DEBUG
 	shapeBottom.SetAsBox(15, 1.5f);
-#endif
+	
 	b2FixtureDef fixtureDefBottom;
 	fixtureDefBottom.density = 1;
 	fixtureDefBottom.friction = 1000;
@@ -95,9 +93,8 @@ void BackgroundElementUI::createGlass() {
 	_bodyGlass->CreateFixture(&fixtureDefBottom);
 
 	b2PolygonShape shapeLeft;
-#ifdef _DEBUG
 	shapeLeft.SetAsBox(1, 25, { 0, 0 }, 0);
-#endif
+
 	b2FixtureDef fixtureDefLeft;
 	fixtureDefLeft.density = 1;
 	fixtureDefLeft.friction = 0;
@@ -106,9 +103,8 @@ void BackgroundElementUI::createGlass() {
 	_bodyGlass->CreateFixture(&fixtureDefLeft);
 
 	b2PolygonShape shapeRight;
-#ifdef _DEBUG
 	shapeRight.SetAsBox(1.11f, 25, { 15.1f, 0 }, 0);
-#endif
+
 	b2FixtureDef fixtureDefRight;
 	fixtureDefRight.density = 1;
 	fixtureDefRight.friction = 0;

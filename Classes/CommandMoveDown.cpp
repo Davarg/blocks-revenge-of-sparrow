@@ -1,6 +1,6 @@
-#include "CommandMoveDown.h"
-#include "Constants.h"
 #include "MainGameScene.h"
+#include "CommandMoveDown.h"
+#include "ConstantsRegistry.h"
 
 bool CommandMoveDown::init() {
 	_isExecute = false;
@@ -40,8 +40,8 @@ void CommandMoveDown::execute(Block *block) {
 		return;
 	}
 	_block = block;
-	body1->SetLinearVelocity({0, GRAVITY_SCALE_Y * 4});
-	body2->SetLinearVelocity({ 0, GRAVITY_SCALE_Y * 4 });
+	body1->SetLinearVelocity({ 0, ConstantsRegistry::getValueForKey(ConstantsRegistry::constants::GRAVITY_SCALE_Y) * 4 });
+	body2->SetLinearVelocity({ 0, ConstantsRegistry::getValueForKey(ConstantsRegistry::constants::GRAVITY_SCALE_Y) * 4 });
 }
 
 void CommandMoveDown::undo() {

@@ -1,7 +1,7 @@
 #ifndef __BLOCK_H__
 #define __BLOCK_H__
 
-#include "cocos2d.h"
+#include <cocos2d.h>
 #include <Box2D/Box2D.h>
 
 USING_NS_CC;
@@ -25,9 +25,10 @@ static __TYPE__* create(__VAR_TYPE__ var) \
 
 class Block : public Ref {
 private:
+	static const char* _emptyBlock;
 	static const char* _blockRedPath;
 	static const char* _blockGreenPath;
-	static const char* _blockYellowPath;
+	static const char* _blockVioletPath;
 
 	void setSprite(Sprite* sprite) { _sprite = sprite; }
 	void setScores(int scores) { _scores = scores; }
@@ -54,8 +55,7 @@ public:
 		NEED_TO_STOP = 0x0111,
 		STOPPED = 0x1111
 	};
-
-	static void createJointListener(void*);
+	
 	static Block* createBlock(blockInfo);
 	static blockInfo generateBlockInfo();
 	static b2WeldJointDef getJointDef();
@@ -71,6 +71,7 @@ public:
 	CC_SYNTHESIZE_READONLY(b2Body*, _attachedBody, AttachedBody);
 	CC_SYNTHESIZE_READONLY(Block*, _attachedBlock, AttachedBlock);
 	
+	void createJointListener(void*);
 	void setPositionInPxl(Vec2);
 	void setJointWith(Block*);
 	Vec2 getPosOnField();

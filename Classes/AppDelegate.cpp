@@ -1,5 +1,6 @@
 #include "AppDelegate.h"
 #include "MainGameScene.h"
+#include "ConstantsRegistry.h"
 
 USING_NS_CC;
 
@@ -24,14 +25,22 @@ void AppDelegate::initGLContextAttrs()
 }
 
 bool AppDelegate::applicationDidFinishLaunching() {
+	ConstantsRegistry::setValueForKey(ConstantsRegistry::constants::MOVEOFFSET, 0.8f);
+	ConstantsRegistry::setValueForKey(ConstantsRegistry::constants::X_OFFSET_BLOCK, 6);
+	ConstantsRegistry::setValueForKey(ConstantsRegistry::constants::SCALE_RATIO_BOX2D, 32);
+	ConstantsRegistry::setValueForKey(ConstantsRegistry::constants::GRAVITY_SCALE_Y, -6.8f);
+	ConstantsRegistry::setValueForKey(ConstantsRegistry::constants::JOINT_BLOCK_DIST, 1.6f);
+	ConstantsRegistry::setValueForKey(ConstantsRegistry::constants::JOINT_BLOCK_DIST_NEGATIVE, -0.6f);
+	ConstantsRegistry::lock();
+
 	//auto size = new Size(720, 1280);
 	auto sizeFrame = new Size(480, 800);
 	
 	auto vecSearchPaths = FileUtils::getInstance()->getSearchPaths();
-	vecSearchPaths.push_back("../Resources/wvga");
-	vecSearchPaths.push_back("../Resources/wvga/ui/back_anim");
+	vecSearchPaths.push_back("wvga");
+	vecSearchPaths.push_back("wvga/ui/back_anim");
 	FileUtils::getInstance()->setSearchPaths(vecSearchPaths);
-    
+
 	auto director = Director::getInstance();
     auto glview = director->getOpenGLView();
     if(!glview) {

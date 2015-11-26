@@ -1,14 +1,8 @@
-#include "MessagesQueue.h"
 #include "Block.h"
-
-struct funcAndObj {
-	void* obj = nullptr;
-	void(*ptrFunc)(void*) = nullptr;
-	void(*ptrFuncExt)(void*, void*) = nullptr;
-};
+#include "MessagesQueue.h"
 
 std::vector<MessagesQueue::Message> msgQueue;
-std::map<MessagesQueue::MessageType, std::vector<funcAndObj> > mapListeners;
+std::map<MessagesQueue::MessageType, std::vector<MessagesQueue::WrapperMessageQueueCallback_1> > mapListeners;
 
 void MessagesQueue::update(float dt) {
 	for (Vector<Message>::iterator it = msgQueue.begin();
@@ -16,10 +10,8 @@ void MessagesQueue::update(float dt) {
 		auto vec = mapListeners.at(it->mt);
 		if (vec.size()) {
 			for (auto vecIt = vec.begin(); vecIt != vec.end(); vecIt++) {
-				if (vecIt->obj != nullptr) 
-					static_cast<void(*)(void*, void*)>(vecIt->ptrFuncExt)(vecIt->obj, it->args);
-				else
-					static_cast<void(*)(void*)>(vecIt->ptrFunc)(it->args);
+				auto a = vecIt->getCallback();
+				a(it->args);
 			}
 		}
 		it = msgQueue.erase(it);
@@ -31,54 +23,23 @@ void MessagesQueue::addMessageToQueue(Message msg) {
 	msgQueue.push_back(msg);
 }
 
-void MessagesQueue::addListener(MessageType mt, void(*ptrFunc)(void*)) {
-	funcAndObj fao;
-	fao.ptrFunc = ptrFunc;
-	
+void MessagesQueue::addListener(MessageType mt, WrapperMessageQueueCallback_1& callback) {
 	if (mapListeners.end() != mapListeners.find(mt)) {
 		auto iterator = mapListeners.find(mt);
-		iterator->second.push_back(fao);
+		iterator->second.push_back(callback);
 	}
 	else {
-		std::vector<funcAndObj> vec;
-		vec.push_back(fao);
+		std::vector<WrapperMessageQueueCallback_1> vec;
+		vec.push_back(callback);
 		mapListeners.insert(std::make_pair(mt, vec));
 	}
 }
 
-void MessagesQueue::addListener(MessageType mt, void* ptrObj, void(*ptrFunc)(void*, void*)) {
-	funcAndObj fao;
-	fao.ptrFuncExt = ptrFunc;
-	fao.obj = ptrObj;
-
-	if (mapListeners.end() != mapListeners.find(mt)) {
-		auto iterator = mapListeners.find(mt);
-		iterator->second.push_back(fao);
-	}
-	else {
-		std::vector<funcAndObj> vec;
-		vec.push_back(fao);
-		mapListeners.insert(std::make_pair(mt, vec));
-	}
-}
-
-void MessagesQueue::removeListener(MessageType mt, void(*ptrFunc)(void*)) {
+void MessagesQueue::removeListener(MessageType mt, WrapperMessageQueueCallback_1& callback) {
 	if (mapListeners.end() != mapListeners.find(mt)) {
 		auto it = mapListeners.find(mt);
 		for (auto itVec = it->second.begin(); itVec != it->second.end();) {
-			if (itVec->ptrFunc == ptrFunc) {
-				itVec = it->second.erase(itVec);
-			}
-		}
-		it->second.shrink_to_fit();
-	}
-}
-
-void MessagesQueue::removeListener(MessageType mt, void* ptrObj, void(*ptrFunc)(void*, void*)) {
-	if (mapListeners.end() != mapListeners.find(mt)) {
-		auto it = mapListeners.find(mt);
-		for (auto itVec = it->second.begin(); itVec != it->second.end();) {
-			if (itVec->ptrFuncExt == ptrFunc && itVec->obj == ptrObj) {
+			if (itVec->getUniqId() == callback.getUniqId()) {
 				itVec = it->second.erase(itVec);
 			}
 		}

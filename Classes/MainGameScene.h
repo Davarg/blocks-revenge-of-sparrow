@@ -1,14 +1,14 @@
 #ifndef __MAIN_GAME_SCENE_H__
 #define __MAIN_GAME_SCENE_H__
 
-#include "cocos2d.h"
-#include "Box2D\Box2D.h"
 #include "Block.h"
-#include "BlockContactListener.h"
-#include "GameField.h"
-#include "MessagesQueue.h"
+#include <cocos2d.h>
 #include "SimpleUI.h"
+#include "GameField.h"
+#include <Box2D\Box2D.h>
 #include "GLES-Render.h"
+#include "MessagesQueue.h"
+#include "BlockContactListener.h"
 
 USING_NS_CC;
 
@@ -22,7 +22,7 @@ private:
 	Block *_currentBlock;
 	BlockContactListener _blockContactListener;
 #ifdef _DEBUG
-	virtual void draw(Renderer *renderer, const Mat4 &transform, uint32_t flags) override;
+	virtual void draw(Renderer*, const Mat4&, uint32_t) override;
 #endif
 	
 public: 
@@ -30,16 +30,13 @@ public:
 	static b2World* getWorld();
 	static Scene* createScene();
 	static SimpleUI* getUI() { return MainGameScene::gameScene->_simpleUI; }
-	static void wrapperToAddBlockListener(void* ptrObj, void* args);
+	static Block* getCurrentBlock() { return MainGameScene::gameScene->_currentBlock; }
 	
 	bool init() override;
-	void update(float dt) override;
-	void addBlockListener(void* args);
+	void update(float) override;
+	void addBlockListener(void*);
 
 	CREATE_FUNC(MainGameScene);
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
-	void onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event);
-#endif
 };
 
 #endif //__MAIN_GAME_SCENE_H__

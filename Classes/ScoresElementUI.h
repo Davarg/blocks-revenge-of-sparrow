@@ -1,8 +1,8 @@
 #ifndef __SCORES_ELEMENT_UI_H__
 #define __SCORES_ELEMENT_UI_H__
 
-#include "AbstractElementUI.h"
 #include <cocos2d.h>
+#include "AbstractElementUI.h"
 
 USING_NS_CC;
 
@@ -32,7 +32,6 @@ public:
 	virtual void show() override;
 	void updateScores(void*);
 
-	static void wrapperToUpdateScores(void* ptrObj, void* args);
 	static const char* name() { return _name; }
 };
 

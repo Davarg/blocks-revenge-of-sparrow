@@ -11,9 +11,7 @@ TopPanel::TopPanel(Layer *layer, Size winSize) {
 	_layerParent = layer;
 	_layerBack = Layer::create();
 	_layerBack->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
-#ifdef _DEBUG //Need to properly calculate position on screen size, avoid absolute position
 	_layerBack->setPosition(0, 745);
-#endif
 
 	_spritePanel = Sprite::create(_panelPath);
 	_spritePanel->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);

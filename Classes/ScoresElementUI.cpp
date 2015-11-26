@@ -10,6 +10,7 @@ ScoresElementUI::~ScoresElementUI() {
 
 ScoresElementUI::ScoresElementUI(Layer *layer, Size winSize) {
 	_scores = 0;
+	_disable = false;
 	_layerParent = layer;
 	_layerBack = Layer::create();
 	_layerBack->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
@@ -18,22 +19,18 @@ ScoresElementUI::ScoresElementUI(Layer *layer, Size winSize) {
 	_labelScores->setColor(Color3B::BLACK);
 
 	_labelSpriteScore = Sprite::create(_labelScorePath);
-#ifdef _DEBUG 
 	_labelSpriteScore->setScaleX(0.6f);
 	_labelSpriteScore->setScaleY(0.4f);
 	_labelSpriteScore->setPosition(90, 27);
-#endif
 	_labelSpriteScore->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
 
 	_labelScores->setPosition(_labelSpriteScore->getContentSize().width / 2
 			, _labelSpriteScore->getContentSize().height / 2);
 
 	_fieldScore = Sprite::create(_fieldScorePath);
-#ifdef _DEBUG 
 	_fieldScore->setScaleX(0.6f);
 	_fieldScore->setScaleY(0.4f);
 	_fieldScore->setPosition(90, 3);
-#endif
 	_fieldScore->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
 
 #ifdef _DEBUG
@@ -57,11 +54,6 @@ void ScoresElementUI::disable(bool flag) {
 
 void ScoresElementUI::show() {
 	_layerParent->addChild(_layerBack);
-}
-
-void ScoresElementUI::wrapperToUpdateScores(void* ptrObj, void* args) {
-	ScoresElementUI *ptrScoresElement = static_cast<ScoresElementUI*>(ptrObj);
-	ptrScoresElement->updateScores(args);
 }
 
 void ScoresElementUI::updateScores(void *args) {

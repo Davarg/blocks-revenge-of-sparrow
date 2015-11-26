@@ -1,11 +1,11 @@
 #include "SimpleUI.h"
-#include "BackgroundElementUI.h"
 #include "TopPanel.h"
-#include "BottomPanel.h"
 #include "UserInput.h"
-#include "ScoresElementUI.h"
+#include "BottomPanel.h"
 #include "MessagesQueue.h"
+#include "ScoresElementUI.h"
 #include "NextBlockElementUI.h"
+#include "BackgroundElementUI.h"
 
 SimpleUI::~SimpleUI() {
 	for (auto iterator : _childrens) {
@@ -17,7 +17,7 @@ SimpleUI::~SimpleUI() {
 }
 
 SimpleUI::SimpleUI(Layer* layer) {
-	const Size winSize = Director::sharedDirector()->getVisibleSize();
+	const Size winSize = Director::getInstance()->getVisibleSize();
 	_layer = layer;
 	
 	BackgroundElementUI *beui = new BackgroundElementUI(layer, winSize);
@@ -38,8 +38,9 @@ SimpleUI::SimpleUI(Layer* layer) {
 	UserInput *ui = new UserInput(bp->getLayer(), bp->getLayer()->getContentSize());
 	_childrens.push_back(ui);
 
-	MessagesQueue::addListener(MessagesQueue::MessageType::UPDATE_SCORES,
-				static_cast<void*>(seui), &ScoresElementUI::wrapperToUpdateScores);
+	MessagesQueue::WrapperMessageQueueCallback_1 callback1(CC_CALLBACK_1(ScoresElementUI::updateScores, seui)
+		, "ScoresUpdate");
+	MessagesQueue::addListener(MessagesQueue::MessageType::UPDATE_SCORES, callback1);
 }
 
 void SimpleUI::show(){

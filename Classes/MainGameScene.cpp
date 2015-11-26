@@ -1,10 +1,10 @@
-#include "MainGameScene.h"
-#include "Constants.h"
-#include "BackgroundElementUI.h"
-#include "NextBlockElementUI.h"
-#include "RandomBlockDrop.h"
 #include <math.h>
 #include "UserInput.h"
+#include "MainGameScene.h"
+#include "RandomBlockDrop.h"
+#include "ConstantsRegistry.h"
+#include "NextBlockElementUI.h"
+#include "BackgroundElementUI.h"
 
 b2World* MainGameScene::world = nullptr;
 MainGameScene* MainGameScene::gameScene = nullptr;
@@ -20,11 +20,11 @@ MainGameScene::~MainGameScene() {
 
 b2World* MainGameScene::getWorld() {
 	if (!world) {
-		b2Vec2 gravityVec{ 0, GRAVITY_SCALE_Y };
+		b2Vec2 gravityVec{ 0, ConstantsRegistry::getValueForKey(ConstantsRegistry::constants::GRAVITY_SCALE_Y) };
 		world = new b2World(gravityVec);
 
 #ifdef _DEBUG
-		debugDraw = new GLESDebugDraw(SCALE_RATIO_BOX2D);
+		debugDraw = new GLESDebugDraw(ConstantsRegistry::getValueForKey(ConstantsRegistry::constants::SCALE_RATIO_BOX2D));
 		uint32  flags = 0;
 		flags += b2Draw::e_shapeBit;
 		flags += b2Draw::e_jointBit;
@@ -53,8 +53,14 @@ Scene* MainGameScene::createScene() {
 
 	scene->addChild(layer);
 	layer->scheduleUpdate();
-
 	layer->_currentBlock = RandomBlockDrop::dropBlock();
+
+	MessagesQueue::WrapperMessageQueueCallback_1 callback1Scene(CC_CALLBACK_1(MainGameScene::addBlockListener, layer)
+		, "MainGameSceneAddBlock");
+	MessagesQueue::WrapperMessageQueueCallback_1 callback1Block(CC_CALLBACK_1(Block::createJointListener, layer->_currentBlock)
+		, "BlockCreateJoint");
+	MessagesQueue::addListener(MessagesQueue::MessageType::ADD_BLOCK_ON_SCENE, callback1Scene);
+	MessagesQueue::addListener(MessagesQueue::MessageType::CREATE_JOINT, callback1Block);
 
 	return scene;
 }
@@ -65,34 +71,13 @@ bool MainGameScene::init() {
 
 	_simpleUI = new SimpleUI(this);
 	
-	/*const Size gameFieldSizePxl = beui->getUserSize();
-	const Size sizeBlock = _currentBlock->getSprite()->getContentSize();
-	GameField::init(gameFieldSizePxl.width / sizeBlock.width, gameFieldSizePxl.height / sizeBlock.height);*/
-	GameField::init();
-
+	GameField::init(8, 13);
 	MainGameScene::getWorld()->SetContactListener(&_blockContactListener);
-	MessagesQueue::addListener(MessagesQueue::MessageType::ADD_BLOCK_ON_SCENE, static_cast<void*>(this)
-				, &MainGameScene::wrapperToAddBlockListener);
-	MessagesQueue::addListener(MessagesQueue::MessageType::CREATE_JOINT, &Block::createJointListener);
 
 	_simpleUI->show();
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
-	auto listener = EventListenerKeyboard::create();
-	listener->onKeyPressed = CC_CALLBACK_2(MainGameScene::onKeyPressed, this);
-	UserInput *ui = (UserInput*)_simpleUI->getChildrenByName(UserInput::name());
-	listener->onKeyReleased = CC_CALLBACK_2(UserInput::onKeyReleased, ui);
-	Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this);
-#endif
-
 	return true;
 }
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
-	void MainGameScene::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {
-		UserInput *ui = (UserInput*)_simpleUI->getChildrenByName(UserInput::name());
-		ui->onKeyPressed(keyCode, event, _currentBlock);
-	}
-#endif
 
 void MainGameScene::update(float dt) {
 	int velocityIterations = 10;
@@ -103,8 +88,10 @@ void MainGameScene::update(float dt) {
 			if (spr != nullptr) {
 				Size size = spr->getContentSize();
 				if (spr->getAnchorPoint() == Vec2::ANCHOR_BOTTOM_LEFT) {
-					spr->setPosition({ (body->GetPosition().x * SCALE_RATIO_BOX2D) - size.width / 2
-						, (body->GetPosition().y * SCALE_RATIO_BOX2D) - size.height / 2 });
+					spr->setPosition({ (body->GetPosition().x 
+								* ConstantsRegistry::getValueForKey(ConstantsRegistry::constants::SCALE_RATIO_BOX2D)) - size.width / 2
+						, (body->GetPosition().y 
+								* ConstantsRegistry::getValueForKey(ConstantsRegistry::constants::SCALE_RATIO_BOX2D)) - size.height / 2 });
 				}
 				spr->setRotation(-1 * CC_RADIANS_TO_DEGREES(body->GetAngle()));
 			}
@@ -115,17 +102,12 @@ void MainGameScene::update(float dt) {
 	MessagesQueue::update(dt);
 }
 
-void MainGameScene::wrapperToAddBlockListener(void* ptrObj, void* args) {
-	MainGameScene *ptrScene = static_cast<MainGameScene*>(ptrObj);
-	ptrScene->addBlockListener(args);
-}
-
 void MainGameScene::addBlockListener(void* args) {
-	pauseSchedulerAndActions();
+	pause();
 
 	GameField::setBlock(_currentBlock);
 	GameField::checkField();
 	_currentBlock = RandomBlockDrop::dropBlock();
 
-	resumeSchedulerAndActions();
+	resume();
 }

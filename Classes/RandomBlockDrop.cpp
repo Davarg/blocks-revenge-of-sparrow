@@ -1,8 +1,7 @@
-#include "RandomBlockDrop.h"
 #include "SimpleUI.h"
-#include "NextBlockElementUI.h"
 #include "MainGameScene.h"
-
+#include "RandomBlockDrop.h"
+#include "NextBlockElementUI.h"
 #include "BackgroundElementUI.h"
 
 Block* RandomBlockDrop::dropBlock() {

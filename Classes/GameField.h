@@ -1,9 +1,9 @@
 #ifndef __GAME_FIELD_H__
 #define __GAME_FIELD_H__
 
-#include "cocos2d.h"
-#include "Box2D\Box2D.h"
 #include "Block.h"
+#include <cocos2d.h>
+#include <Box2D\Box2D.h>
 
 USING_NS_CC;
 
@@ -18,13 +18,13 @@ public:
 	
 	static b2Vec2 getSize();
 	static void checkField();
+	static Block* getBlock(Vec2);
+	static void setBlock(Block*);
 	static void recountGameField();
-	static Block* getBlock(Vec2 pos);
-	static void setBlock(Block* block);
-	static Block* getBlock(int y, int x);
-	static void updateGameField(void* args);
-	static void setBlock(int y, int x, Block* block);
-	static void init(const int width = 0, const int height = 0);
+	static Block* getBlock(int, int);
+	static void updateGameField(void*);
+	static void setBlock(int, int, Block*);
+	static void init(const int, const int);
 };
 
 #endif

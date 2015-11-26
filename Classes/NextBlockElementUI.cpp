@@ -13,13 +13,13 @@ NextBlockElementUI::NextBlockElementUI(Layer *layer, Size winSize) {
 	_layerBack->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
 
 	_labelSpriteNext = Sprite::create(_labelNextPath);
-#ifdef _DEBUG
 	_labelSpriteNext->setScaleX(0.6f);
 	_labelSpriteNext->setScaleY(0.4f);
-	_labelSpriteNext->setPosition(335, 27);
+	_labelSpriteNext->setPosition(333, 27);
+	_labelSpriteNext->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+#ifdef _DEBUG
 	_labelSpriteNext->setOpacity(60);
 #endif
-	_labelSpriteNext->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
 
 	_layerBack->addChild(_labelSpriteNext);
 }
@@ -40,13 +40,14 @@ Block* NextBlockElementUI::getBlock() {
 	layerNextBlocksSprites->setName(_layerNextBlocksName);
 	auto spriteA = Sprite::create(_nextBlock.spritePathFirst);
 	auto spriteB = Sprite::create(_nextBlock.spritePathSecond);
-#ifdef _DEBUG
+
 	spriteA->setScale(0.4f);
 	spriteB->setScale(0.4f);
+	layerNextBlocksSprites->setPosition(355, 15);
+	spriteB->setPosition(23, spriteA->getPositionY());
+#ifdef _DEBUG
 	spriteA->setOpacity(60);
 	spriteB->setOpacity(60);
-	layerNextBlocksSprites->setPosition(355, 15);
-	spriteB->setPosition(21, spriteA->getPositionY());
 #endif
 	layerNextBlocksSprites->addChild(spriteA);
 	layerNextBlocksSprites->addChild(spriteB);
