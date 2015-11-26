@@ -60,12 +60,12 @@ UserInput::UserInput(Layer* layer, Size winSize) {
 	_btnLeftPressed->setLocalZOrder(-1);
 	_btnLeftPressed->setScaleX(0.7f);
 	_btnLeftPressed->setScaleY(0.6f);
-	_btnLeftPressed->setPosition({ 280, 5 });
+	_btnLeftPressed->setPosition({ 180, 5 });
 
 	_btnRightPressed->setLocalZOrder(-1);
 	_btnRightPressed->setScaleX(0.7f);
 	_btnRightPressed->setScaleY(0.6f);
-	_btnRightPressed->setPosition({ 180, 5 });
+	_btnRightPressed->setPosition({ 280, 5 });
 
 	_btnRotatePressed->setLocalZOrder(-1);
 	_btnRotatePressed->setScaleX(0.7f);
@@ -113,11 +113,11 @@ UserInput::UserInput(Layer* layer, Size winSize) {
 
 	_btnLeft->setScaleX(0.7f);
 	_btnLeft->setScaleY(0.6f);
-	_btnLeft->setPosition({ 280, 5 });
+	_btnLeft->setPosition({ 180, 5 });
 
 	_btnRight->setScaleX(0.7f);
 	_btnRight->setScaleY(0.6f);
-	_btnRight->setPosition({ 180, 5 });
+	_btnRight->setPosition({ 280, 5 });
 
 	_btnRotate->setScaleX(0.7f);
 	_btnRotate->setScaleY(0.6f);
