@@ -255,14 +255,14 @@ void GameField::checkField() {
 			++it;
 			int t = *it;
 			++it;
-			const int collumn = *it;
+			const int column = *it;
 
 			for (; b <= t; b++) {
-				if (_arrayBlocks[b][collumn]) {
-					*SCORES += _arrayBlocks[b][collumn]->getScores();
-					_arrayBlocks[b][collumn]->destroy();
-					CC_SAFE_RELEASE(_arrayBlocks[b][collumn]);
-					_arrayBlocks[b][collumn] = nullptr;
+				if (_arrayBlocks[b][column]) {
+					*SCORES += _arrayBlocks[b][column]->getScores();
+					_arrayBlocks[b][column]->destroy();
+					CC_SAFE_RELEASE(_arrayBlocks[b][column]);
+					_arrayBlocks[b][column] = nullptr;
 				}
 			}
 		}

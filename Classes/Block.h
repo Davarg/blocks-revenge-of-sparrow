@@ -49,7 +49,7 @@ public:
 		std::string spritePathSecond;
 	};
 
-	enum blockFlags {
+	enum blockFlags : uint16 {
 		ACTIVE  = 0x1001,
 		PASSIVE = 0x0011,
 		NEED_TO_STOP = 0x0111,

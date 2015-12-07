@@ -109,5 +109,7 @@ void MainGameScene::addBlockListener(void* args) {
 	GameField::checkField();
 	_currentBlock = RandomBlockDrop::dropBlock();
 
+	CC_SAFE_DELETE(args);
+
 	resume();
 }

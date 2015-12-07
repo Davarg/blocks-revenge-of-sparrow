@@ -52,7 +52,8 @@ Block* NextBlockElementUI::getBlock() {
 	layerNextBlocksSprites->addChild(spriteA);
 	layerNextBlocksSprites->addChild(spriteB);
 
-	_layerBack->removeChildByName(_layerNextBlocksName);
+	if (_layerBack->getChildByName(_layerNextBlocksName))
+		_layerBack->removeChildByName(_layerNextBlocksName);
 	_layerBack->addChild(layerNextBlocksSprites);
 
 	return _currentBlock;

@@ -1,26 +1,24 @@
 #include "Block.h"
 #include "MessagesQueue.h"
 
-std::vector<MessagesQueue::Message> msgQueue;
+std::queue<MessagesQueue::Message> msgQueue;
 std::map<MessagesQueue::MessageType, std::vector<MessagesQueue::WrapperMessageQueueCallback_1> > mapListeners;
 
 void MessagesQueue::update(float dt) {
-	for (Vector<Message>::iterator it = msgQueue.begin();
-			it != msgQueue.end();) {
-		auto vec = mapListeners.at(it->mt);
-		if (vec.size()) {
-			for (auto vecIt = vec.begin(); vecIt != vec.end(); vecIt++) {
-				auto a = vecIt->getCallback();
-				a(it->args);
+	while (!msgQueue.empty()) {
+		auto vectorListeners = mapListeners.at(msgQueue.front().mt);
+		if (vectorListeners.size()) {
+			for (auto listenerIter = vectorListeners.begin(); listenerIter != vectorListeners.end(); listenerIter++) {
+				auto a = listenerIter->getCallback();
+				a(msgQueue.front().args);
 			}
 		}
-		it = msgQueue.erase(it);
+		msgQueue.pop();
 	}
-	msgQueue.shrink_to_fit();
 }
 
 void MessagesQueue::addMessageToQueue(Message msg) {
-	msgQueue.push_back(msg);
+	msgQueue.push(msg);
 }
 
 void MessagesQueue::addListener(MessageType mt, WrapperMessageQueueCallback_1& callback) {

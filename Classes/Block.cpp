@@ -11,12 +11,24 @@ const char* Block::_blockGreenPath = "blocks/green.png";
 const char* Block::_blockVioletPath = "blocks/violet.png";
 
 void Block::destroy() {
+	b2Filter filter;
+	for (auto jointEdge = _body->GetJointList(); jointEdge != nullptr; jointEdge = jointEdge->next) {
+		auto bA = jointEdge->joint->GetBodyA();
+		auto bB = jointEdge->joint->GetBodyB();
+
+		filter = bA->GetFixtureList()->GetFilterData();
+		if (bA->GetType() == b2BodyType::b2_staticBody
+			&& filter.categoryBits == Block::blockFlags::PASSIVE)
+			bA->SetType(b2BodyType::b2_dynamicBody);
+
+		filter = bB->GetFixtureList()->GetFilterData();
+		if (bB->GetType() == b2BodyType::b2_staticBody
+			&& filter.categoryBits == Block::blockFlags::PASSIVE)
+			bB->SetType(b2BodyType::b2_dynamicBody);
+	}
+
 	_sprite->removeFromParentAndCleanup(true);
 	auto world = _body->GetWorld();
-	/*b2Joint *joint = _body->GetJointList()->joint;
-
-	if (joint != nullptr)
-	world->DestroyJoint(joint);*/
 	world->DestroyBody(_body);
 	_body = nullptr;
 }
@@ -51,6 +63,7 @@ bool Block::init(Sprite* _sprite) {
 		_body = MainGameScene::getWorld()->CreateBody(&bodyDef);
 		_body->CreateFixture(&fixtureDef);
 
+		_body->SetBullet(true);
 		_body->SetLinearDamping(2);
 		_body->SetAngularDamping(10);
 		_attachedBody = nullptr;
@@ -223,26 +236,53 @@ Vec2 Block::getPosOnField(Sprite *spr) {
 
 void Block::createJointListener(void* args) {
 	auto bodies = static_cast<bodiesStructArgs*>(args);
-	auto typeA = bodies->b1->GetType();
-	auto typeB = bodies->b2->GetType();
+	std::set<int> b2BodiesTypes;
+	b2BodiesTypes.insert(b2BodyType::b2_dynamicBody);
+	b2BodiesTypes.insert(b2BodyType::b2_kinematicBody);
+	b2BodiesTypes.insert(b2BodyType::b2_staticBody);
 
-	if ((bodies->b1->GetContactList() && bodies->b2->GetContactList())
-		&& (typeA == b2BodyType::b2_dynamicBody
-				|| typeA == b2BodyType::b2_staticBody)
-			&& (typeB == b2BodyType::b2_dynamicBody
-				|| typeB == b2BodyType::b2_staticBody)) {
-		auto dst = bodies->b2->GetPosition() - bodies->b1->GetPosition();
-		b2WeldJointDef jointDef;
+	if (b2BodiesTypes.find(bodies->b1->GetType()) == b2BodiesTypes.end()) {
+		CC_SAFE_DELETE(args);
+		return;
+	}
 
-		/*bodies->b1->SetGravityScale(GRAVITY_SCALE_Y);
-		bodies->b2->SetGravityScale(GRAVITY_SCALE_Y);*/
+	auto dst = bodies->b2->GetPosition() - bodies->b1->GetPosition();
+	b2WeldJointDef jointDef;
 
-		jointDef.collideConnected = false;
-		jointDef.localAnchorA = { dst.x, dst.y };
-		jointDef.localAnchorB = { 0, 0 };
-		jointDef.bodyA = bodies->b1;
-		jointDef.bodyB = bodies->b2;
-		MainGameScene::getWorld()->CreateJoint(&jointDef);
+	jointDef.collideConnected = false;
+	jointDef.localAnchorA = { dst.x, dst.y };
+	jointDef.localAnchorB = { 0, 0 };
+	jointDef.bodyA = bodies->b1;
+	jointDef.bodyB = bodies->b2;
+	MainGameScene::getWorld()->CreateJoint(&jointDef);
+
+	if (bodies->b1->GetType() == b2BodyType::b2_dynamicBody) {
+		auto body = bodies->b1;
+		
+		for (auto jointEdge = body->GetJointList(); jointEdge != nullptr; jointEdge = jointEdge->next) {
+			auto bA = jointEdge->joint->GetBodyA();
+			auto bB = jointEdge->joint->GetBodyB();
+
+			if (bA->GetType() == b2BodyType::b2_dynamicBody)
+				bA->SetType(b2BodyType::b2_staticBody);
+
+			if (bB->GetType() == b2BodyType::b2_dynamicBody)
+				bB->SetType(b2BodyType::b2_staticBody);
+		}
+	}
+	if (bodies->b2->GetType() == b2BodyType::b2_dynamicBody) {
+		auto body = bodies->b2;
+		
+		for (auto jointEdge = body->GetJointList(); jointEdge != nullptr; jointEdge = jointEdge->next) {
+			auto bA = jointEdge->joint->GetBodyA();
+			auto bB = jointEdge->joint->GetBodyB();
+
+			if (bA->GetType() == b2BodyType::b2_dynamicBody)
+				bA->SetType(b2BodyType::b2_staticBody);
+
+			if (bB->GetType() == b2BodyType::b2_dynamicBody)
+				bB->SetType(b2BodyType::b2_staticBody);
+		}
 	}
 
 	CC_SAFE_DELETE(args);
